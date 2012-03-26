@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="CoApp.Updater.Views.Primary.NoUpdatesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Height="Auto" d:DesignWidth="1024">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\BaseStyle.xaml"/>
+                <ResourceDictionary Source="..\..\Styles\PrimaryViewStyles.xaml"/>
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid  >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Rectangle Grid.Column="0" Grid.RowSpan="4" Grid.Row="0">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF177715" Offset="0"/>
+                    <GradientStop Color="#FF41B23D" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Image Style="{StaticResource ShieldImage}" Source="/CoApp.Updater;component/Resources/greenshield.png"/>
+        <TextBlock Style="{StaticResource CoAppUpdateInnerHeader}"  Text="Your computer is up to date" />
+        <TextBlock Grid.Column="2" HorizontalAlignment="Left" Margin="0" Grid.Row="1"  Text="There are no updates available for your computer" />
+        <Button Grid.Column="2" HorizontalAlignment="Left" Margin="0" Grid.Row="2"  Content="Note: one or more feeds could not be reached" Style="{StaticResource ChromelessLinkButtonStyle}"/>
+        <Button Content="Check for updates" Grid.Column="2" HorizontalAlignment="Left" Margin="0,15,0,10" Grid.Row="3"  Command="{Binding CheckForUpdates}"/>
+
+
+    </Grid>
+
+
+</UserControl>

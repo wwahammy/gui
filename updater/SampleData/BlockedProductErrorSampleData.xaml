@@ -1,0 +1,14 @@
+<CoApp_Updater_Support_Errors:BlockedProductError xmlns:CoApp_Updater_Support_Errors="clr-namespace:CoApp.Updater.Support.Errors">
+	<CoApp_Updater_Support_Errors:BlockedProductError.BlockedProducts>
+		<CoApp_Updater_Support_Errors:ProductToUnblock ErrorMessage="Maecenas curabitur nam phasellus class" Title="Cras consequat duis aenean" WaitingOnUnblock="True"/>
+		<CoApp_Updater_Support_Errors:ProductToUnblock ErrorMessage="Aliquam integer vestibulum" Title="Quisque nunc mauris praesent" WaitingOnUnblock="False"/>
+		<CoApp_Updater_Support_Errors:ProductToUnblock ErrorMessage="Convallis dignissim elementum amet vivamus" Title="Facilisis ante accumsan fermentum fringilla" WaitingOnUnblock="True"/>
+		<CoApp_Updater_Support_Errors:ProductToUnblock ErrorMessage="Nullam curae habitasse donec aptent" Title="Sed hendrerit bibendum dis" WaitingOnUnblock="False"/>
+		<CoApp_Updater_Support_Errors:ProductToUnblock ErrorMessage="Etiam est aliquam" Title="Auctor arcu hac adipiscing" WaitingOnUnblock="True"/>
+		<CoApp_Updater_Support_Errors:ProductToUnblock ErrorMessage="Aliquet leo congue cursus dictum" Title="Diam mus eget parturient" WaitingOnUnblock="False"/>
+		<CoApp_Updater_Support_Errors:ProductToUnblock ErrorMessage="Himenaeos dictumst fusce elit vestibulum" Title="Eleifend lectus vestibulum libero" WaitingOnUnblock="True"/>
+		<CoApp_Updater_Support_Errors:ProductToUnblock ErrorMessage="Facilisi blandit" Title="Ligula nec enim" WaitingOnUnblock="False"/>
+		<CoApp_Updater_Support_Errors:ProductToUnblock ErrorMessage="Litora non imperdiet erat" Title="Per faucibus lorem" WaitingOnUnblock="True"/>
+		<CoApp_Updater_Support_Errors:ProductToUnblock ErrorMessage="Luctus commodo eros" Title="Conubia morbi sed" WaitingOnUnblock="False"/>
+	</CoApp_Updater_Support_Errors:BlockedProductError.BlockedProducts>
+</CoApp_Updater_Support_Errors:BlockedProductError>

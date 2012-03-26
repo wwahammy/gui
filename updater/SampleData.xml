@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SampleData>
+  <LastChecked>3/1/2012</LastChecked>
+  <LastInstalled>2/20/2012</LastInstalled>
+  <AutoInstallTime>3</AutoInstallTime>
+  <AutoInstallDay>Every</AutoInstallDay>
+  <UpgradeOrUpdate>Update</UpgradeOrUpdate>
+  <Feeds>
+    <Feed Url="http://coapp.org/feed"/>
+    <Feed Url="http://brokenfeed" Error="true"/>
+  </Feeds>
+  <Products>
+    <Package Name="expat 2.0">
+      <Product Name="expat 2.0.1" Type="update">
+        <Summary>Praesent vestibulum rutrum tempus. Aliquam lacus dui, lacinia et posuere non, volutpat nec eros. Vestibulum ullamcorper consequat ipsum, sed mollis nisi consectetur quis. Nulla lorem.</Summary>
+      </Product>  
+    </Package>
+
+    <Package Name="lua 5">
+      <Product Name="lua 5.2.0" Type="update">
+        <Summary>Nam vel dictum lacus. Curabitur rutrum, leo et venenatis sagittis, sem lectus pulvinar mi, ac lobortis ligula elit nec neque. Mauris tristique, odio eget sollicitudin.</Summary>
+      </Product>
+    </Package>
+
+    <Package Name="CML">
+      <Product Name="Common Service Locator 1.0" Type="upgrade">
+        <Summary>Vestibulum id congue diam. Nulla vel dui magna, ac rhoncus lacus. Nam ultricies placerat arcu in semper. Maecenas tincidunt tristique risus, bibendum pretium ligula malesuada.</Summary>
+      </Product>
+    </Package>
+    <Package Name="MvvmLight V3">
+      <Product Name="MvvmLight V3 Sp1" Type="update">
+        <Summary>leo et venenatis sagittis, sem lectus pulvinar mi,</Summary>
+      </Product>
+      <Product Name="MvvmLight V4 Beta1" Type="upgrade">
+        <Summary>Donec lacinia ligula a est malesuada ut sagittis urna dignissim. Praesent lorem metus, euismod eu consequat id, pulvinar at ipsum. Vivamus non felis at sapien.</Summary>
+      </Product>
+    </Package>
+    <Package Name="COappDev">
+      <Product Name="CoApp DevTools" Type="update">
+        <Summary>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id turpis non nulla venenatis aliquet. Nulla ac lectus metus. Donec.</Summary>
+      </Product>
+    </Package>
+  </Products>
+</SampleData>

@@ -1,0 +1,382 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{55D4D63D-C1BF-4675-8DEF-6B4F7DDC4C18}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CoApp.Updater</RootNamespace>
+    <AssemblyName>CoApp.Updater</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20901.0</ExpressionBlendVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(SolutionDir)output\any\debug\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;COAPP_ENGINE_CLIENT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(SolutionDir)output\any\release\bin\</OutputPath>
+    <DefineConstants>TRACE;COAPP_ENGINE_CLIENT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>$(SolutionDir)resources\CoApp.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SampleData|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\output\any\sampledata\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SAMPLEDATA</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>C:\Users\Work\Desktop\gui\output\any\debug\bin\CoApp.Updater.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CoApp.Client, Version=1.2.0.8, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="CoApp.Developer.Toolkit, Version=1.2.0.26, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL" Condition="'$(Configuration)|$(Platform)' == 'SampleData|AnyCPU'">
+      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Developer.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="CoApp.Toolkit, Version=1.2.0.13, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>lib\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>lib\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WPFLocalizeExtension">
+      <HintPath>lib\WPFLocalizeExtension.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Controls\CoAppFrame.cs" />
+    <Compile Include="Controls\DialogBox.cs" />
+    <Compile Include="Controls\ElevateButton.cs" />
+    <Compile Include="Controls\ElevateShield.xaml.cs">
+      <DependentUpon>ElevateShield.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PercentTransform.cs" />
+    <Compile Include="Controls\PressedTabItemControl.cs" />
+    <Compile Include="Controls\ProgressBarIndicator.cs" />
+    <Compile Include="Controls\UnblockControl.cs" />
+    <Compile Include="Messages\BlockedProductsMessage.cs" />
+    <Compile Include="Messages\GoToMessage.cs" />
+    <Compile Include="Messages\InstallationFailedMessage.cs" />
+    <Compile Include="Messages\InstallationFinishedMessage.cs" />
+    <Compile Include="Messages\InstallationProgressMessage.cs" />
+    <Compile Include="Messages\MetroDialogBoxMessage.cs" />
+    <Compile Include="Messages\SelectedProductsChangedMessage.cs" />
+    <Compile Include="Model\AutomationService.cs" />
+    <Compile Include="Model\CoAppService.cs" />
+    <Compile Include="Model\InitializeService.cs" />
+    <Compile Include="Model\Interfaces\IAutomationService.cs" />
+    <Compile Include="Model\Interfaces\ICoAppService.cs" />
+    <Compile Include="Model\Interfaces\IInitializeService.cs" />
+    <Compile Include="Model\Interfaces\INavigationService.cs" />
+    <Compile Include="Model\Interfaces\IPolicyService.cs" />
+    <Compile Include="Model\Interfaces\IUpdateService.cs" />
+    <Compile Include="Model\Interfaces\IWindowsUserService.cs" />
+    <Compile Include="Model\NavigationService.cs" />
+    <Compile Include="Model\PolicyQueryResult.cs" />
+    <Compile Include="Model\PolicyService.cs" />
+    <Compile Include="Model\Product.cs" />
+    <Compile Include="Model\LocalServiceLocator.cs" />
+    <Compile Include="Model\Sample\CoAppServiceSample.cs" />
+    <Compile Include="Model\Sample\PolicyService.cs" />
+    <Compile Include="Model\Sample\UpdateService.cs" />
+    <Compile Include="Model\SidWrapper.cs" />
+    <Compile Include="Model\UpdateService.cs" />
+    <Compile Include="Model\UpdateTimeAndDay.cs" />
+    <Compile Include="Model\WindowsUserService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Strings-en-US.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings-en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Support\CanBlockProperty.cs" />
+    <Compile Include="Support\Converters\ChoiceToTextConverter.cs" />
+    <Compile Include="Support\Converters\DaysOfWeekToTextConverter.cs" />
+    <Compile Include="Support\Converters\HourConverter.cs" />
+    <Compile Include="Support\Converters\ImageToColorConverter.cs" />
+    <Compile Include="Support\Converters\NullEmptyStringToVisibilityConverter.cs" />
+    <Compile Include="Support\Converters\UpdateDayOfWeekConverter.cs" />
+    <Compile Include="Support\Errors\BlockedProductError.cs" />
+    <Compile Include="Support\Errors\ErrorObject.cs" />
+    <Compile Include="Support\Errors\ProductToUnblock.cs" />
+    <Compile Include="Support\Extensions.cs" />
+    <Compile Include="Support\GridViewColumnResize.cs" />
+    <Compile Include="Support\ObjectExtensions.cs" />
+    <Compile Include="Support\PrimaryViewTemplateSelector.cs" />
+    <Compile Include="Support\StateManager.cs" />
+    <Compile Include="Support\StringList.cs" />
+    <Compile Include="ViewModel\InstallingViewModel.cs" />
+    <Compile Include="ViewModel\SelectUpdatesViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\PrimaryViewModel.cs" />
+    <Compile Include="ViewModel\ScreenViewModel.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\FeedSettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\PermissionsSettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\PermissionViewModel.cs" />
+    <Compile Include="ViewModel\Settings\PrivacySettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\UpdateSettingsViewModel.cs" />
+    <Compile Include="ViewModel\UpdatingViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Views\InstallingView.xaml.cs">
+      <DependentUpon>InstallingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PrimaryView.xaml.cs">
+      <DependentUpon>PrimaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Primary\ErrorView.xaml.cs">
+      <DependentUpon>ErrorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Primary\Error\ErrorProductsBlockedView.xaml.cs">
+      <DependentUpon>ErrorProductsBlockedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Primary\NoUpdatesView.xaml.cs">
+      <DependentUpon>NoUpdatesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Primary\UpdatesAvailableView.xaml.cs">
+      <DependentUpon>UpdatesAvailableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectUpdatesView.xaml.cs">
+      <DependentUpon>SelectUpdatesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\FeedsSettingsView.xaml.cs">
+      <DependentUpon>FeedsSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\PermissionsSettingsView.xaml.cs">
+      <DependentUpon>PermissionsSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\PrivacySettingsView.xaml.cs">
+      <DependentUpon>PrivacySettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\UpdateSettingsView.xaml.cs">
+      <DependentUpon>UpdateSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UpdatingView.xaml.cs">
+      <DependentUpon>UpdatingView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="BaseStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ElevateShield.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Properties\DesignTimeResources.xaml" Condition="'$(DesignTime)'=='true' OR ('$(SolutionPath)'!='' AND Exists('$(SolutionPath)') AND '$(BuildingInsideVisualStudio)'!='true' AND '$(BuildingInsideExpressionBlend)'!='true')">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
+    <Page Include="Styles\PrimaryViewStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\InstallingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PrimaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Primary\ErrorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Primary\Error\ErrorProductsBlockedView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Primary\NoUpdatesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Primary\UpdatesAvailableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SelectUpdatesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\FeedsSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\PermissionsSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\PrivacySettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\UpdateSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UpdatingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(SolutionDir)CoApp.Gui.AssemblyStrongName.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\CoApp.ico">
+      <Link>CoApp.ico</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Strings-en-US.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings-en-US.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\greenshield.png" />
+    <Resource Include="Resources\redshield.png" />
+    <Resource Include="Resources\yellowshield.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SampleData.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="lib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="lib\MahApps.Metro\MahApps.Metro.csproj">
+      <Project>{5B1710D2-5DC8-4754-91B2-19165DE49B3D}</Project>
+      <Name>MahApps.Metro</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\UAC-Win7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <DesignData Include="SampleData\BlockedProductErrorSampleData.xaml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

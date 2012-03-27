@@ -7,7 +7,7 @@ namespace CoApp.Updater.Model.Interfaces
 {
     public interface ICoAppService
     {
-        Task<Policy> GetPolicy(PolicyType type);
+        Task<PolicyProxy> GetPolicy(PolicyType type);
 
         Task AddPrincipalToPolicy(PolicyType type, string principal);
 
@@ -65,5 +65,19 @@ namespace CoApp.Updater.Model.Interfaces
         Task RemoveScheduledTask(string name);
 
         Task TrimAll();
+    }
+
+    public class PolicyProxy
+    {
+        public string Description { get; set; }
+        public string Name { get; set; }
+
+        public IEnumerable<string> Members { get; set; }
+
+        internal static PolicyProxy Convert(Policy p)
+        {
+            return new PolicyProxy {Description = p.Description, Name = p.Name, Members = p.Members};
+        }
+       
     }
 }

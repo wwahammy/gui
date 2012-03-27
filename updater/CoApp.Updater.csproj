@@ -135,8 +135,7 @@
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\LocalServiceLocator.cs" />
     <Compile Include="Model\Sample\CoAppServiceSample.cs" />
-    <Compile Include="Model\Sample\PolicyService.cs" />
-    <Compile Include="Model\Sample\UpdateService.cs" />
+    <Compile Include="Model\Sample\PolicyServiceSample.cs" />
     <Compile Include="Model\SidWrapper.cs" />
     <Compile Include="Model\UpdateService.cs" />
     <Compile Include="Model\UpdateTimeAndDay.cs" />

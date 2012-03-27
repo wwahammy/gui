@@ -41,4 +41,6 @@
       </Product>
     </Package>
   </Products>
+
+  <ScheduledTask Name="coapp_update" DayOfWeek="" Time="3" Interval="60" Executable="CoApp.Update.exe" CommandLine="--quiet"/>
 </SampleData>

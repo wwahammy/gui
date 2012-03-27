@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CoApp.Toolkit.Engine.Client;
 using CoApp.Toolkit.Extensions;
+using CoApp.Toolkit.Logging;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model.Interfaces;
 using CoApp.Updater.Support;
@@ -77,13 +78,17 @@ namespace CoApp.Updater.Model
         {
             return Task.Factory.StartNew(HandleInstall).ContinueWith(t =>
                                                                          {
-                                                                             var trim = AutoTrim().Result;
-                                                                             if (trim)
+
+                                                                             if (!t.IsFaulted)
                                                                              {
-                                                                                 var task = CoApp.TrimAll();
-                                                                                 if (task.IsFaulted)
+                                                                                 var trim = AutoTrim().Result;
+                                                                                 if (trim)
                                                                                  {
-                                                                                     // TODO do something?
+                                                                                     var task = CoApp.TrimAll();
+                                                                                     if (task.IsFaulted)
+                                                                                     {
+                                                                                         // TODO do something?
+                                                                                     }
                                                                                  }
                                                                              }
                                                                          }
@@ -112,8 +117,12 @@ namespace CoApp.Updater.Model
             get
             {
                 return
-                    CoApp.GetScheduledTask("coapp_update").ContinueWith(
+                    CoApp.GetScheduledTask("coapp_update").ContinueWith(t => t.IsFaulted
+                                                                                 ? DefaultTask()
+                                                                                 : t.Result)
+                                                                                 .ContinueWith(
                         t =>
+                            
                         new UpdateTimeAndDay
                             {DayOfWeek = UpdateDayOfWeekConverter.ConvertBack(t.Result.DayOfWeek), Time = t.Result.Hour});
             }
@@ -175,7 +184,7 @@ namespace CoApp.Updater.Model
                     var prod in selectedProds.OrderBy(p => p.Key.IsUpgrade).Select((kvp, num) => new {kvp.Key, num}))
                 {
                     CurrentInstallingProduct = prod.Key;
-
+                    Logger.Message("Installing {0}" + Environment.NewLine, CurrentInstallingProduct.DisplayName);
                     Messenger.Default.Send(new InstallationProgressMessage
                                                {
                                                    CurrentProduct = prod.Key,
@@ -268,20 +277,31 @@ namespace CoApp.Updater.Model
                     //did it work?
                     if (t.IsFaulted)
                     {
+                        Logger.Message("Failed to install {0}" + Environment.NewLine, CurrentInstallingProduct.DisplayName);
                         //uh oh, it didn't add it to our list
                         exceptions.Add(t.Exception);
+                    }
+                    else
+                    {
+                        AllPossibleProducts.Remove(prod.Key);
                     }
                 }
 
 
+                Messenger.Default.Send(new InstallationFinishedMessage { NumberOfProductsInstalled = selectedProds.Count() - exceptions.Count});
+                
+
                 //we've gone through all of them, do we have any exceptions?
+                
+
 
                 if (exceptions.Any())
                 {
                     //dang it, things are broken
-
+                    Messenger.Default.Send(new InstallationFailedMessage());    
                     throw new AggregateException(exceptions);
                 }
+
             }
         }
 
@@ -432,6 +452,12 @@ namespace CoApp.Updater.Model
 
 
                 );
+        }
+
+
+        private static ScheduledTask DefaultTask()
+        {
+            return new ScheduledTask { CommandLine = "--quiet", DayOfWeek = null, Executable = "Coapp.Update", Hour = 3, IntervalInMinutes = 60, Minutes = 0, Name = "coapp_update"};
         }
 
     }

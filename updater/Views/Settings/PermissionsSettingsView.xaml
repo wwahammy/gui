@@ -79,7 +79,7 @@
         <TextBlock Text="Edit Session Feeds" Grid.Column="0" Grid.Row="11" Margin="20,5,0,0"/>
         <CheckBox Grid.Column="1" Grid.Row="11" HorizontalAlignment="Center" IsChecked="{Binding Path=ChangeSessionFeed.UserPermission}" IsEnabled="{Binding Path=ChangeSessionFeed.CanSelectUser}"/>
         <CheckBox Grid.Column="2" Grid.Row="11" HorizontalAlignment="Center" IsChecked="{Binding Path=ChangeSessionFeed.EveryonePermission}"/>
-        <Controls:ElevateButton Grid.Row="12"  VerticalAlignment="Bottom" Grid.Column="2" Content="Save" ElevatedCommand="{Binding Save}" UnelevatedCommand="{Binding RunAdmin}" MustElevate="{Binding CanChangeSettings, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}" HorizontalAlignment="Center" />
+        <Controls:ElevateButton Grid.Row="12"  VerticalAlignment="Bottom" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Right" Content="Save" ElevatedCommand="{Binding Save}" UnelevatedCommand="{Binding RunAdmin}" MustElevate="{Binding CanChangeSettings, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}"  />
 
     </Grid>
 </UserControl>

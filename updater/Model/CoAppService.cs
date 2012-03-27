@@ -33,10 +33,11 @@ namespace CoApp.Updater.Model
 
         #region ICoAppService Members
 
-        public Task<Policy> GetPolicy(PolicyType type)
+        public Task<PolicyProxy> GetPolicy(PolicyType type)
         {
-            return EPM.GetPolicy(type.ToString());
+            return EPM.GetPolicy(type.ToString()).ContinueWith(t => PolicyProxy.Convert(t.Result));
         }
+
 
         public Task AddPrincipalToPolicy(PolicyType type, string principal)
         {

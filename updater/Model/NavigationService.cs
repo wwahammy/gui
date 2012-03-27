@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CoApp.Toolkit.Logging;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model.Interfaces;
 using CoApp.Updater.Support;
@@ -16,23 +18,24 @@ namespace CoApp.Updater.Model
         #region INavigationService Members
 
 
-        private bool saveNextInHistory;
+        private bool _saveNextInHistory;
         
         public void GoTo(ScreenViewModel viewModel)
         {
-
+           
            GoTo(viewModel, true);
         }
 
         public void GoTo(ScreenViewModel viewModel, bool saveInHistory)
         {
+            Logger.Message("Going to {0}, from {1}. Save in history? {2} " + Environment.NewLine, viewModel.GetType().Name, Current == null ? "null" : Current.GetType().Name, saveInHistory);
             if (Current != null)
             {
                 Current.FireUnload();
-                if (saveNextInHistory)
+                if (_saveNextInHistory)
                     _innerStack.Push(Current);
             }
-            saveNextInHistory = saveInHistory;
+            _saveNextInHistory = saveInHistory;
             Current = viewModel;
             Messenger.Default.Send(new GoToMessage { Destination = Current });
             Current.FireLoad();
@@ -41,7 +44,7 @@ namespace CoApp.Updater.Model
         public void Back()
         {
             Current.FireUnload();
-             
+            Logger.Message("Going back to {0} from {1}", _innerStack.Peek().GetType().Name, Current.GetType().Name);
             Current = _innerStack.Pop();
             
             Messenger.Default.Send(new GoToMessage {Destination = Current});
@@ -56,26 +59,7 @@ namespace CoApp.Updater.Model
             get { return new ReadOnlyCollection<ScreenViewModel>(_innerStack.ToArray()); }
         }
 
-        /*
-        public void ReloadStack(RestartInfo info)
-        {
-            var stack = new Stack<string>(info.TypeNames);
-
-            var viewModelLocator = new ViewModelLocator();
-
-
-            //This is the screen we ultimately go to
-            string screenToGoTo = stack.Pop();
-
-            //we reset the stack
-            _innerStack = new Stack<ScreenViewModel>();
-            foreach (string page in stack.Reverse())
-            {
-                _innerStack.Push(
-                    (ScreenViewModel) viewModelLocator.GetType().GetProperty(page).GetValue(viewModelLocator, null));
-            }
-        }*/
-
+    
         public bool StackEmpty
         {
             get { return _innerStack.Count < 1; }

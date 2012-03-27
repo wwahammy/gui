@@ -3,24 +3,39 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using CoApp.Updater.Model;
+using CoApp.Updater.Model.Interfaces;
+using GalaSoft.MvvmLight.Command;
 
 namespace CoApp.Updater.ViewModel.Settings
 {
      
     public class PrivacySettingsViewModel : ScreenViewModel
     {
+        internal ICoAppService CoApp;
          public PrivacySettingsViewModel()
          {
              Title = "Privacy";
-             Loaded += OnLoaded;
+             CoApp = new LocalServiceLocator().CoAppService;
 
+             Loaded += OnLoaded;
+             
+             Save = new RelayCommand(OnSave);
          }
 
          private void OnLoaded()
          {
-             new LocalServiceLocator().CoAppService.OptedIn.ContinueWith((t) => UpdateOnUI(() => OptedIn = t.Result));
+             CoApp.OptedIn.ContinueWith((t) => UpdateOnUI(() => OptedIn = t.Result));
          }
 
+
+        private void OnSave()
+        {
+            if (_optedIn != null)
+            {
+                CoApp.SetOptedIn((bool) _optedIn);
+
+            }
+        }
 
          private bool? _optedIn;
 

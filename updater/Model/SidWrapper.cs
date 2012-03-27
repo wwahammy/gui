@@ -14,5 +14,10 @@ namespace CoApp.Updater.Model
         {
             return Sid == other.Sid;
         }
+
+        public virtual bool AreSame(SecurityIdentifier sid)
+        {
+            return Sid == sid;
+        }
     }
 }

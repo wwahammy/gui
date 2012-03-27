@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Windows.Input;
+using System.Windows;
+using CoApp.Toolkit.Logging;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
@@ -11,8 +12,16 @@ namespace CoApp.Updater.ViewModel
     {
         private readonly INavigationService nav;
         private readonly IUpdateService update;
+        internal IAutomationService Automation;
+        private int _currentPackageNumber;
         private DateTime? _lastTimeChecked;
         private DateTime? _lastTimeInstalled;
+        private string _nameOfCurrentPackage;
+
+
+        private double _percentDone;
+        private int _totalPackages;
+
         public InstallingViewModel()
         {
             Messenger.Default.Register<InstallationProgressMessage>(this, HandleMessage);
@@ -20,35 +29,11 @@ namespace CoApp.Updater.ViewModel
             MessengerInstance.Register<InstallationFinishedMessage>(this, HandleInstallFinished);
             var loc = new LocalServiceLocator();
             update = loc.UpdateService;
-            nav = loc.NavigationService; 
+            nav = loc.NavigationService;
+            Automation = loc.AutomationService;
             Loaded += OnLoaded;
             Title = "CoApp Update";
         }
-
-        private void OnLoaded()
-        {
-            _percentDone = 0;
-            _currentPackageNumber = 0;
-            _nameOfCurrentPackage = null;
-            _totalPackages = 0;
-            // we check for blocks
-            
-            update.PerformInstallation();
-        }
-
-
-        private void HandleInstallFinished(InstallationFinishedMessage m)
-        {
-            nav.GoTo(ViewModelLocator.PrimaryViewModelStatic);
-        }
-
-        private void HandleInstallFailed(InstallationFailedMessage m)
-        {
-            nav.GoTo(ViewModelLocator.PrimaryViewModelStatic);
-        }
-
-
-        private double _percentDone;
 
         public double PercentDone
         {
@@ -60,8 +45,6 @@ namespace CoApp.Updater.ViewModel
             }
         }
 
-        private int _currentPackageNumber;
-
         public int CurrentPackageNumber
         {
             get { return _currentPackageNumber; }
@@ -72,8 +55,6 @@ namespace CoApp.Updater.ViewModel
             }
         }
 
-        private int _totalPackages;
-
         public int TotalPackages
         {
             get { return _totalPackages; }
@@ -83,8 +64,6 @@ namespace CoApp.Updater.ViewModel
                 RaisePropertyChanged("TotalPackages");
             }
         }
-
-        private string _nameOfCurrentPackage;
 
         public string NameOfCurrentPackage
         {
@@ -118,7 +97,42 @@ namespace CoApp.Updater.ViewModel
             }
         }
 
-        
+        private void OnLoaded()
+        {
+            _percentDone = 0;
+            _currentPackageNumber = 0;
+            _nameOfCurrentPackage = null;
+            _totalPackages = 0;
+            // we check for blocks
+
+            update.PerformInstallation().ContinueWith(t =>
+                                                          {
+                                                              if (Automation.IsAutomated)
+                                                              {
+                                                                  Logger.Message("Shutting down" + Environment.NewLine);
+                                                                  Application.Current.Dispatcher.Invoke(
+                                                                      new Action(() => Application.Current.Shutdown()));
+
+                                                              }
+                                                              else
+                                                              {
+                                                                  nav.GoTo(ViewModelLocator.PrimaryViewModelStatic);
+                                                              }
+                                                          });
+        }
+
+
+        private void HandleInstallFinished(InstallationFinishedMessage m)
+        {
+            nav.GoTo(ViewModelLocator.PrimaryViewModelStatic);
+        }
+
+        private void HandleInstallFailed(InstallationFailedMessage m)
+        {
+            nav.GoTo(ViewModelLocator.PrimaryViewModelStatic);
+        }
+
+
         private void HandleMessage(InstallationProgressMessage m)
         {
             UpdateOnUI(() =>
@@ -129,9 +143,6 @@ namespace CoApp.Updater.ViewModel
                                TotalPackages = m.TotalNumberOfProducts;
                                CurrentPackageNumber = m.CurrentProductNumber;
                            });
-
         }
-
-  
     }
 }

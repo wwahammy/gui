@@ -59,8 +59,6 @@ namespace CoApp.Updater
             else
             {
                 mainWindow.Visibility = Visibility.Visible;
-                loc.InitializeService.SetInitializeAction(
-                    () => loc.NavigationService.GoTo(ViewModelLocator.PrimaryViewModelStatic));
             }
 
 

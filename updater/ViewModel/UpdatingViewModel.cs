@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Linq;
+using CoApp.Toolkit.Logging;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
 
@@ -12,6 +14,7 @@ namespace CoApp.Updater.ViewModel
         internal IInitializeService InitializeService;
         internal INavigationService NavigationService;
         internal IUpdateService UpdateService;
+        internal IAutomationService AutomationService;
         private DateTime? _lastTimeChecked;
         private DateTime? _lastTimeInstalled;
         private bool _showDates;
@@ -25,6 +28,7 @@ namespace CoApp.Updater.ViewModel
             UpdateService = loc.UpdateService;
             NavigationService = loc.NavigationService;
             InitializeService = loc.InitializeService;
+            AutomationService = loc.AutomationService;
             Loaded += HandleLoaded;
             Unloaded += OnUnloaded;
         }
@@ -79,14 +83,25 @@ namespace CoApp.Updater.ViewModel
             UpdateService.CheckForUpdates(_src.Token).ContinueWith(
                 t =>
                     {
-                        if (!InitializeService.Initialized)
-                        {
-                            InitializeService.RunInitializationAction();
-                        }
-                        else
-                        {
-                            NavigationService.GoTo(ViewModelLocator.PrimaryViewModelStatic);
-                        }
+                       if (AutomationService.IsAutomated)
+                       {
+                           if (UpdateService.NumberOfProductsSelected > 0)
+                           {
+                               NavigationService.GoTo(ViewModelLocator.InstallingViewModelStatic);
+                           }
+                           else
+                           {
+                               Logger.Message("Shutting down" + Environment.NewLine);
+                               Application.Current.Dispatcher.Invoke(
+                                   new Action(() => Application.Current.Shutdown()));
+                           }
+                       }
+                       else
+                       {
+                           NavigationService.GoTo(ViewModelLocator.PrimaryViewModelStatic);   
+                       }
+                        
+                        
                     }
                 , TaskContinuationOptions.NotOnCanceled);
         }

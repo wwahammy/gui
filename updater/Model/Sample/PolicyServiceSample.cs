@@ -8,7 +8,7 @@ using CoApp.Updater.Model.Interfaces;
 namespace CoApp.Updater.Model.Sample
 {
 #if SAMPLEDATA
-    public class PolicyService : IPolicyService
+    public class PolicyServiceSample : IPolicyService
     {
         private static readonly SecurityIdentifier ADMINSID =
             new SecurityIdentifier(WellKnownSidType.BuiltinAdministratorsSid, null);
@@ -31,7 +31,7 @@ namespace CoApp.Updater.Model.Sample
 
         internal ICoAppService CoApp;
 
-        public PolicyService()
+        public PolicyServiceSample()
         {
             CoApp = new LocalServiceLocator().CoAppService;
         }

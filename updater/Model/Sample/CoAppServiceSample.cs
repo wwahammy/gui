@@ -1,6 +1,7 @@
 #if SAMPLEDATA
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,16 +14,14 @@ namespace CoApp.Updater.Model.Sample
 {
     public class CoAppServiceSample : ICoAppService
     {
-        private const int MsToWait = 30;
+        private const int MS_TO_WAIT = 30;
         private readonly List<PackageDecl> _prods = new List<PackageDecl>();
         private readonly dynamic _root;
         private readonly List<string> _sysFeeds = new List<string>();
-        private bool _autoTrim = true;
         private bool _optedIn = true;
+        private readonly Dictionary<PolicyType, IList<string>> _membersForPolicies = new Dictionary<PolicyType, IList<string>>();
 
-        private UpdateChoice _updateChoice = UpdateChoice.AutoInstallAll;
-        private UpdateDayOfWeek _updateDayOfWeek = UpdateDayOfWeek.Everyday;
-        private int _updateTime = 3;
+        private ScheduledTask _scheduledTask;
 
         public CoAppServiceSample()
         {
@@ -34,7 +33,50 @@ namespace CoApp.Updater.Model.Sample
             LoadLastInstalled();
 
             LoadAutoInstallType();
-           
+            LoadScheduledTask();
+            LoadPolicyTypes();
+        }
+
+        private void LoadPolicyTypes()
+        {
+            var everyone = new[] {PolicyType.Connect, PolicyType.UpdatePackage, PolicyType.EnumeratePackages};
+            var admins = new[]
+                             {
+                                 PolicyType.ChangeActivePackage, PolicyType.FreezePackage, PolicyType.RemovePackage,
+                                 PolicyType.InstallPackage, PolicyType.EditSystemFeeds, PolicyType.ModifyPolicy,
+                                 PolicyType.ChangeBlockedState, PolicyType.ChangeActivePackage, PolicyType.ChangeRequiredState, PolicyType.EditSessionFeeds
+                             };
+            foreach (var p in everyone)
+            {
+                _membersForPolicies[p] = new[] { "S-1-1-0" }.ToList();
+            }
+
+
+            foreach (var p in admins)
+            {
+                _membersForPolicies[p] = new List<string> { "Administrators" };    
+            }
+        }
+
+        private void LoadScheduledTask()
+        {
+            dynamic element = _root.ScheduledTask;
+            if (element != null)
+            {
+                _scheduledTask = new ScheduledTask
+                                     {
+                                         Name = element.Attributes.Name,
+                                         DayOfWeek =
+                                             String.IsNullOrWhiteSpace(element.Attributes.DayOfWeek)
+                                                 ? null
+                                                 : Enum.Parse(typeof (DayOfWeek), element.Attributes.DayOfWeek),
+                                         Hour = int.Parse( element.Attributes.Time),
+                                         CommandLine = element.Attributes.CommandLine,
+                                         Executable = element.Attributes.Executable
+
+                                     };
+            }
+
         }
 
         private IEnumerable<Package> AllUpgradesAndUpdates
@@ -44,19 +86,22 @@ namespace CoApp.Updater.Model.Sample
 
         #region ICoAppService Members
 
-        public Task<Policy> GetPolicy(PolicyType type)
+ 
+        public Task<PolicyProxy> GetPolicy(PolicyType type)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(
+                () => 
+                    new PolicyProxy {Name = type.ToString(), Members = _membersForPolicies[type]});
         }
 
         public Task AddPrincipalToPolicy(PolicyType type, string principal)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() => _membersForPolicies[type].Add(principal));
         }
 
         public Task RemovePrincipalFromPolicy(PolicyType type, string principal)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() => _membersForPolicies[type].Remove(principal));
         }
 
 
@@ -141,7 +186,7 @@ namespace CoApp.Updater.Model.Sample
                                                  var ret = new PackageSet();
 
                                                  PackageDecl prod =
-                                                     _prods.Where(p => p.CanonicalName == canonicalName).First();
+                                                     _prods.First(p => p.CanonicalName == canonicalName);
 
                                                  if (prod.Update != null)
 
@@ -172,11 +217,19 @@ namespace CoApp.Updater.Model.Sample
                                                  PackageDecl prod = _prods.First(p => p.CanonicalName == canonicalName);
                                                  for (int i = 0; i < 100; i++)
                                                  {
-                                                     Thread.Sleep(MsToWait);
-                                                     installProgress.Invoke(prod.Update.CanonicalName, i, i);
+                                                     Thread.Sleep(MS_TO_WAIT);
+                                                     if (installProgress != null)
+                                                        installProgress.Invoke(prod.Update.CanonicalName, i, i);
                                                  }
 
-                                                 packageInstalled.Invoke(prod.Update.CanonicalName);
+                                                 if (packageInstalled != null)
+                                                    packageInstalled.Invoke(prod.Update.CanonicalName);
+
+                                                 prod.Update = null;
+                                                 if (prod.Update == null && prod.Upgrade == null)
+                                                 {
+                                                     _prods.Remove(prod);
+                                                 }
                                              }
                 );
         }
@@ -189,11 +242,20 @@ namespace CoApp.Updater.Model.Sample
                                                  PackageDecl prod = _prods.First(p => p.CanonicalName == canonicalName);
                                                  for (int i = 0; i < 100; i++)
                                                  {
-                                                     Thread.Sleep(MsToWait);
-                                                     installProgress.Invoke(prod.Upgrade.CanonicalName, i, i);
+                                                     Thread.Sleep(MS_TO_WAIT);
+
+                                                     if (installProgress != null)
+                                                        installProgress.Invoke(prod.Upgrade.CanonicalName, i, i);
                                                  }
 
-                                                 packageInstalled.Invoke(prod.Upgrade.CanonicalName);
+                                                 if (packageInstalled != null)
+                                                    packageInstalled.Invoke(prod.Upgrade.CanonicalName);
+
+                                                 prod.Upgrade = null;
+                                                 if (prod.Update == null && prod.Upgrade == null)
+                                                 {
+                                                     _prods.Remove(prod);
+                                                 }
                                              }
                 );
         }
@@ -216,18 +278,42 @@ namespace CoApp.Updater.Model.Sample
 
         public Task<ScheduledTask> GetScheduledTask(string name)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() =>
+                                             {
+                                                 if (_scheduledTask != null && _scheduledTask.Name == name)
+                                                     return _scheduledTask;
+                                                 return null;
+
+                                             });
         }
 
         public Task SetScheduledTask(string name, string executable, string commandline, int hour, int minutes,
                                      DayOfWeek? dayOfWeek, int intervalInMinutes)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() =>
+            {
+                if (_scheduledTask == null ||_scheduledTask != null && _scheduledTask.Name == name)
+                    _scheduledTask = new ScheduledTask
+                                         {
+                                             CommandLine = commandline,
+                                             Name = name,
+                                             Executable = executable,
+                                             Hour = hour,
+                                             IntervalInMinutes = intervalInMinutes,
+                                             Minutes = minutes,
+                                             DayOfWeek = dayOfWeek
+                                         };
+
+            });
         }
 
         public Task RemoveScheduledTask(string name)
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() =>
+                                             {
+                                                 if (_scheduledTask != null && _scheduledTask.Name == name)
+                                                     _scheduledTask = null;
+                                             });
         }
 
         public Task TrimAll()
@@ -261,7 +347,7 @@ namespace CoApp.Updater.Model.Sample
                         {
                             if (item.Element.Name == "Package")
                             {
-                                var product = new PackageDecl()
+                                var product = new PackageDecl
                                                   {
                                                       CanonicalName = item.Attributes.Name
                                                   };
@@ -290,7 +376,7 @@ namespace CoApp.Updater.Model.Sample
                                      input.Attributes.Name,
                 Summary =
                     input.Summary.Element.Value,
-                PublishDate = DateTime.Today.ToString(),
+                PublishDate = DateTime.Today.ToString(CultureInfo.InvariantCulture),
                 CanonicalName = input.Attributes.Name
             };
         }
@@ -310,6 +396,7 @@ namespace CoApp.Updater.Model.Sample
                                : UpdateChoice.AutoInstallJustUpdates;
         }
         
+    
     
 
     

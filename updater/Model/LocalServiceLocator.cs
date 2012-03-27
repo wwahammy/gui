@@ -12,13 +12,13 @@ namespace CoApp.Updater.Model
 
 
 #if SAMPLEDATA
-            SimpleIoc.Default.Register<IPolicyService, Sample.PolicyService>();
+            SimpleIoc.Default.Register<IPolicyService, PolicyService>();
             SimpleIoc.Default.Register<INavigationService, NavigationService>();
 
             SimpleIoc.Default.Register<IUpdateService, UpdateService>();
 
             SimpleIoc.Default.Register<ICoAppService, Sample.CoAppServiceSample>();
-
+            SimpleIoc.Default.Register<IWindowsUserService, WindowsUserService>();
 
             SimpleIoc.Default.Register<IAutomationService, AutomationService>();
             SimpleIoc.Default.Register<IInitializeService, InitializeService>();

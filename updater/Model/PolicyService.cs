@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using CoApp.Toolkit.Engine.Client;
 using CoApp.Updater.Model.Interfaces;
 
 namespace CoApp.Updater.Model
 {
     public class PolicyService : IPolicyService
     {
+// ReSharper disable InconsistentNaming
         private static readonly SecurityIdentifier WORLDSID = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+// ReSharper restore InconsistentNaming
         internal ICoAppService CoApp;
         internal IWindowsUserService UserService;
 
@@ -40,7 +41,11 @@ namespace CoApp.Updater.Model
 
         public Task<PolicyResult> UpdatePolicy
         {
-            get { return CoApp.GetPolicy(PolicyType.UpdatePackage).ContinueWith(t => CreatePolicyResultTask(t)); }
+            get
+            {
+                return CoApp.GetPolicy(PolicyType.UpdatePackage).ContinueWith(t => 
+                    CreatePolicyResultTask(t));
+            }
         }
 
         public Task SetUpdatePolicy(PolicyResult result)
@@ -176,7 +181,7 @@ namespace CoApp.Updater.Model
 
         #endregion
 
-        private bool VerifyActionPermission(Task<Policy> taskResult)
+        private bool VerifyActionPermission(Task<PolicyProxy> taskResult)
         {
             if (taskResult.IsFaulted)
             {
@@ -200,7 +205,7 @@ namespace CoApp.Updater.Model
             SidWrapper currentUser = UserService.GetUserSid(current);
 
 
-            foreach (SidWrapper sid in accounts.Select((a) => UserService.FindSid(a)))
+            foreach (SidWrapper sid in accounts.Select(a => UserService.FindSid(a)))
             {
                 if (sid.Equals(WORLDSID))
                 {
@@ -233,14 +238,13 @@ namespace CoApp.Updater.Model
             PolicyResult output = PolicyResult.Other;
             foreach (SidWrapper sid in accounts.Select(a => UserService.FindSid(a)))
             {
-                if (sid.Equals(WORLDSID))
+                if (sid.AreSame(WORLDSID))
                 {
                     output = PolicyResult.Everyone;
                     break;
                 }
 
-                if (sid.Equals(currentUser))
-
+                if (sid.AreSame(currentUser))
                 {
                     output = PolicyResult.CurrentUser;
                 }
@@ -255,8 +259,8 @@ namespace CoApp.Updater.Model
                 throw new Exception();
 
 
-            PolicyResult currentPolicy = currentPolicyTask.Result;
-            IIdentity currentUser = UserService.GetCurrentUser();
+            var currentPolicy = currentPolicyTask.Result;
+            var currentUser = UserService.GetCurrentUser();
             //get the current install policy
             if (currentPolicy == PolicyResult.Everyone)
             {
@@ -319,18 +323,15 @@ namespace CoApp.Updater.Model
             }
         }
 
-        private PolicyResult CreatePolicyResultTask(Task<Policy> taskIn)
+        private PolicyResult CreatePolicyResultTask(Task<PolicyProxy> taskIn)
         {
             if (taskIn.IsFaulted)
             {
                 throw new Exception(); //create properexception
             }
-            else
-            {
-                return
-                    CreatePolicyResult(
-                        taskIn.Result.Members);
-            }
+            return
+                CreatePolicyResult(
+                    taskIn.Result.Members);
         }
     }
 }

@@ -44,16 +44,19 @@ namespace CoApp.Updater.Model.Interfaces
 
         Task BlockProduct(Product product);
 
-        Task<UpdateChoice> UpdateChoice();
+        Task<UpdateChoice> UpdateChoice { get; }
 
         Task SetUpdateChoice(UpdateChoice choice);
 
         Task<UpdateTimeAndDay> UpdateTimeAndDay { get; }
 
         Task SetUpdateTimeAndDay(int hour, UpdateDayOfWeek day);
-        
-        Task<bool> AutoTrim();
+
+        Task<bool> AutoTrim { get; }
         Task SetAutoTrim(bool autotrim);
+
+        Task<DateTime> LastScheduledTaskRealRun { get; }
+        Task SetScheduledTaskToRunNow();
     }
 
     public enum UpdateDayOfWeek

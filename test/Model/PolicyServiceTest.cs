@@ -9,7 +9,7 @@ using Moq;
 namespace CoApp.Gui.Test.Model
 {
     
-    
+    /*
     /// <summary>
     ///This is a test class for PolicyServiceTest and is intended
     ///to contain all PolicyServiceTest Unit Tests
@@ -109,7 +109,7 @@ namespace CoApp.Gui.Test.Model
             mock.Setup(u => u.GetUserSid(AdminUser)).Returns(() => new SecurityIdentifier("AdminUser"));
             mock.Setup(u => u.GetUserSid(UserWhoCanRemoveOnly)).Returns(
                 () => new SecurityIdentifier("UserWhoCanRemoveOnly"));
-            */
+            
             return mock;
         }
         
@@ -533,4 +533,5 @@ namespace CoApp.Gui.Test.Model
         
         
     }
+     */
 }

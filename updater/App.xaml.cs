@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Forms;
 using CoApp.Toolkit.Extensions;
 using CoApp.Updater.Model;
+using CoApp.Updater.Support;
 using CoApp.Updater.ViewModel;
 using GalaSoft.MvvmLight.Threading;
 
@@ -25,14 +26,16 @@ namespace CoApp.Updater
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            _notifyIcon.Visible = false;
+            if (_notifyIcon != null)
+                _notifyIcon.Visible = false;
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
 
-            SetupNotifyIcon();
+            
             var quiet = false;
+            var force = false;
 
             var options = e.Args.Switches();
             foreach (var arg in options.Keys)
@@ -45,8 +48,23 @@ namespace CoApp.Updater
                     case "quiet":
                         quiet = true;
                         break;
+                    case "force":
+                        force = true;
+                        break;
                 }
             }
+
+            if (quiet && !force)
+            {
+                var quietSupport = new QuietSupport();
+                if (quietSupport.HandleScheduledTaskCall().Result)
+                    return;
+            }
+
+            
+            
+
+
 
 
             var mainWindow = new MainWindow();
@@ -55,6 +73,10 @@ namespace CoApp.Updater
             {
                 mainWindow.Visibility = Visibility.Hidden;
                 loc.AutomationService.TurnOnAutomation();
+                if (!force)
+                {
+                    loc.UpdateService.SetScheduledTaskToRunNow();
+                }
             }
             else
             {
@@ -65,6 +87,7 @@ namespace CoApp.Updater
             loc.NavigationService.GoTo(ViewModelLocator.UpdatingViewModelStatic);
 
             Current.MainWindow = mainWindow;
+            SetupNotifyIcon();
         }
 
 

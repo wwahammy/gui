@@ -94,7 +94,7 @@ namespace CoApp.Updater.ViewModel.Settings
 
         private void OnLoaded()
         {
-            UpdateService.UpdateChoice().ContinueWith(t => UpdateOnUI(() => UpdateChoice = t.Result));
+            UpdateService.UpdateChoice.ContinueWith(t => UpdateOnUI(() => UpdateChoice = t.Result));
             UpdateService.UpdateTimeAndDay.ContinueWith(t => UpdateOnUI(() =>
                                                                             {
                                                                                 DayOfWeek = t.Result.DayOfWeek;
@@ -102,7 +102,7 @@ namespace CoApp.Updater.ViewModel.Settings
                                                                             }));
 
  
-            UpdateService.AutoTrim().ContinueWith(t => UpdateOnUI(() => AutoTrim = t.Result));
+            UpdateService.AutoTrim.ContinueWith(t => UpdateOnUI(() => AutoTrim = t.Result));
         }
 
         #region Choices for comboboxes

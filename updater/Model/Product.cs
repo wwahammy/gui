@@ -12,6 +12,8 @@ namespace CoApp.Updater.Model
         public string Summary { get; set; }
         public DateTime UpdateTime { get; set; }
 
+        public string NewId { get; set; }
+
         public bool IsUpgrade { get; set; }
 
     }

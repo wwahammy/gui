@@ -757,5 +757,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+  <Converters1:NullToBooleanConverter x:Key="NullToBooleanConverter1" />
+  <Converters1:UrlToBooleanConverter x:Key="UrlToBooleanConverter1" />
 </ResourceDictionary>

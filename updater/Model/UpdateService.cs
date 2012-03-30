@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,13 +12,15 @@ using CoApp.Updater.Model.Interfaces;
 using CoApp.Updater.Support;
 using CoApp.Updater.Support.Converters;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Win32;
+using RegistryView = CoApp.Toolkit.Configuration.RegistryView;
 
 namespace CoApp.Updater.Model
 {
     public class UpdateService : IUpdateService
     {
         internal ICoAppService CoApp;
-
+        
 
         public UpdateService()
         {
@@ -81,7 +84,7 @@ namespace CoApp.Updater.Model
 
                                                                              if (!t.IsFaulted)
                                                                              {
-                                                                                 var trim = AutoTrim().Result;
+                                                                                 var trim = AutoTrim.Result;
                                                                                  if (trim)
                                                                                  {
                                                                                      var task = CoApp.TrimAll();
@@ -91,6 +94,11 @@ namespace CoApp.Updater.Model
                                                                                      }
                                                                                  }
                                                                              }
+                                                                             else
+                                                                             {
+                                                                                 Logger.Message(t.Exception.Unwrap().ToString());
+                                                                                 throw t.Exception.Unwrap();
+                                                                             }
                                                                          }
 
                 );
@@ -99,12 +107,12 @@ namespace CoApp.Updater.Model
 
         public Task BlockProduct(Product product)
         {
-            return CoApp.BlockPackage(product.OldId);
+            return CoApp.BlockPackage(product.NewId);
         }
 
-        public Task<UpdateChoice> UpdateChoice()
+        public Task<UpdateChoice> UpdateChoice
         {
-            return Task.Factory.StartNew(() => CoApp.UpdateChoice, TaskCreationOptions.AttachedToParent);
+            get { return Task.Factory.StartNew(() => CoApp.UpdateChoice, TaskCreationOptions.AttachedToParent); }
         }
 
         public Task SetUpdateChoice(UpdateChoice choice)
@@ -135,14 +143,39 @@ namespace CoApp.Updater.Model
                 CoApp.SetScheduledTask("coapp_update", "", "--quiet", hour, 0, UpdateDayOfWeekConverter.Convert(day), 60);
         }
 
-        public Task<bool> AutoTrim()
+        public Task<bool> AutoTrim
         {
-            return Task.Factory.StartNew(() => CoApp.TrimOnUpdate);
+            get { return Task.Factory.StartNew(() => CoApp.TrimOnUpdate); }
         }
 
         public Task SetAutoTrim(bool autotrim)
         {
             return Task.Factory.StartNew(() => CoApp.TrimOnUpdate = autotrim);
+        }
+
+        public Task<DateTime> LastScheduledTaskRealRun
+        {
+            get { return Task.Factory.StartNew(() =>
+                                                   {
+                                                       var lastRun =
+                                                           new DateTime(
+                                                               RegistryView.ApplicationUser["coapp_update#last_run"].LongValue);
+                                                       Logger.Message("Last run is {0}", lastRun.ToString(CultureInfo.InvariantCulture));
+
+                                                       return lastRun;
+                                                   }); }
+        }
+
+        public Task SetScheduledTaskToRunNow()
+        {
+            return Task.Factory.StartNew(() =>
+                                             {
+                                                 var now = DateTime.Now;
+                                                 Logger.Message("Setting last run to right now - {0}", now.ToString(CultureInfo.InvariantCulture));
+                                                 RegistryView.ApplicationUser["coapp_update#last_run"].LongValue =
+                                                     now.Ticks;
+
+                                             });
         }
 
 
@@ -171,7 +204,7 @@ namespace CoApp.Updater.Model
 
         #endregion
 
-        public void HandleInstall()
+        private void HandleInstall()
         {
             lock (AllPossibleProducts)
             {
@@ -271,20 +304,25 @@ namespace CoApp.Updater.Model
                     }
 
                     //wait for THIS update/upgrade to finish
+                    var product = prod;
+                    var c = t.ContinueWith(t1 =>
+                                       {
+                                           if (t1.IsFaulted)
+                                           {
+                                               Logger.Message("Failed to install {0}" + Environment.NewLine,
+                                                              CurrentInstallingProduct.DisplayName);
+                                               //uh oh, it didn't add it to our list
+                                               exceptions.Add(t.Exception);
+                                           }
+                                           else
+                                           {
+                                               AllPossibleProducts.Remove(product.Key);
+                                           }
+                                       });
 
-                    t.Wait();
-
+                    c.Wait();
                     //did it work?
-                    if (t.IsFaulted)
-                    {
-                        Logger.Message("Failed to install {0}" + Environment.NewLine, CurrentInstallingProduct.DisplayName);
-                        //uh oh, it didn't add it to our list
-                        exceptions.Add(t.Exception);
-                    }
-                    else
-                    {
-                        AllPossibleProducts.Remove(prod.Key);
-                    }
+
                 }
 
 
@@ -312,6 +350,8 @@ namespace CoApp.Updater.Model
                                 CoApp.GetUpdatablePackages(),
                                 CoApp.GetUpgradablePackages()
                             };
+
+            //TODO this won't get all the errors, just one of them
 
             if (token != null)
             {
@@ -358,6 +398,9 @@ namespace CoApp.Updater.Model
 
             var all = task.Result.Select(p => new { Package = p, Set = GetDetailedPackageSet(p)}).ToArray();
             var tasks = all.Select(a => a.Set).ToArray();
+
+          
+            //TODO this won't get all the errors, just one of them
             if (token != null)
             {
                 Task.WaitAll(tasks, (CancellationToken) token);
@@ -377,17 +420,13 @@ namespace CoApp.Updater.Model
             {
 
                 Package ourUpdate = null;
-                if (isUpgrade)
-                    ourUpdate = t.Set.Result.AvailableNewer;
-                else
-                {
-                    ourUpdate = t.Set.Result.AvailableNewerCompatible;
-                }
+                ourUpdate = isUpgrade ? t.Set.Result.AvailableNewer : t.Set.Result.AvailableNewerCompatible;
 
                 products.Add(new Product
                                  {
                                      DisplayName = ourUpdate.DisplayName,
                                      OldId = t.Package.CanonicalName,
+                                     NewId = ourUpdate.CanonicalName,
                                      IsUpgrade = isUpgrade,
                                      Summary = ourUpdate.Summary,
                                      UpdateTime = DateTime.Parse(ourUpdate.PublishDate)

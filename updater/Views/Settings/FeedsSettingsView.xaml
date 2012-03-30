@@ -11,9 +11,9 @@
 
         <TextBlock  Style="{StaticResource CoAppUpdateInnerHeader}">Remove A Feed</TextBlock>
         <ListBox  Margin="0, 8" ItemsSource="{Binding Feeds}" x:Name="FeedList" Grid.Row="0" VerticalAlignment="Top" MinHeight="350" SelectedItem="{Binding SelectedItem}"/>
-        <Controls:ElevateButton ElevatedCommand="{Binding Remove}" MustElevate="{Binding CanSetSystemFeeds, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}" CommandParameter="{Binding ElementName=FeedList, Path=SelectedItem}" Content="Remove" Grid.Row="1" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="0, 8" />
+        <Controls:ElevateButton ElevatedCommand="{Binding Remove}" MustElevate="{Binding CanSetSystemFeeds, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}" CommandParameter="{Binding ElementName=FeedList, Path=SelectedItem}" Content="Remove" Grid.Row="1" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="0, 8" UnelevatedCommand="{Binding DefaultElevate}" IsEnabled="{Binding ElementName=FeedList, Path=SelectedItem, Converter={StaticResource NullToBooleanConverter1}, Mode=OneWay}"/>
         <TextBlock  Style="{StaticResource CoAppUpdateInnerHeader}">Add A Feed</TextBlock>
         <TextBox Margin="0,8" Grid.Row="3" x:Name="AddBox" Text="{Binding FeedUrlToAdd}"/>
-        <Controls:ElevateButton ElevatedCommand="{Binding Add}" MustElevate="{Binding CanSetSystemFeeds, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}" CommandParameter="{Binding ElementName=AddBox, Path=Text}" Content="Add" Grid.Row="4" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="0, 8" />
+        <Controls:ElevateButton ElevatedCommand="{Binding Add}" MustElevate="{Binding CanSetSystemFeeds, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}" CommandParameter="{Binding ElementName=AddBox, Path=Text}" Content="Add" Grid.Row="4" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="0, 8"  UnelevatedCommand="{Binding DefaultElevate}" IsEnabled="{Binding ElementName=AddBox, Path=Text, Converter={StaticResource UrlToBooleanConverter1}, Mode=OneWay}"/>
     </StackPanel>
 </UserControl>

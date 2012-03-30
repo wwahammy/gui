@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -170,7 +171,7 @@ namespace CoApp.Updater.Support.Errors
         {
             Messenger.Default.Send(new MetroDialogBoxMessage
             {
-                Buttons = new ButtonDescription[] { new ButtonDescription { IsCancel = true, Title = "Close" } },
+                Buttons = new ObservableCollection<ButtonDescription>{ new ButtonDescription { IsCancel = true, Title = "Close" } },
                 Content = ErrorMessage,
                 Title = "Unblock Failed"
             });

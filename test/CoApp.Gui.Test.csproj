@@ -33,8 +33,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoApp.Toolkit, Version=1.1.2.1360, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL" />
-    <Reference Include="CoApp.Toolkit.Engine.Client, Version=1.1.2.1360, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL" />
+    <Reference Include="CoApp.Client, Version=1.2.0.17, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="CoApp.Developer.Toolkit, Version=1.2.0.26, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL" />
+    <Reference Include="CoApp.Toolkit, Version=1.2.0.19, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentDateTime">
+      <HintPath>..\updater\lib\FluentDateTime.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL" />
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=63eb5c012e0b3c1c, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,9 +67,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WPFLocalizeExtension">
-      <HintPath>..\updater\lib\WPFLocalizeExtension.dll</HintPath>
-    </Reference>
+    <Reference Include="WPFLocalizeExtension, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -69,19 +75,28 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\AutomationServiceTest.cs" />
     <Compile Include="Model\NavigationServiceTest.cs" />
     <Compile Include="Model\PolicyServiceTest.cs" />
+    <Compile Include="Model\UpdateServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\HourConverterTest.cs" />
-    <Compile Include="ViewModels\SerializationTests.cs" />
+    <Compile Include="Support\QuietSupportTest.cs" />
+    <Compile Include="TestSupportFiles\TestPackage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\updater\CoApp.Updater.csproj">
       <Project>{55D4D63D-C1BF-4675-8DEF-6B4F7DDC4C18}</Project>
       <Name>CoApp.Updater</Name>
     </ProjectReference>
+    <ProjectReference Include="..\updater\lib\MahApps.Metro\MahApps.Metro.csproj">
+      <Project>{5B1710D2-5DC8-4754-91B2-19165DE49B3D}</Project>
+      <Name>MahApps.Metro</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
   <ItemGroup>
     <Shadow Include="Test References\CoApp.Updater.accessor" />
   </ItemGroup>

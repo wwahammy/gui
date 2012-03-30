@@ -35,6 +35,13 @@ namespace CoApp.Updater.Model
 
         public event Action AutomationTurnedOff;
 
+        internal void Reset()
+        {
+            _automatedInit = false;
+            IsAutomated = false;
+            AutomationTurnedOff = null;
+        }
+
         #endregion
     }
 }

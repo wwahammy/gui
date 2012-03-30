@@ -21,7 +21,7 @@ namespace CoApp.Updater.Model
             SimpleIoc.Default.Register<IWindowsUserService, WindowsUserService>();
 
             SimpleIoc.Default.Register<IAutomationService, AutomationService>();
-            SimpleIoc.Default.Register<IInitializeService, InitializeService>();
+          
 #else
 
                     SimpleIoc.Default.Register<IPolicyService, PolicyService>();
@@ -34,7 +34,6 @@ namespace CoApp.Updater.Model
            
                 SimpleIoc.Default.Register<IAutomationService, AutomationService>();
                 SimpleIoc.Default.Register<IWindowsUserService, WindowsUserService>();
-                 SimpleIoc.Default.Register<IInitializeService, InitializeService>();
 #endif
         }
 
@@ -73,10 +72,5 @@ namespace CoApp.Updater.Model
             get { return ServiceLocator.Current.GetInstance<IAutomationService>(); }
         }
 
-
-        public virtual IInitializeService InitializeService
-        {
-            get { return ServiceLocator.Current.GetInstance<IInitializeService>(); }
-        }
     }
 }

@@ -11,7 +11,6 @@ namespace CoApp.Updater.ViewModel
 {
     public class UpdatingViewModel : ScreenViewModel
     {
-        internal IInitializeService InitializeService;
         internal INavigationService NavigationService;
         internal IUpdateService UpdateService;
         internal IAutomationService AutomationService;
@@ -27,7 +26,6 @@ namespace CoApp.Updater.ViewModel
             var loc = new LocalServiceLocator();
             UpdateService = loc.UpdateService;
             NavigationService = loc.NavigationService;
-            InitializeService = loc.InitializeService;
             AutomationService = loc.AutomationService;
             Loaded += HandleLoaded;
             Unloaded += OnUnloaded;

@@ -16,24 +16,24 @@
     </UserControl.Resources>
     <StackPanel>
         <TextBlock Text="Choose what updates to install:"/>
-        <ComboBox ItemsSource="{Binding AllUpdateChoices}" SelectedItem="{Binding UpdateChoice}">
+        <ComboBox ItemsSource="{Binding AllUpdateChoices}" SelectedItem="{Binding UpdateChoice}" Margin="0, 8, 0, 8">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type Interfaces:UpdateChoice}">
                     <TextBlock Text="{Binding Converter={StaticResource choiceToText}}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Install New Updates: "/>
-            <ComboBox ItemsSource="{Binding AllDaysOfWeek}" SelectedItem="{Binding DayOfWeek}">
+        <StackPanel Orientation="Horizontal" Margin="0, 8, 0 ,8" VerticalAlignment="Center">
+            <TextBlock Text="Install New Updates: " VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding AllDaysOfWeek}" SelectedItem="{Binding DayOfWeek}" Margin="8, 0, 8, 0" VerticalAlignment="Center">
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type Interfaces:UpdateDayOfWeek}">
                         <TextBlock Text="{Binding Converter={StaticResource daysToText}}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <TextBlock Text=" at "/>
-            <ComboBox ItemsSource="{Binding HourChoices}" SelectedItem="{Binding UpdateTime}">
+            <TextBlock Text=" at "  VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding HourChoices}" SelectedItem="{Binding UpdateTime}" Margin="8, 0, 8, 0"  VerticalAlignment="Center">
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type System:Int32}">
                         <TextBlock Text="{Binding Converter={StaticResource hourConverter}}"/>
@@ -41,7 +41,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
-        <CheckBox HorizontalAlignment="Left" Content="Automatically remove unused packages" IsChecked="{Binding AutoTrim}"/>
-        <Controls:ElevateButton Content="Save" HorizontalAlignment="Left" MustElevate="{Binding CanChangeSettings, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}" ElevatedCommand="{Binding Save}" UnelevatedCommand="{Binding RunAdmin}" />
+        <CheckBox HorizontalAlignment="Left" Content="Automatically remove unused packages" IsChecked="{Binding AutoTrim}" Margin="0, 8, 0, 0"/>
+        <Controls:ElevateButton Content="Save" HorizontalAlignment="Left" MustElevate="{Binding CanChangeSettings, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}" ElevatedCommand="{Binding Save}"  UnelevatedCommand="{Binding DefaultElevate}" Margin="0, 20, 0 ,0"/>
     </StackPanel>
 </UserControl>

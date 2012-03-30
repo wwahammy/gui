@@ -65,9 +65,21 @@ namespace CoApp.Updater.Model
             get { return _innerStack.Count < 1; }
         }
 
+
+        internal void Reset()
+        {
+            EmptyStack();
+            ClearCurrent();
+        }
+
         internal void EmptyStack()
         {
             _innerStack = new Stack<ScreenViewModel>();
+        }
+
+        internal void ClearCurrent()
+        {
+            Current = null;
         }
 
 

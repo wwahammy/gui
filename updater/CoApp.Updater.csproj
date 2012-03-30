@@ -63,6 +63,9 @@
     <Reference Include="CoApp.Toolkit, Version=1.2.0.13, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
     </Reference>
+    <Reference Include="FluentDateTime">
+      <HintPath>lib\FluentDateTime.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1673db7d5906b0ad, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
@@ -121,14 +124,12 @@
     <Compile Include="Messages\SelectedProductsChangedMessage.cs" />
     <Compile Include="Model\AutomationService.cs" />
     <Compile Include="Model\CoAppService.cs" />
-    <Compile Include="Model\InitializeService.cs" />
     <Compile Include="Model\Interfaces\IAutomationService.cs" />
     <Compile Include="Model\Interfaces\ICoAppService.cs" />
-    <Compile Include="Model\Interfaces\IInitializeService.cs" />
     <Compile Include="Model\Interfaces\INavigationService.cs" />
     <Compile Include="Model\Interfaces\IPolicyService.cs" />
     <Compile Include="Model\Interfaces\IUpdateService.cs" />
-    <Compile Include="Model\Interfaces\IWindowsUserService.cs" />
+    <Compile Include="Model\Sample\IWindowsUserService.cs" />
     <Compile Include="Model\NavigationService.cs" />
     <Compile Include="Model\PolicyQueryResult.cs" />
     <Compile Include="Model\PolicyService.cs" />
@@ -162,7 +163,9 @@
     <Compile Include="Support\Converters\HourConverter.cs" />
     <Compile Include="Support\Converters\ImageToColorConverter.cs" />
     <Compile Include="Support\Converters\NullEmptyStringToVisibilityConverter.cs" />
+    <Compile Include="Support\Converters\NullToBooleanConverter.cs" />
     <Compile Include="Support\Converters\UpdateDayOfWeekConverter.cs" />
+    <Compile Include="Support\Converters\UrlToBooleanConverter.cs" />
     <Compile Include="Support\Errors\BlockedProductError.cs" />
     <Compile Include="Support\Errors\ErrorObject.cs" />
     <Compile Include="Support\Errors\ProductToUnblock.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="Support\GridViewColumnResize.cs" />
     <Compile Include="Support\ObjectExtensions.cs" />
     <Compile Include="Support\PrimaryViewTemplateSelector.cs" />
+    <Compile Include="Support\QuietSupport.cs" />
     <Compile Include="Support\StateManager.cs" />
     <Compile Include="Support\StringList.cs" />
     <Compile Include="ViewModel\InstallingViewModel.cs" />

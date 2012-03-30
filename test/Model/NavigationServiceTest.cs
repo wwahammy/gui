@@ -66,7 +66,7 @@ namespace CoApp.Gui.Test.Model
 
             try
             {
-                nav.EmptyStack();
+                nav.Reset();
             }
             catch
             {

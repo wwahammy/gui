@@ -1,7 +1,15 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Input;
+using CoApp.Updater.Controls;
+using CoApp.Updater.Messages;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
 
 namespace CoApp.Updater.ViewModel
@@ -20,14 +28,32 @@ namespace CoApp.Updater.ViewModel
         private string _subTitle;
         private string _title;
 
-
         protected ScreenViewModel()
         {
             _policyService = new LocalServiceLocator().PolicyService;
 
             Loaded += OnLoaded;
+            Restart = new RelayCommand(RunRestart);
+            DefaultElevate =
+                new RelayCommand(
+                    () =>
+                    MessengerInstance.Send(new MetroDialogBoxMessage
+                                               {
+                                                   Title = "Restart CoApp Update",
+                                                   Content =
+                                                       "In order to complete your command, CoApp Update must restart. Would you like to restart CoApp Update?",
+                                                   Buttons = new ObservableCollection<ButtonDescription>
+                                                                 {
+                                                                     new ElevateButtonDescription
+                                                                         {Title = "Restart", Command = Restart},
+                                                                     new ButtonDescription
+                                                                         {Title = "Cancel", IsCancel = true}
+                                                                 }
+                                               }));
         }
 
+        public ICommand DefaultElevate { get; set; }
+        public ICommand Restart { get; set; }
 
         public string Title
         {
@@ -131,6 +157,16 @@ namespace CoApp.Updater.ViewModel
                 _canChangeSettings = value;
                 RaisePropertyChanged("CanChangeSettings");
             }
+        }
+
+        private void RunRestart()
+        {
+            var startInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase) {Verb = "runas"};
+
+
+            Process.Start(startInfo);
+
+            Application.Current.Dispatcher.Invoke(new Action(() => Application.Current.Shutdown()));
         }
 
         private void OnLoaded()

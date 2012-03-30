@@ -22,7 +22,7 @@ namespace CoApp.Updater.ViewModel
     {
         private bool _canGoBack;
         private ScreenViewModel _mainScreenViewModel;
-        private string _visualState;
+       
         private INavigationService nav;
 
         /// <summary>

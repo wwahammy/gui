@@ -14,6 +14,6 @@
 
         <RadioButton Content="Yes, I would like to participate" GroupName="Participation1" IsChecked="{Binding OptedIn}"/>
         <RadioButton Content="No, I don't want to participate" Margin="0,0,0,10" GroupName="Participation1" IsChecked="{Binding OptedOut, Mode=OneWay}"/>
-        <Controls1:ElevateButton HorizontalAlignment="Left" Content="Save" MustElevate="{Binding CanChangeSetting}" ElevatedCommand="{Binding Save}"/>
+        <Controls1:ElevateButton HorizontalAlignment="Left" Content="Save" MustElevate="{Binding CanChangeSettings, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}" ElevatedCommand="{Binding Save}"  UnelevatedCommand="{Binding DefaultElevate}"/>
     </StackPanel>
 </UserControl>

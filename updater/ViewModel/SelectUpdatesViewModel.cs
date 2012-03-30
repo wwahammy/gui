@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using CoApp.Updater.Messages;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
 using GalaSoft.MvvmLight;
@@ -14,12 +11,10 @@ using GalaSoft.MvvmLight.Command;
 
 namespace CoApp.Updater.ViewModel
 {
-    
     public class SelectUpdatesViewModel : ScreenViewModel
     {
         private readonly IUpdateService _updateService;
 
-        private IDictionary<Product, bool> _originalProducts;
 
         private ObservableCollection<SelectableProduct> _products;
 
@@ -28,41 +23,34 @@ namespace CoApp.Updater.ViewModel
             Title = "Select the updates you want to install";
             var loc = new LocalServiceLocator();
             _updateService = loc.UpdateService;
-           // MessengerInstance.Register<SelectedProductsChangedMessage>(this, HandleChanged);
 
             Loaded += OnLoaded;
             Save = new RelayCommand(() =>
                                         {
-                                            Parallel.ForEach(Products.ToArray(), (i) =>
-                                                                           {
-                                                                               if (i.IsSelected)
-                                                                               {
-                                                                                   _updateService.SelectProduct(
-                                                                                       i.Product);
-                                                                               }
-                                                                               else
-                                                                                   _updateService.UnselectProduct(
-                                                                                       i.Product);
+                                            Parallel.ForEach(Products.ToArray(), i =>
+                                                                                     {
+                                                                                         if (i.IsSelected)
+                                                                                         {
+                                                                                             _updateService.
+                                                                                                 SelectProduct(
+                                                                                                     i.Product);
+                                                                                         }
+                                                                                         else
+                                                                                             _updateService.
+                                                                                                 UnselectProduct(
+                                                                                                     i.Product);
 
-                                                                               // go to primary page
-                                                                           });
+                                                                                         // go to primary page
+                                                                                     });
                                             loc.NavigationService.GoTo(ViewModelLocator.PrimaryViewModelStatic);
                                         });
 
             BlockProduct = new RelayCommand<SelectableProduct>(p => _updateService.BlockProduct(p.Product));
-
-            
-        }
-
-        private void OnLoaded()
-        {
-            LoadSelectedProducts();
         }
 
         /// <summary>
         /// bool is whether it's selected
         /// </summary>
-        
         public ObservableCollection<SelectableProduct> Products
         {
             get { return _products; }
@@ -73,10 +61,15 @@ namespace CoApp.Updater.ViewModel
             }
         }
 
-        
+
         public ICommand Save { get; set; }
-        
+
         public ICommand BlockProduct { get; set; }
+
+        private void OnLoaded()
+        {
+            LoadSelectedProducts();
+        }
 
         /*
         private void HandleChanged(SelectedProductsChangedMessage obj)
@@ -86,22 +79,19 @@ namespace CoApp.Updater.ViewModel
         */
 
 
-
         private void LoadSelectedProducts()
         {
-            
-            var products = //new ObservableCollection<SelectableProduct>(
+            IEnumerable<SelectableProduct> products = //new ObservableCollection<SelectableProduct>(
                 _updateService.AllPossibleProducts.Select(
                     kp => new SelectableProduct {Product = kp.Key, IsSelected = kp.Value, ViewModel = this});
 
             var test = new ObservableCollection<SelectableProduct>();
-            foreach (var p in products)
+            foreach (SelectableProduct p in products)
             {
                 test.Add(p);
             }
 
             Products = test;
-
         }
 
 
@@ -113,7 +103,7 @@ namespace CoApp.Updater.ViewModel
 
         public void Deserialize(XElement element)
         {
-               //nothing to do
+            //nothing to do
             return;
         }
     }

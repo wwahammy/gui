@@ -1,0 +1,19 @@
+<UserControl x:Class="CoApp.Gui.Toolkit.Views.Settings.PrivacySettingsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Controls="clr-namespace:CoApp.Gui.Toolkit.Controls" mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
+
+    <StackPanel Background="Transparent">
+        <TextBlock Style="{StaticResource CoAppUpdateInnerHeader}" Text="CoApp Improvement Program" Margin="0,0,0,10" />
+        <TextBlock Text="The program improves CoApp. Anonymous information about packages installed with will be sent to CoApp.org for the improvement of CoApp. No identifying information will be sent."
+             TextWrapping="Wrap" Margin="0,0,0,10" />
+
+        <Button Style="{StaticResource ChromelessLinkButtonStyle}" Content="More Information"
+             HorizontalAlignment="Left" Margin="0,0,0,10">
+        </Button>
+
+        <RadioButton Content="Yes, I would like to participate" GroupName="Participation1" IsChecked="{Binding OptedIn}"/>
+        <RadioButton Content="No, I don't want to participate" Margin="0,0,0,10" GroupName="Participation1" IsChecked="{Binding OptedOut, Mode=OneWay}"/>
+        <Controls:ElevateButton HorizontalAlignment="Left" Content="Save" MustElevate="{Binding CanChangeSettings, Converter={StaticResource invertConverter}}" ElevatedCommand="{Binding Save}"  UnelevatedCommand="{Binding DefaultElevate}"/>
+    </StackPanel>
+</UserControl>

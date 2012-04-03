@@ -8,7 +8,9 @@
         xmlns:Controls="clr-namespace:CoApp.Updater.Controls" xmlns:ViewModel="clr-namespace:CoApp.Updater.ViewModel"
         xmlns:Views="clr-namespace:CoApp.Updater.Views"
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
-        mc:Ignorable="d"
+        xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
+        xmlns:ViewModels="clr-namespace:CoApp.Gui.Toolkit.ViewModels;assembly=CoApp.Gui.Toolkit"
+        xmlns:Views1="clr-namespace:CoApp.Gui.Toolkit.Views;assembly=CoApp.Gui.Toolkit" mc:Ignorable="d"
         
         
         Title="CoApp Update" MinHeight="800"
@@ -104,8 +106,8 @@
                         <Views:PrimaryView/>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type ViewModel:SettingsViewModel}">
-                        <Views:SettingsView/>
+                    <DataTemplate DataType="{x:Type ViewModels:SettingsViewModel}">
+                        <Views1:SettingsView/>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type ViewModel:SelectUpdatesViewModel}">
@@ -121,7 +123,7 @@
         </Grid>
         <Grid Grid.Row="0" Grid.RowSpan="2" x:Name="LoadingGrid" Visibility="Collapsed" Opacity="0">
             
-            <Controls:DialogBox DataContext="{Binding DialogBoxInfo}" Title="{Binding Title}"  Content="{Binding Content}" ButtonDescriptions="{Binding Buttons}"/>
+            <Controls1:DialogBox DataContext="{Binding DialogBoxInfo}" Title="{Binding Title}"  Content="{Binding Content}" ButtonDescriptions="{Binding Buttons}"/>
         </Grid>
     </Grid>
 </Window>

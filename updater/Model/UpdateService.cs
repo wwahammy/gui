@@ -4,13 +4,16 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CoApp.Gui.Toolkit.Model;
+using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Gui.Toolkit.Support;
+using CoApp.Gui.Toolkit.Support.Converters;
 using CoApp.Toolkit.Engine.Client;
 using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Logging;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model.Interfaces;
 using CoApp.Updater.Support;
-using CoApp.Updater.Support.Converters;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Win32;
 using RegistryView = CoApp.Toolkit.Configuration.RegistryView;
@@ -20,11 +23,13 @@ namespace CoApp.Updater.Model
     public class UpdateService : IUpdateService
     {
         internal ICoAppService CoApp;
-        
+        internal IUpdateSettingsService UpdateSettings;
 
         public UpdateService()
         {
-            CoApp = new LocalServiceLocator().CoAppService;
+            var loc = new LocalServiceLocator();
+            CoApp = loc.CoAppService;
+            UpdateSettings = loc.UpdateSettingsService;
             AllPossibleProducts = new Dictionary<Product, bool>();
         }
 
@@ -84,7 +89,7 @@ namespace CoApp.Updater.Model
 
                                                                              if (!t.IsFaulted)
                                                                              {
-                                                                                 var trim = AutoTrim.Result;
+                                                                                 var trim = UpdateSettings.AutoTrim.Result;
                                                                                  if (trim)
                                                                                  {
                                                                                      var task = CoApp.TrimAll();
@@ -110,48 +115,7 @@ namespace CoApp.Updater.Model
             return CoApp.BlockPackage(product.NewId);
         }
 
-        public Task<UpdateChoice> UpdateChoice
-        {
-            get { return Task.Factory.StartNew(() => CoApp.UpdateChoice, TaskCreationOptions.AttachedToParent); }
-        }
-
-        public Task SetUpdateChoice(UpdateChoice choice)
-        {
-            return Task.Factory.StartNew(() => CoApp.UpdateChoice = choice, TaskCreationOptions.AttachedToParent);
-        }
-
-        public Task<UpdateTimeAndDay> UpdateTimeAndDay
-        {
-            get
-            {
-                return
-                    CoApp.GetScheduledTask("coapp_update").ContinueWith(t => t.IsFaulted
-                                                                                 ? DefaultTask()
-                                                                                 : t.Result)
-                                                                                 .ContinueWith(
-                        t =>
-                            
-                        new UpdateTimeAndDay
-                            {DayOfWeek = UpdateDayOfWeekConverter.ConvertBack(t.Result.DayOfWeek), Time = t.Result.Hour});
-            }
-        }
-
-
-        public Task SetUpdateTimeAndDay(int hour, UpdateDayOfWeek day)
-        {
-            return
-                CoApp.SetScheduledTask("coapp_update", "", "--quiet", hour, 0, UpdateDayOfWeekConverter.Convert(day), 60);
-        }
-
-        public Task<bool> AutoTrim
-        {
-            get { return Task.Factory.StartNew(() => CoApp.TrimOnUpdate); }
-        }
-
-        public Task SetAutoTrim(bool autotrim)
-        {
-            return Task.Factory.StartNew(() => CoApp.TrimOnUpdate = autotrim);
-        }
+        
 
         public Task<DateTime> LastScheduledTaskRealRun
         {
@@ -378,9 +342,9 @@ namespace CoApp.Updater.Model
                 var choice = CoApp.UpdateChoice;
                 foreach (var product in updatableResults.Concat(upgradableResults))
                 {
-                    AllPossibleProducts[product] = (choice == Interfaces.UpdateChoice.AutoInstallAll) ||
-                                                   (choice == Interfaces.UpdateChoice.Notify) ||
-                                                   (choice == Interfaces.UpdateChoice.AutoInstallJustUpdates &&
+                    AllPossibleProducts[product] = (choice == Gui.Toolkit.Model.Interfaces.UpdateChoice.AutoInstallAll) ||
+                                                   (choice == Gui.Toolkit.Model.Interfaces.UpdateChoice.Notify) ||
+                                                   (choice == Gui.Toolkit.Model.Interfaces.UpdateChoice.AutoInstallJustUpdates &&
                                                     !product.IsUpgrade);
                 }
             }

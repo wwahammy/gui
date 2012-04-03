@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using CoApp.Gui.Toolkit.Model.Interfaces;
 
 namespace CoApp.Updater.Model.Interfaces
 {
@@ -44,38 +45,8 @@ namespace CoApp.Updater.Model.Interfaces
 
         Task BlockProduct(Product product);
 
-        Task<UpdateChoice> UpdateChoice { get; }
-
-        Task SetUpdateChoice(UpdateChoice choice);
-
-        Task<UpdateTimeAndDay> UpdateTimeAndDay { get; }
-
-        Task SetUpdateTimeAndDay(int hour, UpdateDayOfWeek day);
-
-        Task<bool> AutoTrim { get; }
-        Task SetAutoTrim(bool autotrim);
-
+       
         Task<DateTime> LastScheduledTaskRealRun { get; }
         Task SetScheduledTaskToRunNow();
-    }
-
-    public enum UpdateDayOfWeek
-    {
-        Everyday,
-        Sunday,
-        Monday,
-        Tuesday,
-        Wednesday,
-        Thursday,
-        Friday,
-        Saturday
-    }
-
-    public enum UpdateChoice
-    {
-        AutoInstallAll,
-        AutoInstallJustUpdates,
-        Notify,
-        Dont
     }
 }

@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
+using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.Toolkit.Logging;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;

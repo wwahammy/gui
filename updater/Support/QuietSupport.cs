@@ -5,27 +5,31 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using CoApp.Gui.Toolkit.Model;
+using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Gui.Toolkit.Support.Converters;
 using CoApp.Toolkit.Logging;
-using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
-using CoApp.Updater.Support.Converters;
 using FluentDateTime;
+using LocalServiceLocator = CoApp.Updater.Model.LocalServiceLocator;
 
 namespace CoApp.Updater.Support
 {
     public class QuietSupport
     {
         internal IUpdateService Update;
+        internal IUpdateSettingsService UpdateSettings;
         public QuietSupport()
         {
             var loc = new LocalServiceLocator();
 
             Update = loc.UpdateService;
+            UpdateSettings = loc.UpdateSettingsService;
         }
 
         public Task<bool> HandleScheduledTaskCall()
         {
-            var scheduledTask = Update.UpdateTimeAndDay;
+            var scheduledTask = UpdateSettings.UpdateTimeAndDay;
             var taskLastRun = Update.LastScheduledTaskRealRun;
 
             return Task.Factory.ContinueWhenAll(new Task[] {scheduledTask, taskLastRun}, (tasks) =>

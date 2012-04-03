@@ -1,0 +1,49 @@
+<UserControl x:Class="CoApp.Gui.Toolkit.Views.Settings.UpdateSettingsView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+        
+             xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls"
+             xmlns:Interfaces1="clr-namespace:CoApp.Gui.Toolkit.Model.Interfaces"
+             xmlns:Converters="clr-namespace:CoApp.Gui.Toolkit.Support.Converters"
+             mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <Converters:HourConverter x:Key="hourConverter"/>
+        <Converters:DaysOfWeekToTextConverter x:Key="daysToText"/>
+        <Converters:ChoiceToTextConverter x:Key="choiceToText"/>
+    </UserControl.Resources>
+    <StackPanel>
+        <TextBlock Text="Choose what updates to install:"/>
+        <ComboBox ItemsSource="{Binding AllUpdateChoices}" SelectedItem="{Binding UpdateChoice}" Margin="0, 8, 0, 8">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type Interfaces1:UpdateChoice}">
+                    <TextBlock Text="{Binding Converter={StaticResource choiceToText}}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <StackPanel Orientation="Horizontal" Margin="0, 8, 0 ,8" VerticalAlignment="Center">
+            <TextBlock Text="Install New Updates: " VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding AllDaysOfWeek}" SelectedItem="{Binding DayOfWeek}" Margin="8, 0, 8, 0" VerticalAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type Interfaces1:UpdateDayOfWeek}">
+                        <TextBlock Text="{Binding Converter={StaticResource daysToText}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Text=" at "  VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding HourChoices}" SelectedItem="{Binding UpdateTime}" Margin="8, 0, 8, 0"  VerticalAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type System:Int32}">
+                        <TextBlock Text="{Binding Converter={StaticResource hourConverter}}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+        <CheckBox HorizontalAlignment="Left" Content="Automatically remove unused packages" IsChecked="{Binding AutoTrim}" Margin="0, 8, 0, 0"/>
+        <Controls1:ElevateButton Content="Save" HorizontalAlignment="Left" MustElevate="{Binding CanChangeSettings, Converter={StaticResource invertConverter}}" ElevatedCommand="{Binding Save}"  UnelevatedCommand="{Binding DefaultElevate}" Margin="0, 20, 0 ,0"/>
+    </StackPanel>
+</UserControl>

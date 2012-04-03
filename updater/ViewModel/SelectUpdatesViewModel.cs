@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Linq;
+using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
 using GalaSoft.MvvmLight;

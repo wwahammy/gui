@@ -54,13 +54,10 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoApp.Client, Version=1.2.0.8, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Client, Version=1.2.0.23, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
     </Reference>
-    <Reference Include="CoApp.Developer.Toolkit, Version=1.2.0.26, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL" Condition="'$(Configuration)|$(Platform)' == 'SampleData|AnyCPU'">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Developer.Toolkit.dll</HintPath>
-    </Reference>
-    <Reference Include="CoApp.Toolkit, Version=1.2.0.13, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Toolkit, Version=1.2.0.23, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="FluentDateTime, Version=1.6.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
@@ -104,41 +101,22 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\CoAppFrame.cs" />
-    <Compile Include="Controls\DialogBox.cs" />
-    <Compile Include="Controls\ElevateButton.cs" />
-    <Compile Include="Controls\ElevateShield.xaml.cs">
-      <DependentUpon>ElevateShield.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PercentTransform.cs" />
     <Compile Include="Controls\PressedTabItemControl.cs" />
     <Compile Include="Controls\ProgressBarIndicator.cs" />
     <Compile Include="Controls\UnblockControl.cs" />
     <Compile Include="Messages\BlockedProductsMessage.cs" />
-    <Compile Include="Messages\GoToMessage.cs" />
     <Compile Include="Messages\InstallationFailedMessage.cs" />
     <Compile Include="Messages\InstallationFinishedMessage.cs" />
     <Compile Include="Messages\InstallationProgressMessage.cs" />
-    <Compile Include="Messages\MetroDialogBoxMessage.cs" />
     <Compile Include="Messages\SelectedProductsChangedMessage.cs" />
     <Compile Include="Model\AutomationService.cs" />
-    <Compile Include="Model\CoAppService.cs" />
     <Compile Include="Model\Interfaces\IAutomationService.cs" />
-    <Compile Include="Model\Interfaces\ICoAppService.cs" />
-    <Compile Include="Model\Interfaces\INavigationService.cs" />
-    <Compile Include="Model\Interfaces\IPolicyService.cs" />
     <Compile Include="Model\Interfaces\IUpdateService.cs" />
-    <Compile Include="Model\Sample\IWindowsUserService.cs" />
-    <Compile Include="Model\NavigationService.cs" />
     <Compile Include="Model\PolicyQueryResult.cs" />
-    <Compile Include="Model\PolicyService.cs" />
     <Compile Include="Model\Product.cs" />
     <Compile Include="Model\LocalServiceLocator.cs" />
-    <Compile Include="Model\Sample\CoAppServiceSample.cs" />
-    <Compile Include="Model\Sample\PolicyServiceSample.cs" />
-    <Compile Include="Model\SidWrapper.cs" />
     <Compile Include="Model\UpdateService.cs" />
-    <Compile Include="Model\UpdateTimeAndDay.cs" />
-    <Compile Include="Model\WindowsUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -156,19 +134,9 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Support\CanBlockProperty.cs" />
-    <Compile Include="Support\Converters\ChoiceToTextConverter.cs" />
-    <Compile Include="Support\Converters\DaysOfWeekToTextConverter.cs" />
-    <Compile Include="Support\Converters\HourConverter.cs" />
-    <Compile Include="Support\Converters\ImageToColorConverter.cs" />
-    <Compile Include="Support\Converters\InvertBooleanConverter.cs" />
-    <Compile Include="Support\Converters\NullEmptyStringToVisibilityConverter.cs" />
-    <Compile Include="Support\Converters\NullToBooleanConverter.cs" />
-    <Compile Include="Support\Converters\UpdateDayOfWeekConverter.cs" />
-    <Compile Include="Support\Converters\UrlToBooleanConverter.cs" />
     <Compile Include="Support\Errors\BlockedProductError.cs" />
     <Compile Include="Support\Errors\ErrorObject.cs" />
     <Compile Include="Support\Errors\ProductToUnblock.cs" />
-    <Compile Include="Support\Extensions.cs" />
     <Compile Include="Support\GridViewColumnResize.cs" />
     <Compile Include="Support\ObjectExtensions.cs" />
     <Compile Include="Support\PrimaryViewTemplateSelector.cs" />
@@ -179,13 +147,6 @@
     <Compile Include="ViewModel\SelectUpdatesViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\PrimaryViewModel.cs" />
-    <Compile Include="ViewModel\ScreenViewModel.cs" />
-    <Compile Include="ViewModel\SettingsViewModel.cs" />
-    <Compile Include="ViewModel\Settings\FeedSettingsViewModel.cs" />
-    <Compile Include="ViewModel\Settings\PermissionsSettingsViewModel.cs" />
-    <Compile Include="ViewModel\Settings\PermissionViewModel.cs" />
-    <Compile Include="ViewModel\Settings\PrivacySettingsViewModel.cs" />
-    <Compile Include="ViewModel\Settings\UpdateSettingsViewModel.cs" />
     <Compile Include="ViewModel\UpdatingViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="Views\InstallingView.xaml.cs">
@@ -209,29 +170,10 @@
     <Compile Include="Views\SelectUpdatesView.xaml.cs">
       <DependentUpon>SelectUpdatesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SettingsView.xaml.cs">
-      <DependentUpon>SettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\FeedsSettingsView.xaml.cs">
-      <DependentUpon>FeedsSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\PermissionsSettingsView.xaml.cs">
-      <DependentUpon>PermissionsSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\PrivacySettingsView.xaml.cs">
-      <DependentUpon>PrivacySettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\UpdateSettingsView.xaml.cs">
-      <DependentUpon>UpdateSettingsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\UpdatingView.xaml.cs">
       <DependentUpon>UpdatingView.xaml</DependentUpon>
     </Compile>
     <Page Include="BaseStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ElevateShield.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -285,26 +227,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SelectUpdatesView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\SettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Settings\FeedsSettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Settings\PermissionsSettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Settings\PrivacySettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Settings\UpdateSettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -363,7 +285,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toolkit\CoApp.Gui.Toolkit.csproj">
-      <Project>{902F666F-A12D-4C8E-844E-43D02E6DE7AB}</Project>
+      <Project>{9B272BA9-4E30-4B81-AA44-41AE82CDB31E}</Project>
       <Name>CoApp.Gui.Toolkit</Name>
     </ProjectReference>
     <ProjectReference Include="lib\MahApps.Metro\MahApps.Metro.csproj">

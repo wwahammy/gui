@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.Toolkit.Logging;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model;

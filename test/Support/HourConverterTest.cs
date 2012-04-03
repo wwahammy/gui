@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
+using CoApp.Gui.Toolkit.Support.Converters;
 using CoApp.Updater.Support;
-using CoApp.Updater.Support.Converters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CoApp.Gui.Test.Support

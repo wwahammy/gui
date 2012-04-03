@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using CoApp.Gui.Toolkit.Messages;
+using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
@@ -39,7 +42,7 @@ namespace CoApp.Updater.ViewModel
 
             Settings =
                 new RelayCommand(
-                    () => nav.GoTo(ViewModelLocator.SettingsViewModelStatic));
+                    () => nav.GoTo(Gui.Toolkit.ViewModels.ViewModelLocator.SettingsViewModelStatic));
             //temporary
             Shutdown = new RelayCommand(() => Application.Current.Shutdown());
 

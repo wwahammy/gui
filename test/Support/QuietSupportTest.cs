@@ -1,4 +1,6 @@
 using System;
+using CoApp.Gui.Toolkit.Model;
+using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
 using CoApp.Updater.Support;

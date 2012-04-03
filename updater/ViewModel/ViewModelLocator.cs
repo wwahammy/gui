@@ -10,7 +10,6 @@
 */
 
 using System.Diagnostics.CodeAnalysis;
-using CoApp.Updater.ViewModel.Settings;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 
@@ -27,20 +26,17 @@ namespace CoApp.Updater.ViewModel
     /// See http://www.galasoft.ch/mvvm/getstarted
     /// </para>
     /// </summary>
-    public class ViewModelLocator
+    public class ViewModelLocator : CoApp.Gui.Toolkit.ViewModels.ViewModelLocator
     {
         static ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<MainWindowViewModel>();
             SimpleIoc.Default.Register<PrimaryViewModel>();
-            SimpleIoc.Default.Register<SettingsViewModel>();
+         
             SimpleIoc.Default.Register<InstallingViewModel>();
             SimpleIoc.Default.Register<SelectUpdatesViewModel>();
-            SimpleIoc.Default.Register<PermissionsSettingsViewModel>();
-            SimpleIoc.Default.Register<FeedSettingsViewModel>();
-            SimpleIoc.Default.Register<PrivacySettingsViewModel>();
-            SimpleIoc.Default.Register<UpdateSettingsViewModel>();
+      
             SimpleIoc.Default.Register<UpdatingViewModel>();
         }
 
@@ -93,61 +89,10 @@ namespace CoApp.Updater.ViewModel
             get { return ServiceLocator.Current.GetInstance<InstallingViewModel>(); }
         }
 
-        public SettingsViewModel SettingsViewModel
-        {
-            get { return SettingsViewModelStatic; }
-        }
-
-        public static SettingsViewModel SettingsViewModelStatic
-        {
-            get { return ServiceLocator.Current.GetInstance<SettingsViewModel>(); }
-        }
+       
 
 
-        public PermissionsSettingsViewModel PermissionsSettingsViewModel
-        {
-            get { return PermissionsSettingsViewModelStatic; }
-        }
-
-        
-
-        public static PermissionsSettingsViewModel PermissionsSettingsViewModelStatic
-        {
-            get { return ServiceLocator.Current.GetInstance<PermissionsSettingsViewModel>(); }
-        }
-
-        public UpdateSettingsViewModel UpdateSettingsViewModel
-        {
-            get { return UpdateSettingsViewModelStatic; }
-        }
-
-
-
-        public static UpdateSettingsViewModel UpdateSettingsViewModelStatic
-        {
-            get { return ServiceLocator.Current.GetInstance<UpdateSettingsViewModel>(); }
-        }
-
-        
-        public PrivacySettingsViewModel PrivacySettingsViewModel
-        {
-            get { return PrivacySettingsViewModelStatic; }
-        }
-
-        public static PrivacySettingsViewModel PrivacySettingsViewModelStatic
-        {
-            get { return ServiceLocator.Current.GetInstance<PrivacySettingsViewModel>(); }
-        }
-
-        public FeedSettingsViewModel FeedSettingsViewModel
-        {
-            get { return FeedSettingsViewModelStatic; }
-        }
-
-        public static FeedSettingsViewModel FeedSettingsViewModelStatic
-        {
-            get { return ServiceLocator.Current.GetInstance<FeedSettingsViewModel>(); }
-        }
+       
 
         public static SelectUpdatesViewModel SelectUpdatesViewModelStatic
         {

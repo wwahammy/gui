@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoApp.Gui.Test.TestSupportFiles;
+using CoApp.Gui.Toolkit.Model;
+using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Toolkit.Engine.Client;
 using CoApp.Toolkit.Logging;
 using CoApp.Updater.Messages;

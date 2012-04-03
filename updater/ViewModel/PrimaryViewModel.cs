@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using CoApp.Gui.Toolkit.Controls;
+using CoApp.Gui.Toolkit.Messages;
+using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.Updater.Controls;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model;

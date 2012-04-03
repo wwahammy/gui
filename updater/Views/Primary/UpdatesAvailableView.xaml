@@ -44,7 +44,7 @@
 
         <TextBlock Grid.Column="3" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" Text="{Binding NumberOfProductsSelected,  StringFormat={}{0} updates selected}" d:LayoutOverrides="Height" VerticalAlignment="Center" RenderTransformOrigin="3.263,7.163"/>
 
-        <Controls:ElevateButton Grid.Column="3" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,15,0,8" Content="Install Updates" MustElevate="{Binding CanUpdate, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install}" Visibility="{Binding HideInstallButton, Converter={StaticResource boolToVisConverter}}"/>
+        <Controls:ElevateButton Grid.Column="3" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,15,0,8" Content="Install Updates" MustElevate="{Binding CanUpdate, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install}" Visibility="{Binding HideInstallButton, Converter={StaticResource boolToVisConverter}}"/>
 
         <Button Grid.Column="2" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Margin="0,0,0,8"  Command="{Binding CheckForUpdates}" Content="Check For Updates"/>
     </Grid>

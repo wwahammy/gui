@@ -42,6 +42,6 @@
             </ComboBox>
         </StackPanel>
         <CheckBox HorizontalAlignment="Left" Content="Automatically remove unused packages" IsChecked="{Binding AutoTrim}" Margin="0, 8, 0, 0"/>
-        <Controls:ElevateButton Content="Save" HorizontalAlignment="Left" MustElevate="{Binding CanChangeSettings, Converter={StaticResource universalConverter}, ConverterParameter='b=>!b'}" ElevatedCommand="{Binding Save}"  UnelevatedCommand="{Binding DefaultElevate}" Margin="0, 20, 0 ,0"/>
+        <Controls:ElevateButton Content="Save" HorizontalAlignment="Left" MustElevate="{Binding CanChangeSettings, Converter={StaticResource invertConverter}}" ElevatedCommand="{Binding Save}"  UnelevatedCommand="{Binding DefaultElevate}" Margin="0, 20, 0 ,0"/>
     </StackPanel>
 </UserControl>

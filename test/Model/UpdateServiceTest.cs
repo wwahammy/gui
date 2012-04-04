@@ -6,14 +6,13 @@ using CoApp.Gui.Test.TestSupportFiles;
 using CoApp.Gui.Toolkit.Model;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Toolkit.Engine.Client;
+using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Logging;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model;
-using CoApp.Updater.Model.Interfaces;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using CoApp.Toolkit.Extensions;
 
 namespace CoApp.Gui.Test.Model
 {
@@ -24,19 +23,22 @@ namespace CoApp.Gui.Test.Model
     [TestClass]
     public class UpdateServiceTest
     {
-        private ICoAppService _coapp;
-        private Mock<ICoAppService> _mockCoapp;
-        private UpdateService _updateService;
-
         private const string UPGRADABLE_AND_UPDATABLE = "UpgradableAndUpdatable";
         private const string UPGRADABLE1 = "Upgradable1";
         private const string UPDATABLE1 = "Updatable1";
-        [TestInitialize()]
+        private ICoAppService _coapp;
+        private Mock<ICoAppService> _mockCoapp;
+        private UpdateService _updateService;
+        private UpdateSettingsService _updateSettingsService;
+
+        [TestInitialize]
         public void InstanceInitialize()
         {
             _mockCoapp = CreateMockCoApp();
             _coapp = _mockCoapp.Object;
-            _updateService = new UpdateService {CoApp = _coapp};
+            _updateSettingsService = new UpdateSettingsService {CoApp = _coapp};
+            _updateService = new UpdateService {CoApp = _coapp, UpdateSettings = _updateSettingsService};
+
             Messenger.OverrideDefault(new Messenger());
         }
 
@@ -71,7 +73,7 @@ namespace CoApp.Gui.Test.Model
                     new ScheduledTask {DayOfWeek = DayOfWeek.Monday, Hour = 4, Minutes = 10, Name = "coapp_update"}));
 
             UpdateTimeAndDay actual;
-            actual = _updateService.UpdateTimeAndDay.Result;
+            actual = _updateSettingsService.UpdateTimeAndDay.Result;
             Assert.AreEqual(4, actual.Time);
             Assert.AreEqual(UpdateDayOfWeek.Monday, actual.DayOfWeek);
         }
@@ -89,7 +91,7 @@ namespace CoApp.Gui.Test.Model
                     () => new ScheduledTask {DayOfWeek = null, Hour = 4, Minutes = 10, Name = "coapp_update"}));
 
             UpdateTimeAndDay actual;
-            actual = _updateService.UpdateTimeAndDay.Result;
+            actual = _updateSettingsService.UpdateTimeAndDay.Result;
             Assert.AreEqual(4, actual.Time);
             Assert.AreEqual(UpdateDayOfWeek.Everyday, actual.DayOfWeek);
         }
@@ -104,7 +106,7 @@ namespace CoApp.Gui.Test.Model
                 () => Task<ScheduledTask>.Factory.StartNew(() => { throw new Exception(); }));
 
             UpdateTimeAndDay actual;
-            actual = _updateService.UpdateTimeAndDay.Result;
+            actual = _updateSettingsService.UpdateTimeAndDay.Result;
             Assert.AreEqual(3, actual.Time);
             Assert.AreEqual(UpdateDayOfWeek.Everyday, actual.DayOfWeek);
         }
@@ -123,7 +125,7 @@ namespace CoApp.Gui.Test.Model
             {
                 _mockCoapp.Setup(i => i.UpdateChoice).Returns(member);
                 UpdateChoice mem = member;
-                Task<bool> c = _updateService.UpdateChoice.ContinueWith(t => t.Result == mem);
+                Task<bool> c = _updateSettingsService.UpdateChoice.ContinueWith(t => t.Result == mem);
                 c.Wait();
             }
         }
@@ -139,7 +141,7 @@ namespace CoApp.Gui.Test.Model
                 UpdateChoice mem = member;
                 _mockCoapp.SetupSet(i => i.UpdateChoice = mem);
                 Task c =
-                    _updateService.SetUpdateChoice(mem).ContinueWith(
+                    _updateSettingsService.SetUpdateChoice(mem).ContinueWith(
                         t => _mockCoapp.VerifySet(m => m.UpdateChoice = mem, Times.Once()));
                 c.Wait();
             }
@@ -149,7 +151,8 @@ namespace CoApp.Gui.Test.Model
         public void SetUpdateChoiceTestFaulted()
         {
             _mockCoapp.SetupSet(i => i.UpdateChoice = UpdateChoice.Notify).Throws<Exception>();
-            Task c = _updateService.SetUpdateChoice(UpdateChoice.Notify).ContinueWith(t => Assert.IsTrue(t.IsFaulted));
+            Task c =
+                _updateSettingsService.SetUpdateChoice(UpdateChoice.Notify).ContinueWith(t => Assert.IsTrue(t.IsFaulted));
 
             c.Wait();
         }
@@ -158,7 +161,7 @@ namespace CoApp.Gui.Test.Model
         public void UpdateChoiceTestFaulted()
         {
             _mockCoapp.SetupGet(i => i.UpdateChoice).Throws<Exception>();
-            Task c = _updateService.UpdateChoice.ContinueWith(t => Assert.IsTrue(t.IsFaulted));
+            Task c = _updateSettingsService.UpdateChoice.ContinueWith(t => Assert.IsTrue(t.IsFaulted));
 
             c.Wait();
         }
@@ -170,10 +173,10 @@ namespace CoApp.Gui.Test.Model
         public void UnselectProductTest()
         {
             SetupValidCheck();
-            var t = _updateService.CheckForUpdates();
+            Task t = _updateService.CheckForUpdates();
             t.Wait();
 
-            var p = _updateService.AllPossibleProducts.Where(
+            Product p = _updateService.AllPossibleProducts.Where(
                 kp => kp.Value).First().Key;
 
             _updateService.UnselectProduct(p);
@@ -192,29 +195,44 @@ namespace CoApp.Gui.Test.Model
         public void SetUpdateTimeAndDayTest()
         {
             _mockCoapp.Setup(m => m.SetScheduledTask("coapp_update", It.IsAny<string>(), "--quiet", 5, 0, null, 60)).
-                Returns(() => Task.Factory.StartNew(() =>
-                                                        {
-                                                        }));
+                Returns(() => Task.Factory.StartNew(() => { }));
 
-            var c = _updateService.SetUpdateTimeAndDay(5, UpdateDayOfWeek.Everyday).ContinueWith(t =>
-                                                                                             {
-                                                                                                 Assert.IsFalse(
-                                                                                                     t.IsFaulted);
+            Task c = _updateSettingsService.SetUpdateTimeAndDay(5, UpdateDayOfWeek.Everyday).ContinueWith(t =>
+                                                                                                              {
+                                                                                                                  Assert
+                                                                                                                      .
+                                                                                                                      IsFalse
+                                                                                                                      (
+                                                                                                                          t
+                                                                                                                              .
+                                                                                                                              IsFaulted);
 
-                                                                                                 _mockCoapp.Verify(
-                                                                                                     m =>
-                                                                                                     m.SetScheduledTask(
-                                                                                                         "coapp_update",
-                                                                                                         It.IsAny
-                                                                                                             <string>(),
-                                                                                                         "--quiet", 5, 0,
-                                                                                                         null, 60));
-                                                                                             });
+                                                                                                                  _mockCoapp
+                                                                                                                      .
+                                                                                                                      Verify
+                                                                                                                      (
+                                                                                                                          m
+                                                                                                                          =>
+                                                                                                                          m
+                                                                                                                              .
+                                                                                                                              SetScheduledTask
+                                                                                                                              (
+                                                                                                                                  "coapp_update",
+                                                                                                                                  It
+                                                                                                                                      .
+                                                                                                                                      IsAny
+                                                                                                                                      <
+                                                                                                                                      string
+                                                                                                                                      >
+                                                                                                                                      (),
+                                                                                                                                  "--quiet",
+                                                                                                                                  5,
+                                                                                                                                  0,
+                                                                                                                                  null,
+                                                                                                                                  60));
+                                                                                                              });
 
             c.Wait();
-
-
-
         }
 
 
@@ -222,22 +240,20 @@ namespace CoApp.Gui.Test.Model
         public void SetUpdateTimeAndDayTestFaulted()
         {
             _mockCoapp.Setup(m => m.SetScheduledTask("coapp_update", It.IsAny<string>(), "--quiet", 5, 0, null, 60)).
-                Returns(() => Task.Factory.StartNew(() =>
-                                                        { throw new Exception();
-                                                        }));
+                Returns(() => Task.Factory.StartNew(() => { throw new Exception(); }));
 
-            var c = _updateService.SetUpdateTimeAndDay(5, UpdateDayOfWeek.Everyday).ContinueWith(t =>
-            {
-                Assert.IsTrue(
-                    t.IsFaulted);
-
-        
-            });
+            Task c = _updateSettingsService.SetUpdateTimeAndDay(5, UpdateDayOfWeek.Everyday).ContinueWith(t =>
+                                                                                                              {
+                                                                                                                  Assert
+                                                                                                                      .
+                                                                                                                      IsTrue
+                                                                                                                      (
+                                                                                                                          t
+                                                                                                                              .
+                                                                                                                              IsFaulted);
+                                                                                                              });
 
             c.Wait();
-
-
-
         }
 
         /// <summary>
@@ -247,7 +263,7 @@ namespace CoApp.Gui.Test.Model
         public void SetAutoTrimTestTrue()
         {
             _mockCoapp.SetupSet(i => i.TrimOnUpdate = true);
-            Task actual = _updateService.SetAutoTrim(true);
+            Task actual = _updateSettingsService.SetAutoTrim(true);
 
             Task c = actual.ContinueWith(t => Assert.IsFalse(t.IsFaulted));
             c.Wait();
@@ -260,7 +276,7 @@ namespace CoApp.Gui.Test.Model
         public void SetAutoTrimTestFalse()
         {
             _mockCoapp.SetupSet(i => i.TrimOnUpdate = false);
-            Task actual = _updateService.SetAutoTrim(false);
+            Task actual = _updateSettingsService.SetAutoTrim(false);
 
             Task c = actual.ContinueWith(t => Assert.IsFalse(t.IsFaulted));
             c.Wait();
@@ -274,7 +290,7 @@ namespace CoApp.Gui.Test.Model
         public void SetAutoTrimTestFaulted()
         {
             _mockCoapp.SetupSet(i => i.TrimOnUpdate = true).Throws<Exception>();
-            Task actual = _updateService.SetAutoTrim(true);
+            Task actual = _updateSettingsService.SetAutoTrim(true);
             Task c = actual.ContinueWith(t => Assert.IsTrue(t.IsFaulted));
         }
 
@@ -285,10 +301,10 @@ namespace CoApp.Gui.Test.Model
         public void SelectProductTest()
         {
             SetupValidCheck();
-            var t = _updateService.CheckForUpdates();
+            Task t = _updateService.CheckForUpdates();
             t.Wait();
 
-            var p = _updateService.AllPossibleProducts.Where(
+            Product p = _updateService.AllPossibleProducts.Where(
                 kp => !kp.Value).First().Key;
 
             _updateService.SelectProduct(p);
@@ -320,43 +336,55 @@ namespace CoApp.Gui.Test.Model
             _mockCoapp.Setup(
                 m =>
                 m.UpgradeExistingPackage(It.IsAny<string>(), It.IsAny<bool?>(), It.IsAny<Action<string, int, int>>(),
-                                        It.IsAny<Action<string>>())).Returns(() => Task.Factory.StartNew(() => { }));
+                                         It.IsAny<Action<string>>())).Returns(() => Task.Factory.StartNew(() => { }));
             int timesWeGotInstallation = 0;
-            var timesWeGotFailure = 0;
+            int timesWeGotFailure = 0;
             var locker = new object();
             var recip = new object();
-            
+
             Messenger.Default.Register<InstallationFinishedMessage>(recip, (m) =>
-                                                                              {
-                                                                                  Assert.AreEqual(4, m.NumberOfProductsInstalled);
-                                                                                  lock (locker)
-                                                                                  {
-                                                                                      timesWeGotInstallation++;
-                                                                                      
-                                                                                  }
-                                                                              });
+                                                                               {
+                                                                                   Assert.AreEqual(4,
+                                                                                                   m.
+                                                                                                       NumberOfProductsInstalled);
+                                                                                   lock (locker)
+                                                                                   {
+                                                                                       timesWeGotInstallation++;
+                                                                                   }
+                                                                               });
 
             Messenger.Default.Register<InstallationFailedMessage>(recip, (m) =>
-            {
-                lock (locker)
-                {
-                    timesWeGotFailure++;
+                                                                             {
+                                                                                 lock (locker)
+                                                                                 {
+                                                                                     timesWeGotFailure++;
+                                                                                 }
+                                                                             });
 
-                }
-            });
-
-            var t = _updateService.PerformInstallation();
+            Task t = _updateService.PerformInstallation();
 
             t.Wait();
 
-            _mockCoapp.Verify(m => m.UpdateExistingPackage(UPDATABLE1, It.IsAny<bool?>(), It.IsAny<Action<string,int, int>>(), It.IsAny<Action<string>>()),Times.Once());
+            _mockCoapp.Verify(
+                m =>
+                m.UpdateExistingPackage(UPDATABLE1, It.IsAny<bool?>(), It.IsAny<Action<string, int, int>>(),
+                                        It.IsAny<Action<string>>()), Times.Once());
 
-            _mockCoapp.Verify(m => m.UpdateExistingPackage(UPGRADABLE_AND_UPDATABLE, It.IsAny<bool?>(), It.IsAny<Action<string, int, int>>(), It.IsAny<Action<string>>()));
+            _mockCoapp.Verify(
+                m =>
+                m.UpdateExistingPackage(UPGRADABLE_AND_UPDATABLE, It.IsAny<bool?>(),
+                                        It.IsAny<Action<string, int, int>>(), It.IsAny<Action<string>>()));
 
 
-            _mockCoapp.Verify(m => m.UpgradeExistingPackage(UPGRADABLE1, It.IsAny<bool?>(), It.IsAny<Action<string, int, int>>(), It.IsAny<Action<string>>()), Times.Once());
+            _mockCoapp.Verify(
+                m =>
+                m.UpgradeExistingPackage(UPGRADABLE1, It.IsAny<bool?>(), It.IsAny<Action<string, int, int>>(),
+                                         It.IsAny<Action<string>>()), Times.Once());
 
-            _mockCoapp.Verify(m => m.UpgradeExistingPackage(UPGRADABLE_AND_UPDATABLE, It.IsAny<bool?>(), It.IsAny<Action<string, int, int>>(), It.IsAny<Action<string>>()));
+            _mockCoapp.Verify(
+                m =>
+                m.UpgradeExistingPackage(UPGRADABLE_AND_UPDATABLE, It.IsAny<bool?>(),
+                                         It.IsAny<Action<string, int, int>>(), It.IsAny<Action<string>>()));
 
             Assert.AreEqual(1, timesWeGotInstallation);
             Assert.AreEqual(0, timesWeGotFailure);
@@ -369,15 +397,12 @@ namespace CoApp.Gui.Test.Model
         [TestMethod]
         public void PerformInstallationTestFaulted()
         {
-            
-
             SetupValidCheck();
             _mockCoapp.Setup(i => i.UpdateChoice).Returns(() => UpdateChoice.AutoInstallAll);
-            
+
 
             _updateService.CheckForUpdates().Wait();
 
-           
 
             _mockCoapp.Setup(
                 m =>
@@ -387,45 +412,42 @@ namespace CoApp.Gui.Test.Model
             _mockCoapp.Setup(
                 m =>
                 m.UpgradeExistingPackage(It.IsAny<string>(), It.IsAny<bool?>(), It.IsAny<Action<string, int, int>>(),
-                                        It.IsAny<Action<string>>())).Returns(() => Task.Factory.StartNew(() => { }));
+                                         It.IsAny<Action<string>>())).Returns(() => Task.Factory.StartNew(() => { }));
 
-            _mockCoapp.Setup(m => m.UpgradeExistingPackage(UPGRADABLE_AND_UPDATABLE, It.IsAny<bool?>(), It.IsAny<Action<string, int, int>>(), It.IsAny<Action<string>>())).Returns(() => Task.Factory.StartNew(() =>
-                                                                                                                                                                                                                   {
-                                                                                                                                                                                                                       throw new Exception("1");
-                                                                                                                                                                                                                   }));
+            _mockCoapp.Setup(
+                m =>
+                m.UpgradeExistingPackage(UPGRADABLE_AND_UPDATABLE, It.IsAny<bool?>(),
+                                         It.IsAny<Action<string, int, int>>(), It.IsAny<Action<string>>())).Returns(
+                                             () => Task.Factory.StartNew(() => { throw new Exception("1"); }));
             int timesWeGotInstallation = 0;
-            var timesWeGotFailure = 0;
+            int timesWeGotFailure = 0;
             var locker = new object();
             Messenger.Default.Register<InstallationFinishedMessage>(this, (m) =>
-            {
-                Assert.AreEqual(3, m.NumberOfProductsInstalled);
-                lock (locker)
-                {
-                    timesWeGotInstallation++;
-
-                }
-            });
+                                                                              {
+                                                                                  Assert.AreEqual(3,
+                                                                                                  m.
+                                                                                                      NumberOfProductsInstalled);
+                                                                                  lock (locker)
+                                                                                  {
+                                                                                      timesWeGotInstallation++;
+                                                                                  }
+                                                                              });
 
             Messenger.Default.Register<InstallationFailedMessage>(this, (m) =>
-            {
-                lock (locker)
-                {
-                    timesWeGotFailure++;
+                                                                            {
+                                                                                lock (locker)
+                                                                                {
+                                                                                    timesWeGotFailure++;
+                                                                                }
+                                                                            });
 
-                }
-            });
-
-            var t = _updateService.PerformInstallation();
-            var c = t.ContinueWith(
+            Task t = _updateService.PerformInstallation();
+            Task c = t.ContinueWith(
                 t1 =>
                     {
                         Logger.Message(t1.Exception.Unwrap().ToString());
                         Assert.AreEqual("1", t1.Exception.Unwrap().Message);
-
-
                     }
-
-
                 );
 
             c.Wait();
@@ -433,8 +455,6 @@ namespace CoApp.Gui.Test.Model
             Assert.AreEqual(1, timesWeGotFailure);
 
             Assert.AreEqual(1, _updateService.NumberOfProductsSelected);
-            
-
         }
 
         /// <summary>
@@ -443,15 +463,16 @@ namespace CoApp.Gui.Test.Model
         [TestMethod]
         public void CheckForUpdatesTest()
         {
-            var timesReceivedSelectedProductsChangedMessage = 0;
+            int timesReceivedSelectedProductsChangedMessage = 0;
             var changeLock = new object();
             Messenger.Default.Register<SelectedProductsChangedMessage>(this, (m) =>
-                                                 {
-                                                     lock (changeLock)
-                                                     {
-                                                         timesReceivedSelectedProductsChangedMessage++;
-                                                     }
-                                                 });
+                                                                                 {
+                                                                                     lock (changeLock)
+                                                                                     {
+                                                                                         timesReceivedSelectedProductsChangedMessage
+                                                                                             ++;
+                                                                                     }
+                                                                                 });
             _mockCoapp.Setup(i => i.SetAllFeedsStale()).Returns(() => Task.Factory.StartNew(() => { }));
 
             _mockCoapp.Setup(i => i.GetUpdatablePackages()).Returns(
@@ -613,22 +634,21 @@ namespace CoApp.Gui.Test.Model
                     () => GetPackageDetails(p)));
 
             _mockCoapp.SetupGet(i => i.UpdateChoice).Returns(() => UpdateChoice.AutoInstallJustUpdates);
-
-
         }
 
         [TestMethod]
         public void CheckForUpdatesTestFaulted()
         {
-            var timesReceivedSelectedProductsChangedMessage = 0;
+            int timesReceivedSelectedProductsChangedMessage = 0;
             var changeLock = new object();
             Messenger.Default.Register<SelectedProductsChangedMessage>(this, (m) =>
-            {
-                lock (changeLock)
-                {
-                    timesReceivedSelectedProductsChangedMessage++;
-                }
-            });
+                                                                                 {
+                                                                                     lock (changeLock)
+                                                                                     {
+                                                                                         timesReceivedSelectedProductsChangedMessage
+                                                                                             ++;
+                                                                                     }
+                                                                                 });
 
 
             _mockCoapp.Setup(i => i.SetAllFeedsStale()).Returns(
@@ -693,10 +713,10 @@ namespace CoApp.Gui.Test.Model
                 () => Task<Package>.Factory.StartNew(() => { throw new Exception("4"); }));
 
             c = _updateService.CheckForUpdates().ContinueWith(t =>
-            {
-                Assert.IsTrue(t.IsFaulted);
-                Assert.AreEqual("4", t.Exception.Unwrap().Message);
-            }
+                                                                  {
+                                                                      Assert.IsTrue(t.IsFaulted);
+                                                                      Assert.AreEqual("4", t.Exception.Unwrap().Message);
+                                                                  }
                 );
             c.Wait();
 
@@ -708,22 +728,21 @@ namespace CoApp.Gui.Test.Model
             _mockCoapp.SetupGet(i => i.UpdateChoice).Throws(new Exception("5"));
 
             c = _updateService.CheckForUpdates().ContinueWith(t =>
-            {
-                Assert.IsTrue(t.IsFaulted);
-                Assert.AreEqual("5", t.Exception.Unwrap().Message);
-            }
+                                                                  {
+                                                                      Assert.IsTrue(t.IsFaulted);
+                                                                      Assert.AreEqual("5", t.Exception.Unwrap().Message);
+                                                                  }
                 );
-            
+
             c = c.ContinueWith(t =>
-            {
-                lock (changeLock)
-                {
-                    Assert.AreEqual(0, timesReceivedSelectedProductsChangedMessage);
-                }
-            });
+                                   {
+                                       lock (changeLock)
+                                       {
+                                           Assert.AreEqual(0, timesReceivedSelectedProductsChangedMessage);
+                                       }
+                                   });
 
             c.Wait();
-
         }
 
         private void VerifyFeedsAreStale(Times times)
@@ -892,7 +911,7 @@ namespace CoApp.Gui.Test.Model
         {
             _mockCoapp.Setup(i => i.TrimOnUpdate).Returns(() => true);
 
-            Task<bool> actual = _updateService.AutoTrim;
+            Task<bool> actual = _updateSettingsService.AutoTrim;
             Assert.AreEqual(true, actual.Result);
         }
 
@@ -904,7 +923,7 @@ namespace CoApp.Gui.Test.Model
         {
             _mockCoapp.Setup(i => i.TrimOnUpdate).Returns(() => false);
 
-            Task<bool> actual = _updateService.AutoTrim;
+            Task<bool> actual = _updateSettingsService.AutoTrim;
             Assert.AreEqual(false, actual.Result);
         }
 
@@ -917,10 +936,9 @@ namespace CoApp.Gui.Test.Model
         {
             _mockCoapp.Setup(i => i.TrimOnUpdate).Throws<Exception>();
 
-            Task<bool> actual = _updateService.AutoTrim;
+            Task<bool> actual = _updateSettingsService.AutoTrim;
             Task task = actual.ContinueWith(t => Assert.AreEqual(true, t.IsFaulted));
             task.Wait();
         }
-
     }
 }

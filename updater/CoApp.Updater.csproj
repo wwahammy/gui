@@ -54,10 +54,10 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoApp.Client, Version=1.2.0.23, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Client, Version=1.2.0.91, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
     </Reference>
-    <Reference Include="CoApp.Toolkit, Version=1.2.0.23, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Toolkit, Version=1.2.0.91, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="FluentDateTime, Version=1.6.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
@@ -76,6 +76,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\System.Windows.Interactivity.dll</HintPath>

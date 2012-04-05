@@ -98,6 +98,7 @@ namespace CoApp.Updater.ViewModel
                        }
                        else
                        {
+                           Logger.Message("We Will Navigate to Primary" + Environment.NewLine);
                            NavigationService.GoTo(ViewModelLocator.PrimaryViewModelStatic);   
                        }
                         

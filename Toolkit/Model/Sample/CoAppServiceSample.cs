@@ -1,10 +1,11 @@
 using CoApp.Gui.Toolkit.Model.Interfaces;
-using CoApp.Toolkit.DynamicXml;
+
 using CoApp.Toolkit.Engine.Client;
 
 namespace CoApp.Gui.Toolkit.Model.Sample
 {
 #if SAMPLEDATA
+    using CoApp.Toolkit.DynamicXml;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -87,7 +88,7 @@ using System.Xml.Linq;
             get { return _prods.Select(p => p.Update).Concat(_prods.Select(p => p.Upgrade)); }
         }
 
-        #region ICoAppService Members
+    #region ICoAppService Members
 
  
         public Task<PolicyProxy> GetPolicy(PolicyType type)
@@ -384,7 +385,7 @@ using System.Xml.Linq;
             };
         }
 
-        #region Nested type: PackageDecl
+    #region Nested type: PackageDecl
 
         private class PackageDecl : Package
         {

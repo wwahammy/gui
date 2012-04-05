@@ -198,6 +198,8 @@ using System.Xml.Linq;
 
                                                  if (prod.Upgrade != null)
                                                      ret.AvailableNewer = prod.Upgrade;
+
+                                                 ret.Package = prod;
                                                  return ret;
                                              }
                 );

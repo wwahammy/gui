@@ -193,7 +193,7 @@
                 </Border>
                 
                 <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" ItemsSource="{Binding Products}"  SelectedIndex="0"
-                          x:Name="ProductElement" BorderThickness="0" SelectionMode="Single" Support:GridViewColumnResize.Enabled="True">
+                          x:Name="ProductElement" BorderThickness="0" SelectionMode="Single"> <!--Support:GridViewColumnResize.Enabled="True">-->
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="Template" Value="{StaticResource ListViewItemTemplateForSelecting}"/>
@@ -210,7 +210,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Product.DisplayName, Mode=OneWay}" Support:GridViewColumnResize.Width="*">
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Product.DisplayName, Mode=OneWay}"> <!--Support:GridViewColumnResize.Width="*">-->
                                 
                             </GridViewColumn>
                         </GridView>

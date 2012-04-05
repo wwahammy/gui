@@ -83,6 +83,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\CoAppFrame.cs" />
     <Compile Include="Controls\DialogBox.cs" />
     <Compile Include="Controls\ElevateButton.cs" />
     <Compile Include="Controls\ElevateShield.xaml.cs">
@@ -140,6 +141,8 @@
     <Compile Include="Support\Converters\UpdateDayOfWeekConverter.cs" />
     <Compile Include="Support\Converters\UrlToBooleanConverter.cs" />
     <Compile Include="Support\Extensions.cs" />
+    <Compile Include="Support\StateManager.cs" />
+    <Compile Include="Support\StringList.cs" />
     <Compile Include="ViewModels\ScreenViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\FeedSettingsViewModel.cs" />
@@ -183,6 +186,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="CoAppStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\ElevateShield.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

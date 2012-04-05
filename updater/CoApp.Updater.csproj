@@ -101,7 +101,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\CoAppFrame.cs" />
     <Compile Include="Controls\PercentTransform.cs" />
     <Compile Include="Controls\PressedTabItemControl.cs" />
     <Compile Include="Controls\ProgressBarIndicator.cs" />
@@ -142,8 +141,6 @@
     <Compile Include="Support\ObjectExtensions.cs" />
     <Compile Include="Support\PrimaryViewTemplateSelector.cs" />
     <Compile Include="Support\QuietSupport.cs" />
-    <Compile Include="Support\StateManager.cs" />
-    <Compile Include="Support\StringList.cs" />
     <Compile Include="ViewModel\InstallingViewModel.cs" />
     <Compile Include="ViewModel\SelectUpdatesViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />

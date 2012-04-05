@@ -20,11 +20,7 @@
 
             <ResourceDictionary.MergedDictionaries>
 
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml"/>
-
-
+                <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppStyle.xaml"/>
                 <ResourceDictionary Source="BaseStyle.xaml"/>
                 <ResourceDictionary Source="Styles/PrimaryViewStyles.xaml"/>
 

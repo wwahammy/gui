@@ -10,7 +10,8 @@
         xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
         xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
         xmlns:ViewModels="clr-namespace:CoApp.Gui.Toolkit.ViewModels;assembly=CoApp.Gui.Toolkit"
-        xmlns:Views1="clr-namespace:CoApp.Gui.Toolkit.Views;assembly=CoApp.Gui.Toolkit" mc:Ignorable="d"
+        xmlns:Views1="clr-namespace:CoApp.Gui.Toolkit.Views;assembly=CoApp.Gui.Toolkit"
+        xmlns:Support1="clr-namespace:CoApp.Gui.Toolkit.Support;assembly=CoApp.Gui.Toolkit" mc:Ignorable="d"
         
         
         Title="CoApp Update" MinHeight="800"
@@ -26,7 +27,7 @@
 
 
 
-    <Grid x:Name="LayoutRoot" Support:StateManager.VisualStateProperty="{Binding DialogBoxVisualState}">
+    <Grid x:Name="LayoutRoot" Support1:StateManager.VisualStateProperty="{Binding DialogBoxVisualState}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup Name="MainStates">
                 <VisualState Name="Base"/>
@@ -57,20 +58,20 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        
-        
-        
-        <Grid Grid.Row="0" x:Name="Header" MouseLeftButtonDown="HeaderDragWindow" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
-           
-            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Orientation="Horizontal" TextElement.FontFamily="{DynamicResource HeaderFontFamily}">
-                
-                <Button x:Name="ShowSettings" Content="Settings" Style="{DynamicResource ChromelessButtonStyle}" FontSize="15" FontWeight="Bold" Margin="0,0,20,0" Command="{Binding Settings}"/>
 
-                <Button   Style="{DynamicResource ChromelessButtonStyle}" Content="0" FontFamily="Marlett" Click="MinimizeClickWindow" />
-                <Button  x:Name="maxRestore" Style="{DynamicResource ChromelessButtonStyle}" Content="1" FontFamily="Marlett" Click="MaxRestoreClickWindow">
+
+
+        <Grid  x:Name="Header" MouseLeftButtonDown="HeaderDragWindow" Style="{DynamicResource WinLayout_HeaderGrid}">
+
+            <StackPanel Style="{DynamicResource WinLayout_HeaderStackPanel}">
+                
+                <Button x:Name="ShowSettings" Style="{DynamicResource WinLayout_HeaderSettingButton}" Command="{Binding Settings}"/>
+
+                <Button   Style="{DynamicResource WinLayout_HeaderUIButton_Minimize}" Click="MinimizeClickWindow" />
+                <Button  x:Name="maxRestore" Style="{DynamicResource WinLayout_HeaderUIButton_MaxRestore}" Click="MaxRestoreClickWindow">
 
                 </Button>
-                <Button x:Name="TryClose" Style="{DynamicResource ChromelessButtonStyle}" Content="r" FontFamily="Marlett"  Command="{Binding Shutdown}"/>
+                <Button x:Name="TryClose" Style="{DynamicResource WinLayout_HeaderUIButton_Close}" Command="{Binding Shutdown}"/>
             </StackPanel>
         </Grid>
         
@@ -92,13 +93,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-                <TextBlock x:Name="InnerTitle" Text="{Binding ElementName=NavFrame, Path=Content.Title}" Style="{StaticResource Title}" Grid.Column="0" FontFamily="{DynamicResource HeaderFontFamily}" Grid.ColumnSpan="2"/>
-                <TextBlock x:Name="SectionTitle" Text="{Binding ElementName=NavFrame, Path=Content.SubTitle}" Style="{StaticResource Title}" Grid.Column="1" FontFamily="{DynamicResource HeaderFontFamily}" Visibility="{Binding ElementName=NavFrame, Path=Content.SubTitle, Converter={StaticResource NullEmptyStringToVisibilityConverter1}}"/>
+                <TextBlock x:Name="InnerTitle" Style="{StaticResource WinLayout_InnerTitle}" />
+                <TextBlock x:Name="SectionTitle" Style="{StaticResource WinLayout_SubTitle}" />
         </Grid>
 
-            <Controls:CoAppFrame  Grid.Row="1" Grid.Column="1" x:Name="NavFrame"
-               VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,10, 0" Content="{Binding MainScreenViewModel}">
-                <Controls:CoAppFrame.Resources>
+            <Controls1:CoAppFrame x:Name="NavFrame" Style="{DynamicResource WinLayout_CoAppFrame}"
+                Content="{Binding MainScreenViewModel}">
+                <Controls1:CoAppFrame.Resources>
                     <DataTemplate DataType="{x:Type ViewModel:UpdatingViewModel}">
                         <Views:UpdatingView/>
                     </DataTemplate>
@@ -117,8 +118,8 @@
                     <DataTemplate DataType="{x:Type ViewModel:InstallingViewModel}">
                         <Views:InstallingView/>
                     </DataTemplate>
-                </Controls:CoAppFrame.Resources>
-            </Controls:CoAppFrame>
+                </Controls1:CoAppFrame.Resources>
+            </Controls1:CoAppFrame>
 
         </Grid>
         <Grid Grid.Row="0" Grid.RowSpan="2" x:Name="LoadingGrid" Visibility="Collapsed" Opacity="0">

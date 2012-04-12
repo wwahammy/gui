@@ -6,6 +6,7 @@ using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.Support;
 using CoApp.Toolkit.Configuration;
 using CoApp.Toolkit.Engine.Client;
+using CoApp.Toolkit.Win32;
 
 namespace CoApp.Gui.Toolkit.Model
 {
@@ -62,7 +63,7 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task RemoveSystemFeed(string feedUrl)
         {
-            return null;
+            return EPM.RemoveSystemFeed(feedUrl);
         }
 
         public Task<IEnumerable<string>> SessionFeeds
@@ -93,7 +94,13 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<IEnumerable<Package>> GetPackages()
         {
-            throw new NotImplementedException();
+            return EPM.GetPackages("*");
+        }
+
+        public Task<IEnumerable<Package>> GetPackages(string packageName, FourPartVersion? minVersion = new FourPartVersion?(), FourPartVersion? maxVersion = new FourPartVersion?(), bool? dependencies = new bool?(), bool? installed = new bool?(), bool? active = new bool?(), bool? requested = new bool?(), bool? blocked = new bool?(), bool? latest = new bool?(), string locationFeed = null, bool? updates = new bool?(), bool? upgrades = new bool?(), bool? trimable = new bool?())
+        {
+            return EPM.GetPackages(packageName, minVersion, maxVersion, dependencies, installed, active, requested,
+                                   blocked, latest, locationFeed, updates, upgrades, trimable);
         }
 
 

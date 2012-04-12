@@ -226,10 +226,34 @@ namespace CoApp.Gui.Toolkit.ViewModels
 
         public event Action Unloaded;
 
+
+        private ScreenWidth _screenWidth = ScreenWidth.Standard;
+
+        public ScreenWidth ScreenWidth
+        {
+            get { return _screenWidth; }
+            set
+            {
+                _screenWidth = value;
+                RaisePropertyChanged("ScreenWidth");
+            }
+        }
+
+        
+     
+
+        
+
         /*
         public abstract XElement Serialize();
 
         public abstract void Deserialize(XElement element);
         */
+    }
+
+    public enum ScreenWidth
+    {
+        Standard,
+        FullWidth
     }
 }

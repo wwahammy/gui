@@ -27,8 +27,6 @@ namespace CoApp.Updater.ViewModel
         public InstallingViewModel()
         {
             Messenger.Default.Register<InstallationProgressMessage>(this, HandleMessage);
-            MessengerInstance.Register<InstallationFailedMessage>(this, HandleInstallFailed);
-            MessengerInstance.Register<InstallationFinishedMessage>(this, HandleInstallFinished);
             var loc = new LocalServiceLocator();
             update = loc.UpdateService;
             nav = loc.NavigationService;
@@ -108,7 +106,8 @@ namespace CoApp.Updater.ViewModel
             // we check for blocks
 
             update.PerformInstallation().ContinueWith(t =>
-                                                          {
+                                                          { //handle errors
+                                                              UpdateOnUI(() => PercentDone = 100);
                                                               if (Automation.IsAutomated)
                                                               {
                                                                   Logger.Message("Shutting down" + Environment.NewLine);
@@ -124,15 +123,7 @@ namespace CoApp.Updater.ViewModel
         }
 
 
-        private void HandleInstallFinished(InstallationFinishedMessage m)
-        {
-            nav.GoTo(ViewModelLocator.PrimaryViewModelStatic);
-        }
-
-        private void HandleInstallFailed(InstallationFailedMessage m)
-        {
-            nav.GoTo(ViewModelLocator.PrimaryViewModelStatic);
-        }
+     
 
 
         private void HandleMessage(InstallationProgressMessage m)

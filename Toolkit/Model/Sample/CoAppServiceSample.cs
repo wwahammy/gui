@@ -1,7 +1,10 @@
+using System.IO;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 
 using CoApp.Toolkit.Engine.Client;
-
+using CoApp.Toolkit.Exceptions;
+using CoApp.Toolkit.Win32;
+using CoApp.Toolkit.Extensions;
 namespace CoApp.Gui.Toolkit.Model.Sample
 {
 #if SAMPLEDATA
@@ -24,6 +27,7 @@ using System.Xml.Linq;
         private readonly List<string> _sysFeeds = new List<string>();
         private bool _optedIn = true;
         private readonly Dictionary<PolicyType, IList<string>> _membersForPolicies = new Dictionary<PolicyType, IList<string>>();
+        private readonly Dictionary<string,IList<PackageDecl>> _feedToPackages = new Dictionary<string,IList<PackageDecl>>();
 
         private ScheduledTask _scheduledTask;
 
@@ -144,11 +148,11 @@ using System.Xml.Linq;
         {
             return Task.Factory.StartNew(() =>
                                              {
-                                                 IEnumerable<Package> ps =
+                                                 var ps =
                                                      AllUpgradesAndUpdates.Where(p => p.CanonicalName == packageName);
                                                  if (ps.Any())
                                                  {
-                                                     Package first = ps.First();
+                                                     var first = ps.First();
                                                      first.IsBlocked = true;
                                                  }
                                              });
@@ -158,11 +162,11 @@ using System.Xml.Linq;
         {
             return Task.Factory.StartNew(() =>
                                              {
-                                                 IEnumerable<Package> ps =
+                                                 var ps =
                                                      AllUpgradesAndUpdates.Where(p => p.CanonicalName == packageName);
                                                  if (ps.Any())
                                                  {
-                                                     Package first = ps.First();
+                                                     var first = ps.First();
                                                      first.IsBlocked = false;
                                                  }
                                              });
@@ -170,17 +174,48 @@ using System.Xml.Linq;
 
         public Task<IEnumerable<Package>> GetPackages()
         {
-            throw new NotImplementedException();
+            return Task.Factory.StartNew(() => _prods.Cast<Package>());
+        }
+
+        public Task<IEnumerable<Package>> GetPackages(
+            string packageName, FourPartVersion? minVersion = new FourPartVersion?(), FourPartVersion? maxVersion = new FourPartVersion?(), bool? dependencies = new bool?(), bool? installed = new bool?(), bool? active = new bool?(), bool? requested = new bool?(), bool? blocked = new bool?(), bool? latest = new bool?(), string locationFeed = null, bool? updates = new bool?(), bool? upgrades = new bool?(), bool? trimable = new bool?())
+        {
+
+            return Task.Factory.StartNew(() =>
+                                      {
+                                          IEnumerable<PackageDecl> packages = null;
+                                          if (packageName == "*")
+                                              packages = _prods;
+
+                                          if (installed != null)
+                                              packages = packages.Where(p => p.IsInstalled == installed);
+
+                                          if (locationFeed != null)
+                                          {
+                                              if (_feedToPackages.ContainsKey(locationFeed))
+                                              {
+                                                  packages =
+                                                      packages.Where(p => _feedToPackages[locationFeed].Contains(p));
+                                              }
+                                              else
+                                              {
+                                                  packages = Enumerable.Empty<PackageDecl>();
+                                              }
+                                              
+                                          }
+                                          return packages.Cast<Package>();
+                                      });
+
         }
 
         public Task<IEnumerable<Package>> GetUpdatablePackages()
         {
-            return Task.Factory.StartNew(() => _prods.Where(p => p.Update != null).Cast<Package>());
+            return Task.Factory.StartNew(() => _prods.Where(p => p.Update != null && p.IsInstalled).Cast<Package>());
         }
 
         public Task<IEnumerable<Package>> GetUpgradablePackages()
         {
-            return Task.Factory.StartNew(() => _prods.Where(p => p.Upgrade != null).Cast<Package>());
+            return Task.Factory.StartNew(() => _prods.Where(p => p.Upgrade != null && p.IsInstalled).Cast<Package>());
         }
 
         public Task<PackageSet> GetPackageSet(string canonicalName)
@@ -189,7 +224,7 @@ using System.Xml.Linq;
                                              {
                                                  var ret = new PackageSet();
 
-                                                 PackageDecl prod =
+                                                 var prod =
                                                      _prods.First(p => p.CanonicalName == canonicalName);
 
                                                  if (prod.Update != null)
@@ -220,8 +255,15 @@ using System.Xml.Linq;
         {
             return Task.Factory.StartNew(() =>
                                              {
-                                                 PackageDecl prod = _prods.First(p => p.CanonicalName == canonicalName);
-                                                 for (int i = 0; i < 100; i++)
+                                                 var prod = _prods.First(p => p.CanonicalName == canonicalName);
+                                                 if (prod == null)
+                                                     throw new Exception("this is totally invalid");
+
+                                                 if (prod.Update.WillFailToInstall)
+                                                     throw new CoAppException("Install");
+
+
+                                                 for (var i = 0; i < 100; i++)
                                                  {
                                                      Thread.Sleep(MS_TO_WAIT);
                                                      if (installProgress != null)
@@ -245,8 +287,10 @@ using System.Xml.Linq;
         {
             return Task.Factory.StartNew(() =>
                                              {
-                                                 PackageDecl prod = _prods.First(p => p.CanonicalName == canonicalName);
-                                                 for (int i = 0; i < 100; i++)
+                                                 var prod = _prods.First(p => p.CanonicalName == canonicalName);
+                                                 if (prod.Upgrade.WillFailToInstall)
+                                                     throw new CoAppException("Install");
+                                                 for (var i = 0; i < 100; i++)
                                                  {
                                                      Thread.Sleep(MS_TO_WAIT);
 
@@ -331,11 +375,13 @@ using System.Xml.Linq;
 
         private void LoadFeeds()
         {
-            foreach (dynamic item in _root.Feeds.Feed)
+           
+            foreach (dynamic item in _root.Feeds)
             {
                 if (item.Element.Name == "Feed")
                 {
-                    _sysFeeds.Add(item.Element.Attributes.Url);
+                    _sysFeeds.Add(item.Attributes.Url);
+                    _feedToPackages[item.Attributes.Url] = new List<PackageDecl>();
                 }
             }
         }
@@ -349,31 +395,122 @@ using System.Xml.Linq;
 
         private void LoadPackages()
         {
-             foreach (dynamic item in _root.Products)
+            try
+            {
+
+            
+
+            foreach (var item in _root.Products)
+            {
+                if (item.Element.Name == "Package")
+                {
+                    var attribs = item.Attributes;
+                    var product = new PackageDecl
+                                      {
+
+                                          DisplayName = attribs.Has("DisplayName") ? attribs.DisplayName : null,
+                                          Name = attribs.Name,
+                                          Version = attribs.Version,
+                                          Architecture = attribs.Architecture,
+                                          PublicKeyToken = attribs.PublicKeyToken,
+                                          IsInstalled = attribs.Has("Installed") ? bool.Parse(attribs.Installed) : false,
+                                          AuthorVersion = attribs.Has("AuthorVersion") ? attribs.AuthorVersion : null,
+                                          UpdateString = attribs.Has("UpdateFor") ? attribs.UpdateFor : null,
+                                          UpgradeString = attribs.Has("UpgradeFor") ? attribs.UpgradeFor : null,
+                                          PublishDate = DateTime.Now.ToString(CultureInfo.InvariantCulture)
+                                      };
+
+
+                    if (item.Attributes.Has("Summary"))
+                    {
+                        product.Summary = item.Attributes.Summary;
+                    }
+
+                    if (item.Attributes.Has("Icon"))
+                    {
+                        product.Icon =
+                            Convert.ToBase64String(File.ReadAllBytes(item.Attributes.Icon));
+                    }
+
+                    if (item.Tags != null)
+                    {
+                        var l = new List<string>();
+                        foreach (dynamic i in item.Tags)
                         {
-                            if (item.Element.Name == "Package")
-                            {
-                                var product = new PackageDecl
-                                                  {
-                                                      CanonicalName = item.Attributes.Name
-                                                  };
-                                if (item["Type=update"] != null)
-                                {
-                                    product.Update = CreateItem(item["Type=update"]);
-                                }
-
-                                if (item["Type=upgrade"] != null)
-                                {
-
-                                    product.Upgrade = CreateItem(item["Type=upgrade"]);
-                                }
-
-                                _prods.Add(product);
-                            }
+                            l.Add(i.Element.Value);
                         }
+                        product.Tags = l;
+                    }
+
+                    if (attribs.Has("Feed"))
+                    {
+                        _feedToPackages[attribs.Feed].Add(product);
+                    }
+
+                    if (attribs.Has("FailToInstall"))
+                    {
+                        product.WillFailToInstall = bool.Parse(attribs.FailToInstall);
+                    }
+
+
+                    _prods.Add(product);
+                }
+            }
+                SetupCanonicalNames();
+
+            SetupUpgradesAndUpdates();
+        }
+
+            catch (Exception e)
+            {
+                
+                throw;
+            }
 
         }
 
+        private void SetupCanonicalNames()
+        {
+            foreach (var p in _prods)
+            {
+                p.CanonicalName = "{0}-{1}-{2}-{3}".format(p.Name, p.Version, p.Architecture, p.PublicKeyToken);
+
+            }
+        }
+
+        private void SetupUpgradesAndUpdates()
+        {
+            foreach (var p in _prods)
+            {
+                if (p.UpdateString != null)
+                {
+                    foreach (var part in p.UpdateString.Split(','))
+                    {
+                        //find what this package updates!
+                        var updatedPackage = _prods.FirstOrDefault(prod => prod.CanonicalName == part);
+                        if (updatedPackage != null)
+                        {
+                            updatedPackage.Update = p;
+                        }
+                    }
+                }
+
+                if (p.UpgradeString != null)
+                {
+                    foreach (var part in p.UpgradeString.Split(','))
+                    {
+                        //find what this package updates!
+                        var updatedPackage = _prods.FirstOrDefault(prod => prod.CanonicalName == part);
+                        if (updatedPackage != null)
+                        {
+                            updatedPackage.Upgrade = p;
+                        }
+                    }
+                }
+            }
+        }
+
+        /*
         private dynamic CreateItem(dynamic input)
         {
             return new PackageDecl
@@ -385,14 +522,26 @@ using System.Xml.Linq;
                 PublishDate = DateTime.Today.ToString(CultureInfo.InvariantCulture),
                 CanonicalName = input.Attributes.Name
             };
-        }
+        }*/
 
     #region Nested type: PackageDecl
 
         private class PackageDecl : Package
         {
-            public Package Update;
-            public Package Upgrade;
+            public PackageDecl Update;
+            public PackageDecl Upgrade;
+
+            internal bool WillFailToInstall;
+
+
+            internal string UpdateString;
+            internal string UpgradeString;
+
+            public override string ToString()
+            {
+                return CanonicalName;
+            }
+            
         }
 
         private void LoadAutoInstallType()

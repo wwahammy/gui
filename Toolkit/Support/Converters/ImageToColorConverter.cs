@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Color = System.Windows.Media.Color;
 
-// from http://chironexsoftware.com/blog/?p=60
+// from http://www.rudigrobler.net/blog/2011/9/26/make-your-wpf-buttons-color-hot-track.html NEED FINAL PERMISSION
 
 namespace CoApp.Gui.Toolkit.Support.Converters
 {
@@ -16,13 +19,25 @@ namespace CoApp.Gui.Toolkit.Support.Converters
     {
         #region IValueConverter Members
 
+        public SolidColorBrush DefaultBackgroundColor = new SolidColorBrush( new Color {A = 255, B = 236, G = 114, R = 38});
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var source = value as BitmapSource;
+            var source = value as BitmapImage;
             if (source != null)
-            {
+            {/*
                 if (source.Format.BitsPerPixel != 32 || source.Format != PixelFormats.Bgra32)
-                    throw new ApplicationException("expected 32bit image");
+                {
+                    var formatted = new FormatConvertedBitmap();
+                    formatted.BeginInit();
+                    formatted.Source = source;
+                    formatted.DestinationFormat = PixelFormats.Bgra32;
+                    formatted.EndInit();
+                    source = formatted;
+                    
+
+                }
+                
 
 
                 var colorDist = new Dictionary<Color, double>();
@@ -108,9 +123,40 @@ namespace CoApp.Gui.Toolkit.Support.Converters
                                               (byte) (clrs.Sum(x => x.Color.G*x.Dist)/sumDist),
                                               (byte) (clrs.Sum(x => x.Color.B*x.Dist)/sumDist));
 
-                return result;
+                return result;*/
+                using (var m = new MemoryStream())
+                {
+                    System.Windows.Media.Imaging.BmpBitmapEncoder e = new BmpBitmapEncoder();
+                    var frame = BitmapFrame.Create(source);
+                    e.Frames.Add(frame);
+                    e.Save(m);
+                    Bitmap bitmap = new Bitmap(m);
+                    int tr = 0;
+                    int tg = 0;
+                    int tb = 0;
+
+
+                    for (int x = 0; x < bitmap.Width; x++)
+                    {
+                        for (int y = 0; y < bitmap.Height; y++)
+                        {
+                            System.Drawing.Color pixel = bitmap.GetPixel(x, y);
+                            tr += pixel.R;
+                            tg += pixel.G;
+                            tb += pixel.B;
+                        }
+                    }
+
+                    byte r = (byte) Math.Floor((double) (tr/(bitmap.Height*bitmap.Width)));
+                    byte g = (byte) Math.Floor((double) (tg/(bitmap.Height*bitmap.Width)));
+                    byte b = (byte) Math.Floor((double) (tb/(bitmap.Height*bitmap.Width)));
+
+                    return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, r, g, b));
+                }
+
+
             }
-            return null;
+            return DefaultBackgroundColor;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

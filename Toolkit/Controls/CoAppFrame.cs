@@ -23,6 +23,7 @@ namespace CoApp.Gui.Toolkit.Controls
             get { return (Uri)GetValue(CurrentSourceBindProperty); }
             set { SetValue(CurrentSourceBindProperty, value); }
         }
+
         /*
         public static readonly DependencyProperty SoundsProperty =
             DependencyProperty.Register("Sounds", typeof (bool?), typeof (CoAppFrame), new PropertyMetadata(SoundsChangedCallback));

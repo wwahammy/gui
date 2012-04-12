@@ -12,6 +12,7 @@ using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Logging;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model.Interfaces;
+using CoApp.Updater.Support;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace CoApp.Updater.Model
@@ -172,7 +173,7 @@ namespace CoApp.Updater.Model
         {
         lock (AllPossibleProducts)
             {
-                var exceptions = new List<Exception>();
+                var exceptions = new List<UpdateFailureException>();
 
                 KeyValuePair<Product, bool>[] selectedProds = AllPossibleProducts.Where(kv => kv.Value).ToArray();
 
@@ -276,7 +277,7 @@ namespace CoApp.Updater.Model
                                                Logger.Message("Failed to install {0}" + Environment.NewLine,
                                                               CurrentInstallingProduct.DisplayName);
                                                //uh oh, it didn't add it to our list
-                                               exceptions.Add(t.Exception);
+                                               exceptions.Add( new UpdateFailureException(t.Exception){OriginalPackage = product.Key.OldId, PackageToUpdateTo = product.Key.NewId, IsUpgrade = product.Key.IsUpgrade});
                                            }
                                            else
                                            {
@@ -300,7 +301,7 @@ namespace CoApp.Updater.Model
                 if (exceptions.Any())
                 {
                     //dang it, things are broken
-                    Messenger.Default.Send(new InstallationFailedMessage());    
+                    Messenger.Default.Send(new InstallationFailedMessage {Exceptions = exceptions});    
                     throw new AggregateException(exceptions);
                 }
 
@@ -366,25 +367,31 @@ namespace CoApp.Updater.Model
 
             all.ContinueOnFail(e => { throw e.Unwrap(); });
 
-            var c = all.Continue(tasks => tasks.AsParallel().Select((PackageSet t) =>
-                                                                        {
-                                                                            Package ourUpdate = null;
-                                                                            ourUpdate = isUpgrade
-                                                                                            ? t.AvailableNewer
-                                                                                            : t.AvailableNewerCompatible;
-                                                                            return new Product
-                                                                                       {
-                                                                                           DisplayName = ourUpdate.DisplayName,
-                                                                                           OldId = t.Package.CanonicalName,
-                                                                                           NewId = ourUpdate.CanonicalName,
-                                                                                           IsUpgrade = isUpgrade,
-                                                                                           Summary = ourUpdate.Summary,
-                                                                                           UpdateTime =
-                                                                                               DateTime.Parse(
-                                                                                                   ourUpdate.PublishDate)
-                                                                                       };
-                                                                        }
-                                              ));
+            var c = all.Continue(tasks => tasks.Select(t =>
+                                                            {
+                                                                Package ourUpdate = null;
+                                                                ourUpdate = isUpgrade
+                                                                                ? t.AvailableNewer
+                                                                                : t.AvailableNewerCompatible;
+
+                                                                //name 
+                                                                var name = ourUpdate.DisplayName ?? ourUpdate.Name;
+                                                                var ver = ourUpdate.AuthorVersion ?? ourUpdate.Version.ToString();
+
+                                                                return new Product
+                                                                            {
+                                                                                DisplayName = name + " " + ver,
+
+                                                                                OldId = t.Package.CanonicalName,
+                                                                                NewId = ourUpdate.CanonicalName,
+                                                                                IsUpgrade = isUpgrade,
+                                                                                Summary = ourUpdate.Summary,
+                                                                                UpdateTime =
+                                                                                    DateTime.Parse(
+                                                                                        ourUpdate.PublishDate)
+                                                                            };
+                                                            }
+                                              ).Distinct(p => p.NewId.GetHashCode(), (x, y) => x.NewId == y.NewId));
 
             c.ContinueOnFail(e => { throw e.Unwrap(); });
             return c.Result;

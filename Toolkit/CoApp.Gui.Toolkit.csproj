@@ -43,13 +43,13 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoApp.Client, Version=1.2.0.91, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Client, Version=1.2.0.140, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
     </Reference>
-    <Reference Include="CoApp.Developer.Toolkit, Version=1.2.0.49, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL" Condition="'$(Configuration)' == 'SampleData'">
+    <Reference Include="CoApp.Developer.Toolkit, Version=1.2.0.72, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Developer.Toolkit.dll</HintPath>
     </Reference>
-    <Reference Include="CoApp.Toolkit, Version=1.2.0.91, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Toolkit, Version=1.2.0.140, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="FluentDateTime, Version=1.6.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
@@ -57,9 +57,11 @@
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=5fcbd337a8f68b41, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=5fcbd337a8f68b41, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -131,6 +133,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Support\Converters\AlternationEqualityConverter.cs" />
+    <Compile Include="Support\Converters\BackgroundToForegroundColorConverter.cs" />
     <Compile Include="Support\Converters\ChoiceToTextConverter.cs" />
     <Compile Include="Support\Converters\DaysOfWeekToTextConverter.cs" />
     <Compile Include="Support\Converters\HourConverter.cs" />
@@ -140,6 +144,7 @@
     <Compile Include="Support\Converters\NullToBooleanConverter.cs" />
     <Compile Include="Support\Converters\UpdateDayOfWeekConverter.cs" />
     <Compile Include="Support\Converters\UrlToBooleanConverter.cs" />
+    <Compile Include="Support\Converters\ValueConverterList.cs" />
     <Compile Include="Support\Extensions.cs" />
     <Compile Include="Support\StateManager.cs" />
     <Compile Include="Support\StringList.cs" />

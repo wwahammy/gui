@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Controls;
 using CoApp.Gui.Toolkit.Messages;
@@ -11,6 +12,7 @@ using CoApp.Updater.Messages;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
 using CoApp.Updater.Support.Errors;
+using CoApp.Updater.ViewModel.Errors;
 using GalaSoft.MvvmLight.Command;
 
 namespace CoApp.Updater.ViewModel
@@ -20,9 +22,9 @@ namespace CoApp.Updater.ViewModel
         internal INavigationService NavigationService;
         internal IPolicyService PolicyService;
         internal IUpdateService UpdateService;
-        private ErrorObject _error;
+        private ScreenViewModel _error;
 
-        private IDictionary<Product, IEnumerable<string>> _errors;
+       
         private bool _hideInstallButton;
         private DateTime? _lastTimeChecked;
         private DateTime? _lastTimeInstalled;
@@ -103,15 +105,7 @@ namespace CoApp.Updater.ViewModel
         }
 
 
-        public IDictionary<Product, IEnumerable<string>> Errors
-        {
-            get { return _errors; }
-            private set
-            {
-                _errors = new Dictionary<Product, IEnumerable<string>>(value);
-                RaisePropertyChanged("Errors");
-            }
-        }
+        
 
         public bool HideInstallButton
         {
@@ -151,7 +145,7 @@ namespace CoApp.Updater.ViewModel
         public ICommand SelectUpdates { get; set; }
         public ICommand CheckForUpdates { get; set; }
 
-        public ErrorObject Error
+        public ScreenViewModel Error
         {
             get { return _error; }
             set
@@ -159,6 +153,8 @@ namespace CoApp.Updater.ViewModel
                 _error = value;
                 RaisePropertyChanged("Error");
             }
+
+            
         }
 
         private void OnLoaded()
@@ -169,7 +165,7 @@ namespace CoApp.Updater.ViewModel
 
         private void HandleInstallFailed(InstallationFailedMessage m)
         {
-            UpdateOnUI(() => Errors = m.ErrorsByProduct);
+            UpdateOnUI(() => Error = new UpdateFailureViewModel { InnerException = m.Exceptions.First(), UpdateExceptions = new ObservableCollection<Exception>(m.Exceptions)} );
         }
 
         private void HandleInstallFinished(InstallationFinishedMessage m)

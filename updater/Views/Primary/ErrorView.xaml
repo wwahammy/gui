@@ -5,7 +5,9 @@
              mc:Ignorable="d"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Error="clr-namespace:CoApp.Updater.Views.Primary.Error"
-             xmlns:Errors="clr-namespace:CoApp.Updater.Support.Errors" d:DesignWidth="1024"
+             xmlns:Errors="clr-namespace:CoApp.Updater.Support.Errors"
+             xmlns:Support="clr-namespace:CoApp.Updater.Support"
+             xmlns:Errors1="clr-namespace:CoApp.Updater.ViewModel.Errors" d:DesignWidth="1024"
              Height="Auto" >
     <UserControl.Resources>
         <ResourceDictionary>
@@ -41,11 +43,11 @@
             </Rectangle.Fill>
         </Rectangle>
         <Image Style="{StaticResource ShieldImage}" Source="/CoApp.Updater;component/Resources/redshield.png"/>
-        <TextBlock Style="{StaticResource CoAppUpdateInnerHeader}" Text="{Binding ErrorTitle}" Grid.Column="2" Margin="0,13,0,9" />
-        <ContentControl DataContext="{Binding Error}" d:DataContext="{d:DesignData /SampleData/BlockedProductErrorSampleData.xaml}">
+        <TextBlock Style="{StaticResource CoAppUpdateInnerHeader}" Text="{Binding Error.ErrorTitle}" Grid.Column="2" Margin="0,13,0,9" />
+        <ContentControl DataContext="{Binding Error}">
             <ContentControl.Resources>
-                <DataTemplate DataType="{x:Type Errors:BlockedProductError}">
-                    <Error:ErrorProductsBlockedView  DataContext="{Binding}"/>
+                <DataTemplate DataType="{x:Type Errors1:UpdateFailureViewModel}">
+                    <Error:UpdateFailureError DataContext="{Binding}"/>
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>

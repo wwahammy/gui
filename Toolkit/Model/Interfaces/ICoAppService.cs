@@ -31,6 +31,15 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
 
         Task<IEnumerable<Package>> GetPackages();
 
+        Task<IEnumerable<Package>> GetPackages(string packageName,
+                                               CoApp.Toolkit.Win32.FourPartVersion? minVersion = null,
+                                               CoApp.Toolkit.Win32.FourPartVersion? maxVersion = null,
+                                               bool? dependencies = null, bool? installed = null, bool? active = null,
+                                               bool? requested = null, bool? blocked = null, bool? latest = null,
+                                               string locationFeed = null, bool? updates = null, bool? upgrades = null,
+                                               bool? trimable = null);
+
+
         Task<IEnumerable<Package>> GetUpdatablePackages();
 
         Task<IEnumerable<Package>> GetUpgradablePackages();

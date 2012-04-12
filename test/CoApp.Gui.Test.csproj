@@ -33,22 +33,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoApp.Client, Version=1.2.0.91, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Client, Version=1.2.0.140, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="CoApp.Developer.Toolkit, Version=1.2.0.49, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Developer.Toolkit.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="CoApp.Toolkit, Version=1.2.0.91, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="FluentDateTime, Version=1.6.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\FluentDateTime.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=5fcbd337a8f68b41, processorArchitecture=MSIL">
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5fcbd337a8f68b41, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=5fcbd337a8f68b41, processorArchitecture=MSIL">
+    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5fcbd337a8f68b41, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\GalaSoft.MvvmLight.WPF4.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />

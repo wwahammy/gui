@@ -10,36 +10,58 @@
     <Feed Url="http://brokenfeed" Error="true"/>
   </Feeds>
   <Products>
-    <Package Name="expat 2.0">
-      <Product Name="expat 2.0.1" Type="update">
-        <Summary>Praesent vestibulum rutrum tempus. Aliquam lacus dui, lacinia et posuere non, volutpat nec eros. Vestibulum ullamcorper consequat ipsum, sed mollis nisi consectetur quis. Nulla lorem.</Summary>
-      </Product>  
+    <Package Name="tester" Version="0.0.1.2" Icon="SampleData\TestTube.png" DisplayName="Tester" Architecture="any" PublicKeyToken="Token1">
+      <Tags>
+        <Tag>Tag1</Tag>
+        <Tag>Tag2</Tag>
+      </Tags>
+    </Package>
+    <Package Name="expat" Icon="SampleData\expat.png" Version="2.0.0.0" DisplayName="Expat" DisplayVersion="2.0" Architecture="x86" PublicKeyToken="Token1" Summary="Praesent vestibulum rutrum tempus. Aliquam lacus dui, lacinia et posuere non, volutpat nec eros. Vestibulum ullamcorper consequat ipsum, sed mollis nisi consectetur quis. Nulla lorem."
+             
+             Installed="true" Feed="http://coapp.org/feed">      
     </Package>
 
-    <Package Name="lua 5">
-      <Product Name="lua 5.2.0" Type="update">
-        <Summary>Nam vel dictum lacus. Curabitur rutrum, leo et venenatis sagittis, sem lectus pulvinar mi, ac lobortis ligula elit nec neque. Mauris tristique, odio eget sollicitudin.</Summary>
-      </Product>
+    <Package Name="lua" Icon="SampleData\multitool.png" Version="5.0.0.0" DisplayName="Lua" DisplayVersion="5" Architecture="x64" PublicKeyToken="Token1" Summary="Nam vel dictum lacus. Curabitur rutrum, leo et venenatis sagittis, sem lectus pulvinar mi, ac lobortis ligula elit nec neque. Mauris tristique, odio eget sollicitudin." Installed="false" Feed="http://coapp.org/feed"/>
+      
+     
+   
+    
+    <Package Name="cml" DisplayName="Command Service Locator" Version="0.9.0.0" 
+             Icon="SampleData\safe.png" Architecture="any" PublicKeyToken="Token1" Summary="Vestibulum id congue diam. Nulla vel dui magna, ac rhoncus lacus. Nam ultricies placerat arcu in semper. Maecenas tincidunt tristique risus, bibendum pretium ligula malesuada." Feed="http://coapp.org/feed" Installed="true"/>
+
+
+    <Package Name="mvvmlight" Version="3.0.0.0" Icon="SampleData\notebox.png" Architecture="any" PublicKeyToken="Token1" Installed="true"
+             Summary="leo et venenatis sagittis, sem lectus pulvinar mi," DisplayName="MvvmLight" AuthorVersion="V3" Feed="http://coapp.org/feed"/>
+
+
+    <Package Name="expat" Icon="SampleData\expat.png" Version="2.0.1.0" DisplayName="Expat 2.0.1" 
+             Architecture="x86" PublicKeyToken="Token1" 
+             Summary="Praesent vestibulum rutrum tempus. Aliquam lacus dui, lacinia et posuere non, volutpat nec eros. Vestibulum ullamcorper consequat ipsum, sed mollis nisi consectetur quis. Nulla lorem."
+             UpdateFor="expat-2.0.0.0-any-Token1" Installed="false" Feed="http://coapp.org/feed">
+      
     </Package>
 
-    <Package Name="CML">
-      <Product Name="Common Service Locator 1.0" Type="upgrade">
-        <Summary>Vestibulum id congue diam. Nulla vel dui magna, ac rhoncus lacus. Nam ultricies placerat arcu in semper. Maecenas tincidunt tristique risus, bibendum pretium ligula malesuada.</Summary>
-      </Product>
-    </Package>
-    <Package Name="MvvmLight V3">
-      <Product Name="MvvmLight V3 Sp1" Type="update">
-        <Summary>leo et venenatis sagittis, sem lectus pulvinar mi,</Summary>
-      </Product>
-      <Product Name="MvvmLight V4 Beta1" Type="upgrade">
-        <Summary>Donec lacinia ligula a est malesuada ut sagittis urna dignissim. Praesent lorem metus, euismod eu consequat id, pulvinar at ipsum. Vivamus non felis at sapien.</Summary>
-      </Product>
-    </Package>
-    <Package Name="COappDev">
-      <Product Name="CoApp DevTools" Type="update">
-        <Summary>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus id turpis non nulla venenatis aliquet. Nulla ac lectus metus. Donec.</Summary>
-      </Product>
-    </Package>
+    <Package Name="lua" 
+             Icon="SampleData\multitool.png" Version="5.2.0.0" DisplayName="Lua" DisplayVerison="5.2" Architecture="x64" 
+             PublicKeyToken="Token1" 
+             Summary="Nam vel dictum lacus. Curabitur rutrum, leo et venenatis sagittis, sem lectus pulvinar mi, ac lobortis ligula elit nec neque. Mauris tristique, odio eget sollicitudin." Installed="false"
+             UpdateFor="lua-5.0.0.0-x64-Token1" Feed="http://coapp.org/feed"/>
+
+
+    <Package Name="cml" DisplayName="Command Service Locator" Version="1.0.0.0"
+    Icon="SampleData\safe.png" Architecture="any" PublicKeyToken="Token1" Summary="Vestibulum id congue diam. Nulla vel dui magna, ac rhoncus lacus. Nam ultricies placerat arcu in semper. Maecenas tincidunt tristique risus, bibendum pretium ligula malesuada."
+                UpgradeFor="cml-0.9.0.0-any-Token1" Feed="http://coapp.org/feed"/>
+
+    <Package Name="mvvmlight" Feed="http://coapp.org/feed" Version="3.1.0.0" Icon="SampleData\notebox.png" Architecture="any" PublicKeyToken="Token1"
+      Summary="leo et venenatis sagittis, sem lectus pulvinar mi," DisplayName="MvvmLight" AuthorVersion="V3 SP1" UpdateFor="mvvmlight-3.0.0.0-any-Token1"/>
+
+    <Package Name="mvvmlight" Feed="http://coapp.org/feed" Version="4.0.0.0" Icon="SampleData\notebox.png" Architecture="any" PublicKeyToken="Token1"
+      Summary="Donec lacinia ligula a est malesuada ut sagittis urna dignissim. Praesent lorem metus, euismod eu consequat id, pulvinar at ipsum. Vivamus non felis at sapien."
+             DisplayName="MvvmLight" AuthorVersion="V4 Beta1" UpgradeFor="mvvmlight-3.0.0.0-any-Token1,mvvmlight-3.1.0.0-any-Token1"/>
+
+    <Package Name="CoAppDev" Feed="http://coapp.org/feed" Version="1.50.0.0" Summary="THAOTHLATHGN kjfntgajth ath awt" Icon="SampleData\kwrite.png" Architecture="any" PublicKeyToken="Token1" Installed="true"/>
+
+    <Package Name="CoAppDev" Version="1.50.0.1" Summary="THAOTHLATHGN kjfntgajth ath awt"  Feed="http://coapp.org/feed" Icon="SampleData\kwrite.png" Architecture="any" PublicKeyToken="Token1" UpdateFor="CoAppDev-1.50.0.0-any-Token1" FailToInstall="true"/>
   </Products>
 
   <ScheduledTask Name="coapp_update" DayOfWeek="" Time="3" Interval="60" Executable="CoApp.Update.exe" CommandLine="--quiet"/>

@@ -702,8 +702,8 @@ namespace CoApp.Gui.Test.Model
             c = _updateService.CheckForUpdates().ContinueWith(t =>
                                                                   {
                                                                       Assert.IsTrue(t.IsFaulted);
-                                                                      
-                                                                       //  Assert.AreEqual("3", t.Exception.Unwrap().Unwrap().Unwrap().Unwrap().Message);
+
+                                                                      //  Assert.AreEqual("3", t.Exception.Unwrap().Unwrap().Unwrap().Unwrap().Message);
                                                                   }
                 );
             c.Wait();
@@ -718,7 +718,7 @@ namespace CoApp.Gui.Test.Model
             c = _updateService.CheckForUpdates().ContinueWith(t =>
                                                                   {
                                                                       Assert.IsTrue(t.IsFaulted);
-                                                                     // Assert.AreEqual("4", t.Exception.Unwrap().Message);
+                                                                      // Assert.AreEqual("4", t.Exception.Unwrap().Message);
                                                                   }
                 );
             c.Wait();
@@ -787,11 +787,8 @@ namespace CoApp.Gui.Test.Model
                                                DisplayName = "Upgrade 1",
                                                Summary = "Upgrade 1",
                                                PublishDate = DateTime.Now.ToString(),
-                                               
                                            },
                                    Package = new TestPackage {CanonicalName = UPGRADABLE1}
-
-         
                                };
                 case UPDATABLE1:
                     return new PackageSet
@@ -804,8 +801,7 @@ namespace CoApp.Gui.Test.Model
                                                Summary = "Update 1",
                                                PublishDate = DateTime.Today.ToString()
                                            },
-
-                                   Package = new TestPackage { CanonicalName = UPDATABLE1 }
+                                   Package = new TestPackage {CanonicalName = UPDATABLE1}
                                };
                 case UPGRADABLE_AND_UPDATABLE:
 
@@ -827,8 +823,7 @@ namespace CoApp.Gui.Test.Model
                                                Summary = "Update 2",
                                                PublishDate = DateTime.Today.ToString()
                                            },
-
-                                 Package = new TestPackage {CanonicalName = UPGRADABLE_AND_UPDATABLE}
+                                   Package = new TestPackage {CanonicalName = UPGRADABLE_AND_UPDATABLE}
                                };
             }
 

@@ -54,10 +54,10 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoApp.Client, Version=1.2.0.91, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Client, Version=1.2.0.140, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
     </Reference>
-    <Reference Include="CoApp.Toolkit, Version=1.2.0.91, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Toolkit, Version=1.2.0.140, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="FluentDateTime, Version=1.6.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
@@ -65,9 +65,11 @@
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=5fcbd337a8f68b41, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=5fcbd337a8f68b41, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -141,6 +143,8 @@
     <Compile Include="Support\ObjectExtensions.cs" />
     <Compile Include="Support\PrimaryViewTemplateSelector.cs" />
     <Compile Include="Support\QuietSupport.cs" />
+    <Compile Include="Support\UpdateFailureException.cs" />
+    <Compile Include="ViewModel\Errors\UpdateFailureViewModel.cs" />
     <Compile Include="ViewModel\InstallingViewModel.cs" />
     <Compile Include="ViewModel\SelectUpdatesViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -158,6 +162,9 @@
     </Compile>
     <Compile Include="Views\Primary\Error\ErrorProductsBlockedView.xaml.cs">
       <DependentUpon>ErrorProductsBlockedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Primary\Error\UpdateFailureError.xaml.cs">
+      <DependentUpon>UpdateFailureError.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Primary\NoUpdatesView.xaml.cs">
       <DependentUpon>NoUpdatesView.xaml</DependentUpon>
@@ -213,6 +220,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Primary\Error\ErrorProductsBlockedView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Primary\Error\UpdateFailureError.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -296,6 +307,28 @@
   </ItemGroup>
   <ItemGroup>
     <DesignData Include="SampleData\BlockedProductErrorSampleData.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SampleData\kwrite.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SampleData\multitool.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SampleData\notebox.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SampleData\safe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SampleData\testtube.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SampleData\expat.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

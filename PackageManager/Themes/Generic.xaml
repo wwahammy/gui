@@ -1,0 +1,189 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:Controls="clr-namespace:CoApp.PackageManager.Controls"
+    xmlns:Controls1="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:ViewModel="clr-namespace:CoApp.PackageManager.ViewModel"
+    xmlns:Model="clr-namespace:CoApp.PackageManager.Model">
+
+
+    <Style TargetType="{x:Type Controls1:PanoramaItem}">
+        <Setter Property="FontFamily" Value="{DynamicResource HeaderFontFamily}"/>
+        <Setter Property="FontSize" Value="36"/>
+    </Style>
+
+    <Style TargetType="{x:Type Controls:CustomTile}">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:CustomTile}">
+
+                    <Border BorderBrush="{TemplateBinding PrimaryColorBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Image Source="{TemplateBinding IconSource}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Height="256" Width="256" />
+                            <StackPanel Grid.Row="1" Background="{TemplateBinding PrimaryColorBrush}">
+                                <TextBlock Text="{TemplateBinding Title}" TextWrapping="Wrap"/>
+                                <TextBlock Text="{TemplateBinding Summary}" TextWrapping="Wrap"/>
+                                <!-- rating-->
+                            </StackPanel>
+
+
+                        </Grid>
+
+
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="CustomTile2x2" TargetType="{x:Type Controls:CustomTile}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:CustomTile}">
+
+                    <Border BorderBrush="{TemplateBinding PrimaryColorBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Image Source="{TemplateBinding IconSource}" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Height="256" Width="256"/>
+                            <StackPanel Grid.Row="1" Background="{TemplateBinding PrimaryColorBrush}">
+                                <TextBlock Text="{TemplateBinding Title}" TextWrapping="Wrap"/>
+                                <TextBlock Text="{TemplateBinding Summary}" TextWrapping="Wrap"/>
+                                <!-- rating-->
+                            </StackPanel>
+
+
+                        </Grid>
+
+                        
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="{x:Type Controls:TileGridControl}">
+       
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:TileGridControl}">
+                    <ControlTemplate.Resources>
+                        <DataTemplate DataType="{x:Type Model:ProductInfo}">
+                            
+                            <Controls:CustomTile PrimaryColorBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=IconSource, Converter={StaticResource ImageToColorConverter}}" 
+                                                        
+                                                 TextBlock.Foreground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=PrimaryColorBrush, Converter={StaticResource BgToFgConverter}}"
+                                                         Title="{Binding Name}" Summary="{Binding Summary}"  IconSource="{Binding Icon}" />
+
+                            <!--<Controls:CustomTile 
+                                                         Title="{Binding Name}" Summary="{Binding Summary}"  IconSource="{Binding Icon}" />-->
+                        </DataTemplate>
+                    </ControlTemplate.Resources>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.333*"/>
+                            <RowDefinition Height="0.333*"/>
+                            <RowDefinition Height="0.333*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="256"/>
+                            <ColumnDefinition Width="256"/>
+                            <ColumnDefinition Width="256"/>
+                        </Grid.ColumnDefinitions>
+
+
+
+                        <ContentPresenter 
+                            Content="{TemplateBinding TopLeftContent}"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0, 8, 8" >
+                            <ContentPresenter.Resources>
+                                <DataTemplate DataType="{x:Type Model:ProductInfo}">
+                                   
+                                    <Controls:CustomTile PrimaryColorBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=IconSource, Converter={StaticResource ImageToColorConverter}}" 
+                                                         IconSource="{Binding Icon}" TextBlock.Foreground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=PrimaryColorBrush, Converter={StaticResource BgToFgConverter}}"
+                                                         Title="{Binding Name}" Summary="{Binding Summary}" Style="{StaticResource CustomTile2x2}">
+                                        
+                                        
+                                    
+                                    </Controls:CustomTile> 
+
+                                    <!--<Controls:CustomTile 
+                                                         IconSource="{Binding Icon}"
+                                        Title="{Binding Name}" Summary="{Binding Summary}" Style="{StaticResource CustomTile2x2}"/>-->
+                                </DataTemplate>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+
+                        
+
+                      
+                        <ContentPresenter RecognizesAccessKey="True"
+                                        Content="{TemplateBinding BottomLeftContent}" Grid.Column="0" Grid.Row="2"  Margin="0,0, 8, 0"/>
+                      
+
+                        
+                        <ContentPresenter RecognizesAccessKey="True" Content="{TemplateBinding BottomMiddleContent}" Grid.Column="1" Grid.Row="2" Margin="0,0, 8, 0"/>
+                        
+
+                        
+                            <ContentPresenter RecognizesAccessKey="True" Content="{TemplateBinding TopRightContent}" Grid.Column="2" Grid.Row="0"  Grid.RowSpan="2" Margin="0,0, 0, 8"/>
+                        
+                        
+                        
+                            <ContentPresenter Grid.Column="2" Grid.Row="2" RecognizesAccessKey="True" Content="{TemplateBinding BottomRightContent}"/>
+                        
+                    </Grid>
+                   
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Controls:CustomPanoramaItem}">
+        <Setter Property="HorizontalContentAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Stretch" />
+        <Setter Property="Margin" Value="0,0,20,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:CustomPanoramaItem}">
+                    <Grid Background="{TemplateBinding Background}"
+                          Margin="{TemplateBinding Margin}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ContentControl x:Name="header"
+                                        Content="{TemplateBinding Header}"
+                                        FontSize="36"
+                                        HorizontalAlignment="Left"
+                                        FontFamily="{DynamicResource HeaderFontFamily}"
+                                        Margin="0,0,0,20">
+                        </ContentControl>
+                        <ContentPresenter RecognizesAccessKey="True"
+                                          Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          Grid.Row="1"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    
+</ResourceDictionary>

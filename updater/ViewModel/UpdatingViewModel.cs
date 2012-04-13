@@ -16,7 +16,7 @@ namespace CoApp.Updater.ViewModel
         internal INavigationService NavigationService;
         internal IUpdateService UpdateService;
         internal IAutomationService AutomationService;
-        private DateTime? _lastTimeChecked;
+ 
         private DateTime? _lastTimeInstalled;
         private bool _showDates;
         private CancellationTokenSource _src = new CancellationTokenSource();
@@ -31,17 +31,6 @@ namespace CoApp.Updater.ViewModel
             AutomationService = loc.AutomationService;
             Loaded += HandleLoaded;
             Unloaded += OnUnloaded;
-        }
-
-
-        public DateTime? LastTimeChecked
-        {
-            get { return _lastTimeChecked; }
-            set
-            {
-                _lastTimeChecked = value;
-                RaisePropertyChanged("LastTimeChecked");
-            }
         }
 
 
@@ -78,31 +67,33 @@ namespace CoApp.Updater.ViewModel
 
             UpdateService.LastTimeInstalled.ContinueWith(t => UpdateOnUI(() => LastTimeInstalled = t.Result));
 
-            ShowDates = LastTimeChecked != null && LastTimeInstalled != null;
+            ShowDates = LastTimeInstalled != null;
 
             UpdateService.CheckForUpdates(_src.Token).ContinueWith(
                 t =>
                     {
-                       if (AutomationService.IsAutomated)
-                       {
-                           if (UpdateService.NumberOfProductsSelected > 0)
-                           {
-                               NavigationService.GoTo(ViewModelLocator.InstallingViewModelStatic);
-                           }
-                           else
-                           {
-                               Logger.Message("Shutting down" + Environment.NewLine);
-                               Application.Current.Dispatcher.Invoke(
-                                   new Action(() => Application.Current.Shutdown()));
-                           }
-                       }
-                       else
-                       {
-                           Logger.Message("We Will Navigate to Primary" + Environment.NewLine);
-                           NavigationService.GoTo(ViewModelLocator.PrimaryViewModelStatic);   
-                       }
-                        
-                        
+                        if (!t.IsCanceled)
+                        {
+                            if (AutomationService.IsAutomated)
+                            {
+                                if (UpdateService.NumberOfProductsSelected > 0)
+                                {
+                                    NavigationService.GoTo(ViewModelLocator.InstallingViewModelStatic);
+                                }
+                                else
+                                {
+                                    Logger.Message("Shutting down" + Environment.NewLine);
+                                    Application.Current.Dispatcher.Invoke(
+                                        new Action(() => Application.Current.Shutdown()));
+                                }
+                            }
+                            else
+                            {
+                                Logger.Message("We Will Navigate to Primary" + Environment.NewLine);
+                                NavigationService.GoTo(ViewModelLocator.PrimaryViewModelStatic);
+                            }
+                        }
+
                     }
                 , TaskContinuationOptions.NotOnCanceled);
         }

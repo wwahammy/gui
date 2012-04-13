@@ -33,7 +33,7 @@ namespace CoApp.Gui.Toolkit.Model
             get
             {
                 return
-                    CoApp.GetScheduledTask("coapp_update").ContinueWith(t => t.IsFaulted
+                    CoApp.GetScheduledTask("coapp_update").ContinueWith(t => t.IsFaulted || t.IsCanceled || t.Result == null
                                                                                  ? DefaultTask()
                                                                                  : t.Result)
                                                                                  .ContinueWith(

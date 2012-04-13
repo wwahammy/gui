@@ -142,6 +142,13 @@
     <Compile Include="Support\Converters\InvertBooleanConverter.cs" />
     <Compile Include="Support\Converters\NullEmptyStringToVisibilityConverter.cs" />
     <Compile Include="Support\Converters\NullToBooleanConverter.cs" />
+    <Compile Include="Support\Converters\ProgressBarConverters.cs" />
+    <Compile Include="Support\Converters\ProgressBar\WidthToContainerAnimationEndPositionConverter.cs" />
+    <Compile Include="Support\Converters\ProgressBar\WidthToContainerAnimationStartPositionConverter.cs" />
+    <Compile Include="Support\Converters\ProgressBar\WidthToEllipseAnimationEndPositionConverter.cs" />
+    <Compile Include="Support\Converters\ProgressBar\WidthToEllipseAnimationWellPositionConverter.cs" />
+    <Compile Include="Support\Converters\ProgressBar\WidthToEllipseDiameterConverter.cs" />
+    <Compile Include="Support\Converters\ProgressBar\WidthToEllipseOffsetConverter.cs" />
     <Compile Include="Support\Converters\UpdateDayOfWeekConverter.cs" />
     <Compile Include="Support\Converters\UrlToBooleanConverter.cs" />
     <Compile Include="Support\Converters\ValueConverterList.cs" />

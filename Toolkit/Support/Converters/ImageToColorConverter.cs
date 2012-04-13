@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Color = System.Windows.Media.Color;
 
-// from http://www.rudigrobler.net/blog/2011/9/26/make-your-wpf-buttons-color-hot-track.html NEED FINAL PERMISSION
+// from http://www.rudigrobler.net/blog/2011/9/26/make-your-wpf-buttons-color-hot-track.html under CC-BY licence
 
 namespace CoApp.Gui.Toolkit.Support.Converters
 {

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Linq;
 using CoApp.Gui.Toolkit.Model;
@@ -8,14 +10,14 @@ using GalaSoft.MvvmLight.Command;
 
 namespace CoApp.Gui.Toolkit.ViewModels.Settings
 {
-    [Serializable]
+ 
     
     public class FeedSettingsViewModel : ScreenViewModel
     {
         internal ICoAppService CoAppService;
 
         private ObservableCollection<string> _feeds;
-
+        private Task<IEnumerable<string>> SysFeed;
         public FeedSettingsViewModel()
         {
             Title = "Feeds";
@@ -48,7 +50,9 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
 
         private void ReloadFeeds()
         {
-            CoAppService.SystemFeeds.ContinueWith((t) => 
+
+            SysFeed = CoAppService.SystemFeeds;
+                SysFeed.ContinueWith((t) => 
                 UpdateOnUI(() => 
                     
                     Feeds = new ObservableCollection<string>( t.Result)));

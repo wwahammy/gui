@@ -161,7 +161,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
 
         private void RunRestart()
         {
-            var startInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase) {Verb = "runas"};
+            var startInfo = new ProcessStartInfo(Process.GetCurrentProcess().MainModule.FileName) { Verb = "runas"};
 
 
             Process.Start(startInfo);

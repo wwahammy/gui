@@ -7,6 +7,7 @@ using CoApp.Gui.Toolkit.Support;
 using CoApp.Toolkit.Configuration;
 using CoApp.Toolkit.Engine.Client;
 using CoApp.Toolkit.Win32;
+using CoApp.Toolkit.Extensions;
 
 namespace CoApp.Gui.Toolkit.Model
 {
@@ -34,12 +35,6 @@ namespace CoApp.Gui.Toolkit.Model
 
         #region ICoAppService Members
 
-        public Task<PolicyProxy> GetPolicy(PolicyType type)
-        {
-            return EPM.GetPolicy(type.ToString()).ContinueWith(t => PolicyProxy.Convert(t.Result));
-        }
-
-
         public Task AddPrincipalToPolicy(PolicyType type, string principal)
         {
             return EPM.AddToPolicy(type.ToString(), principal);
@@ -53,7 +48,8 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<IEnumerable<string>> SystemFeeds
         {
-            get { return EPM.Feeds.ContinueWith((a) => a.Result.Where(f => !f.IsSession).Select(f => f.Location)); }
+            get { return EPM.Feeds.ContinueWith((a) => 
+                a.Result.Where(f => !f.IsSession).Select(f => f.Location)); }
         }
 
         public Task AddSystemFeed(string feedUrl)
@@ -103,6 +99,18 @@ namespace CoApp.Gui.Toolkit.Model
                                    blocked, latest, locationFeed, updates, upgrades, trimable);
         }
 
+
+        public Task<IEnumerable<PolicyProxy>> Policies
+        {
+            get
+            {
+                return EPM.Policies.ContinueWith(t =>
+                                              {
+                                                  t.RethrowWhenFaulted();
+                                                  return t.Result.Select(PolicyProxy.Convert);
+                                              });
+            }
+        }
 
         public Task<IEnumerable<Package>> GetUpdatablePackages()
         {

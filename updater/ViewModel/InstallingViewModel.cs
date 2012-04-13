@@ -19,6 +19,19 @@ namespace CoApp.Updater.ViewModel
         private DateTime? _lastTimeChecked;
         private DateTime? _lastTimeInstalled;
         private string _nameOfCurrentPackage;
+        private bool _showDates;
+
+        public bool ShowDates
+        {
+            get { return _showDates; }
+            set
+            {
+                _showDates = value;
+                RaisePropertyChanged("ShowDates");
+            }
+        }
+
+        
 
 
         private double _percentDone;
@@ -104,7 +117,9 @@ namespace CoApp.Updater.ViewModel
             _nameOfCurrentPackage = null;
             _totalPackages = 0;
             // we check for blocks
-
+            update.LastTimeInstalled.ContinueWith(t => UpdateOnUI(() => LastTimeInstalled = t.Result));
+            ShowDates = LastTimeInstalled != null;
+            
             update.PerformInstallation().ContinueWith(t =>
                                                           { //handle errors
                                                               UpdateOnUI(() => PercentDone = 100);

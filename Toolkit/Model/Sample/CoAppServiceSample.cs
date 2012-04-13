@@ -95,12 +95,6 @@ using System.Xml.Linq;
     #region ICoAppService Members
 
  
-        public Task<PolicyProxy> GetPolicy(PolicyType type)
-        {
-            return Task.Factory.StartNew(
-                () => 
-                    new PolicyProxy {Name = type.ToString(), Members = _membersForPolicies[type]});
-        }
 
         public Task AddPrincipalToPolicy(PolicyType type, string principal)
         {
@@ -556,6 +550,20 @@ using System.Xml.Linq;
 
     
         #endregion
+
+
+        public Task<IEnumerable<PolicyProxy>> Policies
+        {
+            get
+            {
+                return
+                    Task.Factory.StartNew(
+                        () =>
+                        _membersForPolicies.Keys.Select(
+                            type => new PolicyProxy {Name = type.ToString(), Members = _membersForPolicies[type]}))
+                            ;
+            }
+        }
     }
 
     internal class FeedItem

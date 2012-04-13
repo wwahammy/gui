@@ -39,7 +39,7 @@
 
 <!-- Style="{StaticResource MainUpdateInfoStyle}" -->
         </Border>
-        <Grid Grid.Row="1" VerticalAlignment="Top">
+        <Grid Grid.Row="1" VerticalAlignment="Top" Visibility="{Binding ShowDates, Converter={StaticResource boolToVisConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>

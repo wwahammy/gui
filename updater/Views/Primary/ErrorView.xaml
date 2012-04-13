@@ -7,7 +7,8 @@
              xmlns:Error="clr-namespace:CoApp.Updater.Views.Primary.Error"
              xmlns:Errors="clr-namespace:CoApp.Updater.Support.Errors"
              xmlns:Support="clr-namespace:CoApp.Updater.Support"
-             xmlns:Errors1="clr-namespace:CoApp.Updater.ViewModel.Errors" d:DesignWidth="1024"
+             xmlns:Errors1="clr-namespace:CoApp.Updater.ViewModel.Errors"
+             xmlns:Controls="clr-namespace:CoApp.Updater.Controls" d:DesignWidth="1024"
              Height="Auto" >
     <UserControl.Resources>
         <ResourceDictionary>
@@ -21,35 +22,15 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
-
-        <Rectangle Grid.Column="0" Grid.RowSpan="3" Grid.Row="0">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FFAF0102" Offset="0"/>
-                    <GradientStop Color="#FFDD0101" Offset="1"/>
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Image Style="{StaticResource ShieldImage}" Source="/CoApp.Updater;component/Resources/redshield.png"/>
-        <TextBlock Style="{StaticResource CoAppUpdateInnerHeader}" Text="{Binding Error.ErrorTitle}" Grid.Column="2" Margin="0,13,0,9" />
-        <ContentControl DataContext="{Binding Error}">
-            <ContentControl.Resources>
-                <DataTemplate DataType="{x:Type Errors1:UpdateFailureViewModel}">
-                    <Error:UpdateFailureError DataContext="{Binding}"/>
-                </DataTemplate>
-            </ContentControl.Resources>
-        </ContentControl>
+        <Controls:PrimaryViewControl TopGradientColor="#FFAF0102" BottomGradientColor="#FFDD0101" ImageSource="/CoApp.Updater;component/Resources/redshield.png" Header="{Binding Error.ErrorTitle}">
+            <ContentControl DataContext="{Binding Error}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type Errors1:UpdateFailureViewModel}">
+                        <Error:UpdateFailureError DataContext="{Binding}"/>
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+        </Controls:PrimaryViewControl>
+        
     </Grid>
 </UserControl>

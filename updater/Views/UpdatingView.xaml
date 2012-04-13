@@ -37,8 +37,7 @@
                 
                 <Image   Stretch="Fill" VerticalAlignment="Top" Width="43" Grid.Column="1" Grid.RowSpan="3" Grid.Row="0" HorizontalAlignment="Center"/>
                 <TextBlock Style="{StaticResource CoAppUpdateInnerHeader}" Text="Checking for updates" />
-                <ProgressBar Grid.Column="2" Grid.Row="1" Height="16.936" Margin="8,0,156.327,28"  VerticalAlignment="Bottom" IsIndeterminate="False" />
-                <!--Style="{DynamicResource ProgressBarStyleTest}"-->
+                <ProgressBar Grid.Column="2" Grid.Row="1" Height="16.936" Margin="8,0,0,8"  VerticalAlignment="Bottom" IsIndeterminate="True"/>
             </Grid>
         </Border>
         <Grid Grid.Row="1" VerticalAlignment="Top" Visibility="{Binding ShowDates, Converter={StaticResource boolToVisConverter}}">

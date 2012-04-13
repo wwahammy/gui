@@ -15,7 +15,27 @@
 
     
 
-
+<Style TargetType="TextBlock" x:Key="CoAppUpdateInnerHeader">
+        <Setter Property="FontFamily" Value="{DynamicResource HeaderFontFamily}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,12,0,10"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Grid.Row" Value="0"/>
+        <Setter Property="Grid.Column"  Value="2"/>
+        <Setter Property="Grid.ColumnSpan" Value="2"/>
+    </Style>
+    <Style TargetType="Image" x:Key="ShieldImage">
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Stretch" Value="Fill"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="Grid.RowSpan" Value="3"/>
+        <Setter Property="Grid.Row" Value="0"/>
+        <Setter Property="Margin" Value="30,12,20,0"/>
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="Width" Value="48"/>
+    </Style>
     
     
 
@@ -71,6 +91,7 @@
     <CircleEase EasingMode="EaseIn" x:Key="ProgressBarEaseIn"/>
 
     <CircleEase EasingMode="EaseIn" x:Key="ProgressBarEaseOut" />
+    
     <Style x:Key="ProgressBarStyleTest" TargetType="{x:Type ProgressBar}">
         <Setter Property="Foreground"
             Value="{DynamicResource HighlightBrush}" />
@@ -184,7 +205,7 @@
                             </Grid>
                             <Grid x:Name="DeterminateRoot">
                                 <Border x:Name="PART_Indicator"
-                                    Background="{DynamicResource  Windows8DialogButtonBgBrush}"
+                                    Background="{DynamicResource Windows8DialogButtonBgBrush}"
                                     HorizontalAlignment="Left">
                                     <Rectangle x:Name="GradientFill"
                                         Opacity="0.7"
@@ -218,6 +239,39 @@
                             <Setter Property="Visibility" TargetName="PART_Track" Value="Hidden"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    
+    <Style TargetType="{x:Type Controls:PrimaryViewControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:PrimaryViewControl}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="25"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Rectangle Grid.Column="0" Grid.RowSpan="2" Grid.Row="0">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="{Binding TopGradientColor, RelativeSource={RelativeSource TemplatedParent}}" Offset="0"/>
+                                    <GradientStop Color="{Binding BottomGradientColor, RelativeSource={RelativeSource TemplatedParent}}" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+
+                        <Image Style="{StaticResource ShieldImage}" Source="{Binding ImageSource, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        <TextBlock Style="{StaticResource CoAppUpdateInnerHeader}" Text="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        <ContentPresenter Content="{TemplateBinding Content}" Grid.Column="2" Grid.Row="1"/>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

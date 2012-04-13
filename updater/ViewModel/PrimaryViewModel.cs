@@ -73,6 +73,20 @@ namespace CoApp.Updater.ViewModel
         public ICommand Install { get; set; }
 
 
+        private bool _showDates;
+
+        public bool ShowDates
+        {
+            get { return _showDates; }
+            set
+            {
+                _showDates = value;
+                RaisePropertyChanged("ShowDates");
+            }
+        }
+
+        
+
         public int NumberOfProducts
         {
             get { return _numberOfProducts; }
@@ -114,17 +128,6 @@ namespace CoApp.Updater.ViewModel
             {
                 _hideInstallButton = value;
                 RaisePropertyChanged("HideInstallButton");
-            }
-        }
-
-
-        public DateTime? LastTimeChecked
-        {
-            get { return _lastTimeChecked; }
-            set
-            {
-                _lastTimeChecked = value;
-                RaisePropertyChanged("LastTimeChecked");
             }
         }
 
@@ -178,7 +181,7 @@ namespace CoApp.Updater.ViewModel
             NumberOfProducts = UpdateService.NumberOfProducts;
             NumberOfProductsSelected = UpdateService.NumberOfProductsSelected;
             UpdateService.LastTimeInstalled.ContinueWith(t => UpdateOnUI(() => LastTimeInstalled = t.Result));
-
+            ShowDates = LastTimeInstalled != null;
             //LastTimeChecked = UpdateService.LastTimeChecked;
             HideInstallButton = NumberOfProductsSelected != 0;
         }

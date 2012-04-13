@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            
-             xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit" mc:Ignorable="d" Height="Auto">
+             xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
+             xmlns:Controls="clr-namespace:CoApp.Updater.Controls" mc:Ignorable="d" Height="Auto">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,6 +15,35 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+    <Grid>
+        <Controls:PrimaryViewControl TopGradientColor="#FFF2B100" BottomGradientColor="#FFFECD48" ImageSource="/CoApp.Updater;component/Resources/yellowshield.png" Header="Updates are available">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Margin="0" Grid.Row="0" Height="30" BorderBrush="#FFB2B2B2" BorderThickness="0,0,1,0">
+                    <Grid>
+                        <Button Style="{DynamicResource ChromelessLinkButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" Content="{Binding NumberOfProducts}" Command="{Binding SelectUpdates}" ContentStringFormat="{}{0} updates available"/>
+
+                    </Grid>
+                </Border>
+
+                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="0" Text="{Binding NumberOfProductsSelected,  StringFormat={}{0} updates selected}" d:LayoutOverrides="Height" VerticalAlignment="Center" RenderTransformOrigin="3.263,7.163"/>
+
+                <Button Grid.Column="0" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,0,0,8"  Command="{Binding CheckForUpdates}" Content="Check For Updates"/>
+
+                <Controls1:ElevateButton Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Margin="10,15,0,8" Content="Install Updates" MustElevate="{Binding CanUpdate, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install}" Visibility="{Binding HideInstallButton, Converter={StaticResource boolToVisConverter}}"/>
+            </Grid>
+            
+        </Controls:PrimaryViewControl>
+    </Grid>
+    <!--
     <Grid  >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
@@ -36,17 +66,12 @@
         </Rectangle>
         <Image Style="{StaticResource ShieldImage}" Source="/CoApp.Updater;component/Resources/yellowshield.png"/>
         <TextBlock Style="{StaticResource CoAppUpdateInnerHeader}"  Text="Updates are available"/>
-        <Border Grid.Column="2" Margin="0" Grid.Row="1" Height="30" BorderBrush="#FFB2B2B2" BorderThickness="0,0,1,0">
-            <Grid>
-                <Button Style="{DynamicResource ChromelessLinkButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" Content="{Binding NumberOfProducts}" Command="{Binding SelectUpdates}" ContentStringFormat="{}{0} updates available"/>
+        
 
-            </Grid>
-        </Border>
+        
 
-        <TextBlock Grid.Column="3" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" Text="{Binding NumberOfProductsSelected,  StringFormat={}{0} updates selected}" d:LayoutOverrides="Height" VerticalAlignment="Center" RenderTransformOrigin="3.263,7.163"/>
+        
 
-        <Controls1:ElevateButton Grid.Column="3" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,15,0,8" Content="Install Updates" MustElevate="{Binding CanUpdate, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install}" Visibility="{Binding HideInstallButton, Converter={StaticResource boolToVisConverter}}"/>
-
-        <Button Grid.Column="2" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Margin="0,0,0,8"  Command="{Binding CheckForUpdates}" Content="Check For Updates"/>
-    </Grid>
+        
+    </Grid>-->
 </UserControl>

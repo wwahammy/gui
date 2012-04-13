@@ -7,7 +7,8 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
 {
     public interface ICoAppService
     {
-        Task<PolicyProxy> GetPolicy(PolicyType type);
+
+        Task<IEnumerable<PolicyProxy>>  Policies { get; } 
 
         Task AddPrincipalToPolicy(PolicyType type, string principal);
 

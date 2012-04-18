@@ -1,6 +1,16 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
-using CoApp.PackageManager.ViewModel;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using CoApp.Gui.Toolkit.Controls;
 
 namespace CoApp.PackageManager
 {
@@ -9,45 +19,11 @@ namespace CoApp.PackageManager
     /// </summary>
     public partial class MainWindow
     {
-        /// <summary>
-        /// Initializes a new instance of the MainWindow class.
-        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-            Closing += (s, e) => ViewModelLocator.Cleanup();
-          
         }
 
-        private void HeaderDragWindow(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton != MouseButtonState.Pressed && e.MiddleButton != MouseButtonState.Pressed)
-                DragMove();
-        }
-
-        private void MinimizeClickWindow(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void MaxRestoreClickWindow(object sender, RoutedEventArgs e)
-        {
-            if (WindowState == WindowState.Maximized)
-            {
-                maxRestore.Content = "1";
-                WindowState = WindowState.Normal;
-            }
-            else
-            {
-                maxRestore.Content = "2";
-                WindowState = WindowState.Maximized;
-            }
-        }
-
-
-       
-
-
-       
+      
     }
 }

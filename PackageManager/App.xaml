@@ -16,6 +16,8 @@
                 <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppStyle.xaml"/>
                 <ResourceDictionary Source="BaseStyle.xaml"/>
                 <ResourceDictionary Source="Themes/Generic.xaml"/>
+                <ResourceDictionary Source="/CoApp.Gui.Toolkit;component/CoAppToolkitDictionary.xaml"/>
+                <ResourceDictionary Source="PageResourceDictionary.xaml"/>
                 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -18,6 +18,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
             SimpleIoc.Default.Register<PrivacySettingsViewModel>();
             SimpleIoc.Default.Register<UpdateSettingsViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
+            SimpleIoc.Default.Register<CoAppWindowViewModel>();
         }
 
         public SettingsViewModel SettingsViewModel
@@ -73,6 +74,11 @@ namespace CoApp.Gui.Toolkit.ViewModels
         public static FeedSettingsViewModel FeedSettingsViewModelStatic
         {
             get { return ServiceLocator.Current.GetInstance<FeedSettingsViewModel>(); }
+        }
+
+        public CoAppWindowViewModel CoAppWindowViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<CoAppWindowViewModel>(); }
         }
     }
 }

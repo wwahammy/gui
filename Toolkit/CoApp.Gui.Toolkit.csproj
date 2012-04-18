@@ -45,26 +45,27 @@
   <ItemGroup>
     <Reference Include="CoApp.Client, Version=1.2.0.140, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="CoApp.Developer.Toolkit, Version=1.2.0.72, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Developer.Toolkit.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="CoApp.Toolkit, Version=1.2.0.140, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="FluentDateTime, Version=1.6.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\FluentDateTime.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=5fcbd337a8f68b41, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\GalaSoft.MvvmLight.Extras.WPF4.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=0.0.0.0, Culture=neutral, PublicKeyToken=5fcbd337a8f68b41, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\GalaSoft.MvvmLight.WPF4.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -86,11 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\CoAppFrame.cs" />
+    <Compile Include="Controls\CoAppWindow.cs" />
     <Compile Include="Controls\DialogBox.cs" />
     <Compile Include="Controls\ElevateButton.cs" />
-    <Compile Include="Controls\ElevateShield.xaml.cs">
-      <DependentUpon>ElevateShield.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Controls\ElevateShield.cs" />
     <Compile Include="Messages\GoToMessage.cs" />
     <Compile Include="Messages\MetroDialogBoxMessage.cs" />
     <Compile Include="Model\CoAppService.cs" />
@@ -155,6 +155,7 @@
     <Compile Include="Support\Extensions.cs" />
     <Compile Include="Support\StateManager.cs" />
     <Compile Include="Support\StringList.cs" />
+    <Compile Include="ViewModels\CoAppWindowViewModel.cs" />
     <Compile Include="ViewModels\ScreenViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\FeedSettingsViewModel.cs" />
@@ -202,7 +203,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\ElevateShield.xaml">
+    <Page Include="CoAppToolkitDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\GeneralStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Win8Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -235,6 +248,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\UAC-Win7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\UAC-Win7-Disabled.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:View="clr-namespace:CoApp.PackageManager.View"
+                    xmlns:ViewModel="clr-namespace:CoApp.PackageManager.ViewModel">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppToolkitDictionary.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <DataTemplate DataType="{x:Type ViewModel:ActivityViewModel}">
+        <View:ActivityView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModel:HomeViewModel}">
+        <View:HomeView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModel:PackageViewModel}">
+        <View:PackageView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModel:ProductViewModel}">
+        <View:ProductView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type ViewModel:SearchViewModel}">
+        <View:SearchView/>
+    </DataTemplate>
+</ResourceDictionary>

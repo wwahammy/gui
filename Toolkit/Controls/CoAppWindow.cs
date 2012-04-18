@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CoApp.Gui.Toolkit.Controls
 {
@@ -43,24 +33,48 @@ namespace CoApp.Gui.Toolkit.Controls
     ///     <MyNamespace:CoAppWindow/>
     ///
     /// </summary>
-    [TemplatePart(Name = MaxRestoreName, Type = typeof(Button))]
-    [TemplatePart(Name = MinimizeName, Type = typeof(Button))]
-    [TemplatePart(Name = NavFrameName, Type = typeof(CoAppFrame))]
-    [TemplatePart(Name = HeaderName, Type= typeof(Grid))]
+    [TemplatePart(Name = MaxRestoreName, Type = typeof (Button))]
+    [TemplatePart(Name = MinimizeName, Type = typeof (Button))]
+    [TemplatePart(Name = NavFrameName, Type = typeof (CoAppFrame))]
+    [TemplatePart(Name = HeaderName, Type = typeof (Grid))]
     public class CoAppWindow : Window
     {
         private const string NavFrameName = "NavFrame";
         private const string MaxRestoreName = "MaxRestore";
         private const string MinimizeName = "Minimize";
         private const string HeaderName = "Header";
-        private CoAppFrame _navFrame;
-        private Button _maxRestore, _minimize;
+
+        public static readonly DependencyProperty FrameResourcesProperty =
+            DependencyProperty.Register("FrameResources", typeof (ResourceDictionary), typeof (CoAppWindow),
+                                        new PropertyMetadata(default(ResourceDictionary), FrameResourceCallback));
+
+        public static readonly DependencyProperty CoAppFrameResourcesProperty =
+            DependencyProperty.Register("CoAppFrameResources", typeof (ResourceDictionary), typeof (CoAppWindow),
+                                        new PropertyMetadata(default(ResourceDictionary), CoAppResourceDictionaryChanged));
+
         private Grid _header;
+
+        private Button _maxRestore, _minimize;
+        private CoAppFrame _navFrame;
 
         static CoAppWindow()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CoAppWindow), new FrameworkPropertyMetadata(typeof(CoAppWindow)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof (CoAppWindow),
+                                                     new FrameworkPropertyMetadata(typeof (CoAppWindow)));
         }
+
+        public ResourceDictionary FrameResources
+        {
+            get { return (ResourceDictionary) GetValue(FrameResourcesProperty); }
+            set { SetValue(FrameResourcesProperty, value); }
+        }
+
+        public ResourceDictionary CoAppFrameResources
+        {
+            get { return (ResourceDictionary) GetValue(CoAppFrameResourcesProperty); }
+            set { SetValue(CoAppFrameResourcesProperty, value); }
+        }
+
         private void HeaderDragWindow(object sender, MouseButtonEventArgs e)
         {
             if (e.RightButton != MouseButtonState.Pressed && e.MiddleButton != MouseButtonState.Pressed)
@@ -86,47 +100,41 @@ namespace CoApp.Gui.Toolkit.Controls
             }
         }
 
-        public static readonly DependencyProperty CoAppFrameResourcesProperty =
-            DependencyProperty.Register("CoAppFrameResources", typeof(ResourceDictionary), typeof(CoAppWindow), new PropertyMetadata(default(ResourceDictionary), CoAppResourceDictionaryChanged));
-
-        private static void CoAppResourceDictionaryChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        private static void FrameResourceCallback(DependencyObject dependencyObject,
+                                                  DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            var win = (CoAppWindow)dependencyObject;
-            if (dependencyPropertyChangedEventArgs.OldValue != null && dependencyPropertyChangedEventArgs.OldValue is ResourceDictionary)// && win._navFrame != null)
+            var win = (CoAppWindow) dependencyObject;
+            var fe = (FrameworkElement) win.FindName("NavFrame");
+            fe.Resources = (ResourceDictionary) dependencyPropertyChangedEventArgs.NewValue;
+        }
+
+
+        private static void CoAppResourceDictionaryChanged(DependencyObject dependencyObject,
+                                                           DependencyPropertyChangedEventArgs
+                                                               dependencyPropertyChangedEventArgs)
+        {
+            var win = (CoAppWindow) dependencyObject;
+            if (dependencyPropertyChangedEventArgs.OldValue != null &&
+                dependencyPropertyChangedEventArgs.OldValue is ResourceDictionary) // && win._navFrame != null)
             {
                 win.Resources.MergedDictionaries.Remove(
-                    (ResourceDictionary)dependencyPropertyChangedEventArgs.OldValue);
+                    (ResourceDictionary) dependencyPropertyChangedEventArgs.OldValue);
             }
 
-            if (dependencyPropertyChangedEventArgs.NewValue != null && dependencyPropertyChangedEventArgs.NewValue is ResourceDictionary)// && win._navFrame != null)
+            if (dependencyPropertyChangedEventArgs.NewValue != null &&
+                dependencyPropertyChangedEventArgs.NewValue is ResourceDictionary) // && win._navFrame != null)
             {
                 win.Resources.MergedDictionaries.Add(
-                    (ResourceDictionary)dependencyPropertyChangedEventArgs.NewValue);
+                    (ResourceDictionary) dependencyPropertyChangedEventArgs.NewValue);
             }
         }
 
-
-        public ResourceDictionary CoAppFrameResources
-        {
-            get { return (ResourceDictionary)GetValue(CoAppFrameResourcesProperty); }
-            set { SetValue(CoAppFrameResourcesProperty, value); }
-        }
-
-        public static readonly DependencyProperty FrameContentProperty =
-            DependencyProperty.Register("FrameContent", typeof(object), typeof(CoAppWindow), new PropertyMetadata(default(object)));
-
-        public object FrameContent
-        {
-            get { return (object)GetValue(FrameContentProperty); }
-            set { SetValue(FrameContentProperty, value); }
-        }
 
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
-           
-
+            /*
             if (_maxRestore != null)
             {
                 _maxRestore.Click -= MaxRestoreClickWindow;
@@ -160,10 +168,7 @@ namespace CoApp.Gui.Toolkit.Controls
             if (_header != null)
             {
                 _header.MouseLeftButtonDown += HeaderDragWindow;
-            }
-
-
+            }*/
         }
-
     }
 }

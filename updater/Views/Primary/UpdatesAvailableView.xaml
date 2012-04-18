@@ -15,7 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid Height="Auto">
         <Controls:PrimaryViewControl TopGradientColor="#FFF2B100" BottomGradientColor="#FFFECD48" ImageSource="/CoApp.Updater;component/Resources/yellowshield.png" Header="Updates are available">
             <Grid>
                 <Grid.RowDefinitions>
@@ -29,16 +29,16 @@
 
                 <Border Grid.Column="0" Margin="0" Grid.Row="0" Height="30" BorderBrush="#FFB2B2B2" BorderThickness="0,0,1,0">
                     <Grid>
-                        <Button Style="{DynamicResource ChromelessLinkButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" Content="{Binding NumberOfProducts}" Command="{Binding SelectUpdates}" ContentStringFormat="{}{0} updates available"/>
+                        <Button Style="{DynamicResource ChromelessLinkButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" Content="{Binding NumberOfProducts, PresentationTraceSources.TraceLevel=High}" Command="{Binding SelectUpdates, PresentationTraceSources.TraceLevel=High}" ContentStringFormat="{}{0} updates available"/>
 
                     </Grid>
                 </Border>
 
-                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="0" Text="{Binding NumberOfProductsSelected,  StringFormat={}{0} updates selected}" d:LayoutOverrides="Height" VerticalAlignment="Center" RenderTransformOrigin="3.263,7.163"/>
+                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="0" Text="{Binding NumberOfProductsSelected,  StringFormat={}{0} updates selected, PresentationTraceSources.TraceLevel=High}" d:LayoutOverrides="Height" VerticalAlignment="Center" RenderTransformOrigin="3.263,7.163"/>
 
-                <Button Grid.Column="0" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,0,0,8"  Command="{Binding CheckForUpdates}" Content="Check For Updates"/>
+                <Button Grid.Column="0" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,0,0,8"  Command="{Binding CheckForUpdates, PresentationTraceSources.TraceLevel=High}" Content="Check For Updates"/>
 
-                <Controls1:ElevateButton Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Margin="10,15,0,8" Content="Install Updates" MustElevate="{Binding CanUpdate, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install}" Visibility="{Binding HideInstallButton, Converter={StaticResource boolToVisConverter}}"/>
+                <Controls1:ElevateButton Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Margin="10,15,0,8" Content="Install Updates" MustElevate="{Binding CanUpdate, Converter={StaticResource invertConverter}, PresentationTraceSources.TraceLevel=High}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install}" Visibility="{Binding HideInstallButton, Converter={StaticResource boolToVisConverter}}"/>
             </Grid>
             
         </Controls:PrimaryViewControl>

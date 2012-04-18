@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using CoApp.Toolkit.Extensions;
 using CoApp.Updater.Model;
 using CoApp.Updater.Support;
@@ -18,11 +20,21 @@ namespace CoApp.Updater
         private NotifyIcon _notifyIcon;
         private LocalServiceLocator loc = new LocalServiceLocator();
 
-        static App()
+        public App() : base()
         {
-            DispatcherHelper.Initialize();
+            DispatcherUnhandledException += OnDispatcherUnhandledException;
         }
 
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs dispatcherUnhandledExceptionEventArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        static App()
+        {
+            
+            DispatcherHelper.Initialize();
+        }
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {

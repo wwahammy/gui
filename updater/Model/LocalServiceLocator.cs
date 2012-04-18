@@ -13,26 +13,10 @@ namespace CoApp.Updater.Model
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
 
-#if SAMPLEDATA
-         
 
             SimpleIoc.Default.Register<IUpdateService, UpdateService>();
 
-            SimpleIoc.Default.Register<IAutomationService, AutomationService>();
-
-         
-          
-#else
-
-
-            SimpleIoc.Default.Register<IUpdateService, UpdateService>();
-
-
-
-           
-                SimpleIoc.Default.Register<IAutomationService, AutomationService>();
-
-#endif
+            SimpleIoc.Default.Register<IAutomationService, AutomationService>();         
         }
 
 

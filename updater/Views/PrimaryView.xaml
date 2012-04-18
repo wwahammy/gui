@@ -17,13 +17,13 @@
         <Support:PrimaryViewTemplateSelector x:Key="PrimaryTemplateSelector"/>
        
         <DataTemplate x:Key="ErrorTemplate">
-                <Primary:ErrorView/>
+                <Primary:ErrorView DataContext="{Binding}"/>
             </DataTemplate>
         <DataTemplate x:Key="NoUpdatesTemplate">
-                <Primary:NoUpdatesView/>
+                <Primary:NoUpdatesView DataContext="{Binding}"/>
             </DataTemplate>
         <DataTemplate x:Key="UpdatesAvailableTemplate">
-                <Primary:UpdatesAvailableView/>
+                <Primary:UpdatesAvailableView DataContext="{Binding PresentationTraceSources.TraceLevel=High}"/>
 
             </DataTemplate>
         </ResourceDictionary>
@@ -35,11 +35,11 @@
         </Grid.RowDefinitions>
         <Border Grid.Row="0" BorderBrush="#FFB2B2B2" BorderThickness="1" Margin="0,0,0,20" Grid.ColumnSpan="2" Style="{DynamicResource BorderStyle}">
 
-            <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource PrimaryTemplateSelector}"/>
+            <ContentControl Content="{Binding PresentationTraceSources.TraceLevel=High}" ContentTemplateSelector="{StaticResource PrimaryTemplateSelector}"/>
 
 <!-- Style="{StaticResource MainUpdateInfoStyle}" -->
         </Border>
-        <Grid Grid.Row="1" VerticalAlignment="Top" Visibility="{Binding ShowDates, Converter={StaticResource boolToVisConverter}}">
+        <Grid Grid.Row="1" VerticalAlignment="Top" Visibility="{Binding ShowDates, Converter={StaticResource boolToVisConverter}, PresentationTraceSources.TraceLevel=High}">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>

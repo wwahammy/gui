@@ -1,0 +1,314 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls2="clr-namespace:CoApp.Gui.Toolkit.Controls"
+                    xmlns:Converters1="clr-namespace:CoApp.Gui.Toolkit.Support.Converters"
+                    xmlns:Support="clr-namespace:CoApp.Gui.Toolkit.Support">
+    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+    <Converters1:NullEmptyStringToVisibilityConverter x:Key="NullEmptyStringToVisibilityConverter1"/>
+    <BooleanToVisibilityConverter x:Key="boolToVisConverter"/>
+
+    <Converters1:InvertBooleanConverter x:Key="invertConverter"/>
+    <Converters1:NullToBooleanConverter x:Key="NullToBooleanConverter1" />
+    <Converters1:UrlToBooleanConverter x:Key="UrlToBooleanConverter1" />
+    
+    <Style TargetType="TextBlock" x:Key="CoAppUpdateInnerHeader">
+        <Setter Property="FontFamily" Value="{StaticResource HeaderFontFamily}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,12,0,10"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Grid.Row" Value="0"/>
+        <Setter Property="Grid.Column"  Value="2"/>
+        <Setter Property="Grid.ColumnSpan" Value="2"/>
+    </Style>
+    
+    <Style TargetType="{x:Type Border}" x:Key="BorderStyle">
+        <Setter Property="BorderBrush" Value="#FFB2B2B2"/>
+        <Setter  Property="BorderThickness" Value="1"/>
+        <Setter Property="Margin" Value="0,0,0,20"   />
+    </Style>
+    
+    <Style TargetType="{x:Type TextBlock}" x:Key="Title">
+        <Setter Property="FontFamily" Value="{StaticResource HeaderFontFamily}"/>
+        <Setter Property="FontSize" Value="40"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
+    
+    <Style x:Key="BackButtonStyle" TargetType="{x:Type Button}">
+
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40 "/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="Margin" Value="40"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Canvas Opacity="0.75" x:Name="ButtonCanvas">
+                        <!-- fill is needed so the click is actually caught in the transparent regions -->
+                        <Ellipse Width="40" Height="40" Stroke="Black" Fill="Transparent"/>
+
+                        <Canvas Width="40" Height="40" Canvas.Left="20.667" Canvas.Top="27.5" >
+
+                            <Canvas.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleY="0.40" ScaleX="0.40"/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="179.547"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Canvas.RenderTransform>
+                            <Path Fill="Black" StrokeThickness="1"  StrokeMiterLimit="10" StrokeLineJoin="Round" Data="F1 M0.64426238,10.744088 L49.318571,11.101961 49.281571,17.092961 0.5,17.310553 0.64426238,10.744088 z M32.893571,0.91696081 L55.254571,14.135961 32.720571,27.061961 32.720571,27.061961 C31.280571,27.884961 29.441571,27.390961 28.616571,25.959961 27.791571,24.521961 28.286571,22.694961 29.726571,21.862961 L29.726571,21.862961 47.802571,11.497961 47.772571,16.673961 29.832571,6.0759608 29.832571,6.0759608 C28.406571,5.2299608 27.934571,3.3949608 28.781571,1.9719608 29.621571,0.54296081 31.467571,0.077960811 32.893571,0.91696081 L32.893571,0.91696081 z" Height="50.995" Canvas.Left="-25.224" Canvas.Top="-4.992" Width="60.559" Stretch="Fill"/>
+                            <Canvas/>
+                            <Canvas/>
+                        </Canvas>
+
+
+                    </Canvas>
+                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonCanvas" Property="Opacity" Value="1"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    
+
+
+    
+    <Style x:Key="ChromelessLinkButtonStyle"
+           TargetType="{x:Type Button}">
+        <Setter Property="Background"
+                Value="#02FFFFFF" />
+        <Setter Property="Foreground"
+                Value="Blue" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Padding"
+                Value="1" />
+        <Setter Property="TextBlock.TextDecorations" Value="None"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <ContentPresenter x:Name="contentPresenter"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          RecognizesAccessKey="True"
+                                           >
+                            <ContentPresenter.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="TextDecorations" Value="None" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="TextDecorations" Value="Underline"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    
+    
+    
+
+    <Style x:Key="WinLayout_HeaderGrid" TargetType="Grid">
+        <Setter Property="Grid.Row" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+
+    <Style x:Key="WinLayout_HeaderStackPanel" TargetType="StackPanel">
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="TextElement.FontFamily" Value="{DynamicResource HeaderFontFamily}"/>
+
+    </Style>
+    <Style x:Key="WinLayout_HeaderSettingButton" TargetType="{x:Type Button}" BasedOn="{StaticResource ChromelessButtonStyle}">
+        <Setter Property="Content" Value="Settings"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Margin" Value="0,0,20,0"/>
+    </Style>
+
+    <Style x:Key="WinLayout_HeaderUIButton" TargetType="{x:Type Button}" BasedOn="{StaticResource ChromelessButtonStyle}">
+        <Setter Property="FontFamily" Value="Marlett"/>
+    </Style>
+
+    <Style x:Key="WinLayout_HeaderUIButton_Minimize" TargetType="{x:Type Button}" BasedOn="{StaticResource WinLayout_HeaderUIButton}">
+        <Setter Property="Content" Value="0"/>
+    </Style>
+
+    <Style x:Key="WinLayout_HeaderUIButton_MaxRestore" TargetType="{x:Type Button}" BasedOn="{StaticResource WinLayout_HeaderUIButton}">
+        <Setter Property="Content" Value="1"/>
+    </Style>
+
+    <Style x:Key="WinLayout_HeaderUIButton_Close" TargetType="{x:Type Button}" BasedOn="{StaticResource WinLayout_HeaderUIButton}">
+        <Setter Property="Content" Value="r"/>
+    </Style>
+
+    <Style x:Key="WinLayout_InnerTitle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Title}">
+        <Setter Property="Grid.Column" Value="0"/>
+        <Setter Property="FontFamily" Value="{DynamicResource HeaderFontFamily}"/>
+        <Setter Property="Grid.ColumnSpan" Value="2"/>
+        <Setter Property="Text" Value="{Binding ElementName=NavFrame, Path=Content.Title}"/>
+    </Style>
+
+    <Style x:Key="WinLayout_SubTitle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Title}">
+        <Setter Property="Text" Value="{Binding ElementName=NavFrame, Path=Content.SubTitle}"/>
+        <Setter Property="Visibility" Value="{Binding ElementName=NavFrame, Path=Content.SubTitle, Converter={StaticResource NullEmptyStringToVisibilityConverter1}}"/>
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="FontFamily" Value="{DynamicResource HeaderFontFamily}"/>
+    </Style>
+
+
+
+
+    <Style x:Key="WinLayout_CoAppFrame" TargetType="{x:Type Controls2:CoAppFrame}">
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Margin" Value="0,0,10, 0"/>
+
+        <Setter Property="Grid.Row" Value="1"/>
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Style.Triggers>
+            <!--
+            <DataTrigger Binding="{Binding DataContext.ScreenWidth}" Value="Standard">
+               
+            </DataTrigger>-->
+            <DataTrigger Binding="{Binding MainScreenViewModel.ScreenWidth}" Value="FullWidth">
+                <Setter Property="Grid.Row" Value="1"/>
+                <Setter Property="Grid.Column" Value="0"/>
+                <Setter Property="Grid.ColumnSpan" Value="2"/>
+
+            </DataTrigger>
+        </Style.Triggers>
+
+    </Style>
+    
+    
+
+    <Style x:Key="WinLayout_CoAppFrameStandard" BasedOn="{StaticResource WinLayout_CoAppFrame}" TargetType="{x:Type Controls2:CoAppFrame}">
+
+    </Style>
+
+
+    <Style x:Key="WinLayout_CoAppFrameFullWidth" BasedOn="{StaticResource WinLayout_CoAppFrame}" TargetType="{x:Type Controls2:CoAppFrame}">
+
+    </Style>
+
+    <ControlTemplate x:Key="CoAppWinTemplate" TargetType="{x:Type Controls2:CoAppWindow}">
+        <Grid x:Name="LayoutRoot" Support:StateManager.VisualStateProperty="{Binding DialogBoxVisualState}" Background="White">
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup Name="MainStates">
+                    <VisualState Name="Base"/>
+
+                    <VisualState Name="Showing">
+                        <Storyboard Duration="00:00:00.25">
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LoadingGrid" Duration="00:00:00">
+                                <DiscreteObjectKeyFrame KeyTime="0"  Value="{x:Static Visibility.Visible}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <DoubleAnimation To="1" Storyboard.TargetName="LoadingGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:00.25"/>
+
+
+                        </Storyboard>
+                    </VisualState>
+                    <VisualStateGroup.Transitions>
+                        <VisualTransition To="Base" From="Showing">
+                            <Storyboard Duration="00:00:00.25">
+
+                                <DoubleAnimation To="0" Storyboard.TargetName="LoadingGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:00.25"/>
+
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LoadingGrid" Duration="0" BeginTime="00:00:00.2499999">
+                                    <DiscreteObjectKeyFrame KeyTime="0"  Value="{x:Static Visibility.Collapsed}"/>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </VisualTransition>
+                        <VisualTransition To="Showing"/>
+                    </VisualStateGroup.Transitions>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+
+
+
+            <Grid Grid.Row="0" x:Name="Header" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Orientation="Horizontal" TextElement.FontFamily="{DynamicResource HeaderFontFamily}">
+
+                    <Button x:Name="ShowSettings" Content="Settings" Style="{DynamicResource ChromelessButtonStyle}" FontSize="15" FontWeight="Bold" Margin="0,0,20,0" Command="{Binding Settings}"/>
+
+                    <Button x:Name="Minimize"  Style="{DynamicResource ChromelessButtonStyle}" Content="0" FontFamily="Marlett"/>
+                    <Button  x:Name="MaxRestore" Style="{DynamicResource ChromelessButtonStyle}" Content="1" FontFamily="Marlett" >
+
+                    </Button>
+                    <Button x:Name="TryClose" Style="{DynamicResource ChromelessButtonStyle}" Content="r" FontFamily="Marlett"  Command="{Binding Shutdown}"/>
+                </StackPanel>
+            </Grid>
+
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="122"/>
+                    <ColumnDefinition MinWidth="880"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="122"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button x:Name="BackButton" Style="{StaticResource BackButtonStyle}" Grid.Column="0" Grid.Row="0" Visibility="{Binding Path=CanGoBack, Converter={StaticResource boolToVisConverter}}" Command="{Binding Back}"/>
+
+                <Grid Grid.Column="1" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="400"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock x:Name="InnerTitle" Text="{Binding ElementName=NavFrame, Path=Content.Title}" Style="{StaticResource Title}" Grid.Column="0" FontFamily="{DynamicResource HeaderFontFamily}" Grid.ColumnSpan="2"/>
+                    <TextBlock x:Name="SectionTitle" Text="{Binding ElementName=NavFrame, Path=Content.SubTitle}" Style="{StaticResource Title}" Grid.Column="1" FontFamily="{DynamicResource HeaderFontFamily}" Visibility="{Binding ElementName=NavFrame, Path=Content.SubTitle, Converter={StaticResource NullEmptyStringToVisibilityConverter1}}"/>
+                </Grid>
+
+                <Controls2:CoAppFrame  Grid.Row="1" Grid.Column="1" x:Name="NavFrame"
+               VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,10, 0" Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent, PresentationTraceSources.TraceLevel=High}, PresentationTraceSources.TraceLevel=High}"/>
+
+            </Grid>
+            <Grid Grid.Row="0" Grid.RowSpan="2" x:Name="LoadingGrid" Visibility="Collapsed" Opacity="0">
+
+                <Controls2:DialogBox DataContext="{Binding DialogBoxInfo}" Title="{Binding Title}"  Content="{Binding Content}" ButtonDescriptions="{Binding Buttons}"/>
+            </Grid>
+        </Grid>
+    </ControlTemplate>
+
+   
+
+</ResourceDictionary>

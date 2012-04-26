@@ -258,6 +258,6 @@
                 </Behaviours:StylizedBehaviorCollection>
             </Setter.Value>
         </Setter>
-        <Setter Property="Template" Value="{StaticResource CoAppWinTemplate,PresentationTraceSources.TraceLevel=High}"/>
+        <Setter Property="Template" Value="{StaticResource CoAppWinTemplate}"/>
     </Style>
 </ResourceDictionary>

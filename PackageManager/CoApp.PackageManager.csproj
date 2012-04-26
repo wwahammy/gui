@@ -71,7 +71,9 @@
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=0.7.3.23551, Culture=neutral, PublicKeyToken=e4472823608665b4, processorArchitecture=MSIL" />
+    <Reference Include="MahApps.Metro, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\updater\lib\MahApps.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Interactions">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>

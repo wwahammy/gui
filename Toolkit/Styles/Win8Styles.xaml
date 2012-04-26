@@ -293,5 +293,17 @@
     <Style BasedOn="{StaticResource Windows8DialogElevateButtonStyle}" x:Key="DialogElevateButtonStyle"/>
 
 
-    
+    <Style TargetType="Controls:ElevateButton">
+        <Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />
+        <Setter Property="Background" Value="{StaticResource Windows8ButtonBgBrush1}" />
+        <Setter Property="BorderBrush" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
+        <Setter Property="Padding" Value="12,4,12,5" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14.666999816894531"/>
+    </Style>
+
 </ResourceDictionary>

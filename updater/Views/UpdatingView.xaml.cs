@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
 
 namespace CoApp.Updater.Views
 {
@@ -19,7 +20,9 @@ namespace CoApp.Updater.Views
     {
         public UpdatingView()
         {
+            MetroProgressBar progressBar = new MetroProgressBar();
             InitializeComponent();
+            
         }
     }
 }

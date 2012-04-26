@@ -134,7 +134,7 @@ namespace CoApp.Gui.Toolkit.Controls
         {
             base.OnApplyTemplate();
 
-            /*
+            
             if (_maxRestore != null)
             {
                 _maxRestore.Click -= MaxRestoreClickWindow;
@@ -168,7 +168,7 @@ namespace CoApp.Gui.Toolkit.Controls
             if (_header != null)
             {
                 _header.MouseLeftButtonDown += HeaderDragWindow;
-            }*/
+            }
         }
     }
 }

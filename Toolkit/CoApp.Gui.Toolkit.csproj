@@ -64,6 +64,13 @@
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="MahApps.Metro, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Documents\Visual Studio 2010\Projects\WpfApplication1\packages\MahApps.Metro.0.7.9.59-ALPHA\lib\net40\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -143,12 +150,6 @@
     <Compile Include="Support\Converters\NullEmptyStringToVisibilityConverter.cs" />
     <Compile Include="Support\Converters\NullToBooleanConverter.cs" />
     <Compile Include="Support\Converters\ProgressBarConverters.cs" />
-    <Compile Include="Support\Converters\ProgressBar\WidthToContainerAnimationEndPositionConverter.cs" />
-    <Compile Include="Support\Converters\ProgressBar\WidthToContainerAnimationStartPositionConverter.cs" />
-    <Compile Include="Support\Converters\ProgressBar\WidthToEllipseAnimationEndPositionConverter.cs" />
-    <Compile Include="Support\Converters\ProgressBar\WidthToEllipseAnimationWellPositionConverter.cs" />
-    <Compile Include="Support\Converters\ProgressBar\WidthToEllipseDiameterConverter.cs" />
-    <Compile Include="Support\Converters\ProgressBar\WidthToEllipseOffsetConverter.cs" />
     <Compile Include="Support\Converters\UpdateDayOfWeekConverter.cs" />
     <Compile Include="Support\Converters\UrlToBooleanConverter.cs" />
     <Compile Include="Support\Converters\ValueConverterList.cs" />
@@ -239,12 +240,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\updater\lib\MahApps.Metro\MahApps.Metro.csproj">
-      <Project>{5B1710D2-5DC8-4754-91B2-19165DE49B3D}</Project>
-      <Name>MahApps.Metro</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\UAC-Win7.png" />

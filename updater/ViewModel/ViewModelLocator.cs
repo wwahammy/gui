@@ -1,13 +1,4 @@
-﻿/*
-  In App.xaml:
-  <Application.Resources>
-      <vm:ViewModelLocatorTemplate xmlns:vm="clr-namespace:Gui.ViewModel"
-                                   x:Key="Locator" />
-  </Application.Resources>
-  
-  In the View:
-  DataContext="{Binding Source={StaticResource Locator}, Path=ViewModelName}"
-*/
+﻿
 
 using System.Diagnostics.CodeAnalysis;
 using GalaSoft.MvvmLight.Ioc;
@@ -48,17 +39,28 @@ namespace CoApp.Updater.ViewModel
             Justification = "This non-static member is needed for data binding purposes.")]
         public MainWindowViewModel MainWindowViewModel
         {
-            get { return MainWindowViewModelStatic; }
+            get
+            {
+                return MainWindowViewModelStatic;
+            }
         }
 
         public static MainWindowViewModel MainWindowViewModelStatic
         {
-            get { return ServiceLocator.Current.GetInstance<MainWindowViewModel>(); }
+            get
+            {
+                return ServiceLocator.Current.GetInstance<MainWindowViewModel>();
+            }
         }
 
         public static PrimaryViewModel PrimaryViewModelStatic
         {
-            get { return ServiceLocator.Current.GetInstance<PrimaryViewModel>(); }
+            get
+            {
+                return ServiceLocator.Current.GetInstance<PrimaryViewModel>();
+            }
+
+
         }
 
         public PrimaryViewModel PrimaryViewModel
@@ -69,7 +71,10 @@ namespace CoApp.Updater.ViewModel
 
         public static UpdatingViewModel UpdatingViewModelStatic
         {
-            get { return ServiceLocator.Current.GetInstance<UpdatingViewModel>(); }
+            get
+            {
+                return ServiceLocator.Current.GetInstance<UpdatingViewModel>();
+            }
         }
 
         public UpdatingViewModel UpdatingViewModel

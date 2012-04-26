@@ -55,8 +55,9 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoApp.Client, Version=1.2.0.157, Culture=neutral, PublicKeyToken=1e373a58e25250cb">
+    <Reference Include="CoApp.Client, Version=1.2.0.157, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="CoApp.Toolkit">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
@@ -70,6 +71,7 @@
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="MahApps.Metro, Version=0.7.3.23551, Culture=neutral, PublicKeyToken=e4472823608665b4, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Expression.Interactions">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
@@ -204,10 +206,6 @@
     <ProjectReference Include="..\Toolkit\CoApp.Gui.Toolkit.csproj">
       <Project>{9B272BA9-4E30-4B81-AA44-41AE82CDB31E}</Project>
       <Name>CoApp.Gui.Toolkit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\updater\lib\MahApps.Metro\MahApps.Metro.csproj">
-      <Project>{5B1710D2-5DC8-4754-91B2-19165DE49B3D}</Project>
-      <Name>MahApps.Metro</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

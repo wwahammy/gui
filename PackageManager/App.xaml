@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:CoApp.PackageManager.ViewModel" mc:Ignorable="d" Startup="Application_Startup" Exit="Application_Exit">
+             xmlns:vm="clr-namespace:CoApp.PackageManager.ViewModel" mc:Ignorable="d" Startup="Application_Startup" Exit="Application_Exit" StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <vm:ViewModelLocator x:Key="Locator"
@@ -12,9 +12,9 @@
 
 
             <ResourceDictionary.MergedDictionaries>
-
-                <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppStyle.xaml"/>
                 <ResourceDictionary Source="BaseStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppStyle.xaml"/>
+                
                 <ResourceDictionary Source="Themes/Generic.xaml"/>
                 <ResourceDictionary Source="/CoApp.Gui.Toolkit;component/CoAppToolkitDictionary.xaml"/>
                 <ResourceDictionary Source="PageResourceDictionary.xaml"/>

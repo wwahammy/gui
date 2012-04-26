@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
@@ -23,6 +24,19 @@ namespace CoApp.Updater
         public App() : base()
         {
             DispatcherUnhandledException += OnDispatcherUnhandledException;
+            System.AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+        }
+
+        System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            if (!args.Name.Contains(".resources,"))
+            {
+                AssemblyName name = new AssemblyName(args.Name);
+                name.SetPublicKeyToken(null);
+                //return Assembly.Load(name);
+                //Assembly.Load()
+            }
+            return null;
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs dispatcherUnhandledExceptionEventArgs)

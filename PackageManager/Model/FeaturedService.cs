@@ -33,9 +33,12 @@ namespace CoApp.PackageManager.Model
         private IEnumerable<SectionFeature> GetSectionsInternal()
         {
             var feeds = CoApp.SystemFeeds;
-           
 
-            feeds.ContinueOnFail(e => { throw e.Unwrap();  }).RethrowWhenFaulted();
+
+            feeds.ContinueOnFail(e =>
+                                     {
+                                         throw e.Unwrap();
+                                     });
 
             return feeds.Continue(enumerable =>
                 {

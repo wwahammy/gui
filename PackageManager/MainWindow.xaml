@@ -2,12 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Controls="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
-                      xmlns:Views1="clr-namespace:CoApp.Gui.Toolkit.Views;assembly=CoApp.Gui.Toolkit"
-                      xmlns:ViewModels="clr-namespace:CoApp.Gui.Toolkit.ViewModels;assembly=CoApp.Gui.Toolkit"
-                      xmlns:ViewModel="clr-namespace:CoApp.PackageManager.ViewModel"
-                      xmlns:View="clr-namespace:CoApp.PackageManager.View"
+                      
                       xmlns:System="clr-namespace:System;assembly=mscorlib" Title="MainWindow" 
-                      DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}" Style="{StaticResource WinStyle}" Content="{Binding MainScreenViewModel}"
+                      DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}" Content="{Binding MainScreenViewModel, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                       >
     <Controls:CoAppWindow.Resources>
         <ResourceDictionary Source="PageResourceDictionary.xaml"/>

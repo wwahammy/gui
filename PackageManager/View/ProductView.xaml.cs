@@ -17,7 +17,7 @@ namespace CoApp.PackageManager.View
     /// <summary>
     /// Interaction logic for ProductView.xaml
     /// </summary>
-    public partial class ProductView : UserControl
+    public partial class ProductView
     {
         public ProductView()
         {

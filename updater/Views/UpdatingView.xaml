@@ -39,7 +39,7 @@
                 <Image   Stretch="Fill" VerticalAlignment="Top" Width="43" Grid.Column="1" Grid.RowSpan="3" Grid.Row="0" HorizontalAlignment="Center"/>
                 <TextBlock Style="{StaticResource CoAppUpdateInnerHeader}" Text="Checking for updates" />
                 
-                <Controls1:MetroProgressBar HorizontalAlignment="Left" Grid.Column="2" Grid.Row="1" Margin="8,0,0,12" VerticalAlignment="Bottom" IsIndeterminate="True" Width="100"/>
+                <Controls1:MetroProgressBar HorizontalAlignment="Left" Grid.Column="2" Grid.Row="1" Margin="17,0,0,6" VerticalAlignment="Bottom" IsIndeterminate="True" Width="357" Height="34" Grid.RowSpan="2" />
             </Grid>
         </Border>
         <Grid Grid.Row="1" VerticalAlignment="Top" Visibility="{Binding ShowDates, Converter={StaticResource boolToVisConverter}}">
@@ -52,7 +52,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
           
-            <TextBlock Text="Updates were installed:" Grid.Row="1" Grid.Column="0" />
+            <TextBlock Text="Updates were installed: " Grid.Row="1" Grid.Column="0" />
 
             <TextBlock Grid.Column="1" Margin="0,0,0,8" Grid.Row="1" Text="{Binding LastTimeInstalled}"/>
         </Grid>

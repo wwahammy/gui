@@ -21,22 +21,25 @@ namespace CoApp.PackageManager.ViewModel
         static ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-            SimpleIoc.Default.Register<MainWindowViewModel>();
+            //SimpleIoc.Default.Register<MainWindowViewModel>();
             SimpleIoc.Default.Register<HomeViewModel>();
             SimpleIoc.Default.Register<ActivityViewModel>();
-           
+            SimpleIoc.Default.Register<ProductViewModel>();
+            SimpleIoc.Default.Register<PackageViewModel>();
+            SimpleIoc.Default.Register<SearchViewModel>();
+
         }
 
         /// <summary>
         /// Gets the Main property.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance",
+       /* [SuppressMessage("Microsoft.Performance",
             "CA1822:MarkMembersAsStatic",
             Justification = "This non-static member is needed for data binding purposes.")]
         public MainWindowViewModel MainWindowViewModel
         {
             get { return ServiceLocator.Current.GetInstance<MainWindowViewModel>(); }
-        }
+        }*/
 
 
         public HomeViewModel HomeViewModel
@@ -49,6 +52,11 @@ namespace CoApp.PackageManager.ViewModel
             get { return ServiceLocator.Current.GetInstance<ActivityViewModel>(); }
         }
 
+        public SearchViewModel SearchViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<SearchViewModel>(); }
+        }
+
         public SearchViewModel GetSearchViewModel(string key)
         {
                 return ServiceLocator.Current.GetInstance<SearchViewModel>(key);
@@ -56,13 +64,19 @@ namespace CoApp.PackageManager.ViewModel
 
         public ProductViewModel GetProductViewModel(string key)
         {
-            return ServiceLocator.Current.GetInstance<ProductViewModel>(key);
+            var ret = ServiceLocator.Current.GetInstance<ProductViewModel>(key);
+            ret.InitializationName = key;
+            return ret;
         }
 
         public PackageViewModel GetPackageViewModel(string key)
         {
-            return ServiceLocator.Current.GetInstance<PackageViewModel>(key);
+            var ret = ServiceLocator.Current.GetInstance<PackageViewModel>(key);
+            ret.InitializationName = key;
+            return ret;
         }
+
+       
 
 
         /// <summary>

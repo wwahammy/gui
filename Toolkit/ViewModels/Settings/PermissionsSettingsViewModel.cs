@@ -177,14 +177,6 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
         
         public  ICommand Save { get; set; }
 
-        public XElement Serialize()
-        {
-            return new XElement("PermissionsViewModel");
-        }
-
-        public  void Deserialize(XElement element)
-        {
-            
-        }
+       
     }
 }

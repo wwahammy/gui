@@ -1,50 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.PackageManager.Model;
 using CoApp.PackageManager.Model.Interfaces;
 using GalaSoft.MvvmLight;
-
+using GalaSoft.MvvmLight.Command;
 
 namespace CoApp.PackageManager.ViewModel
 {
     public class HomeViewModel : ScreenViewModel
     {
         internal IFeaturedService Featured;
-        public HomeViewModel()
-        {
-            Loaded += OnLoaded;
-            Featured = new LocalServiceLocator().FeaturedService;
-        }
-
-        private void OnLoaded()
-        {
-            Title = "Home";
-            ScreenWidth = ScreenWidth.FullWidth;
-            PanoramaItems.Clear();
-            foreach (var a in Featured.GetSections().Result)
-            {
-                var panItem = new PanoramaItemSource
-                                  {
-                                      Name = a.Name,
-                                      TopLeft = a.TopLeft,
-                                      BottomCenter = a.BottomCenter,
-                                      BottomLeft = a.BottomLeft,
-                                      BottomRight = a.BottomRight
-                                  };
-                PanoramaItems.Add(panItem);
-            }
-        }
 
         private ObservableCollection<PanoramaItemSource> _panoramaItems = new ObservableCollection<PanoramaItemSource>();
 
+        public HomeViewModel()
+        {
+            Loaded += OnLoaded;
+           
+            Featured = new LocalServiceLocator().FeaturedService;
+
+            GoToSearch = new RelayCommand(() => new LocalServiceLocator().NavigationService.GoTo(new ViewModelLocator().SearchViewModel));
+        }
+
+        public ICommand GoToSearch { get; set; }
+
         public ObservableCollection<PanoramaItemSource> PanoramaItems
         {
-            get { return _panoramaItems; }
+            get
+            {
+                return _panoramaItems;
+            }
             set
             {
                 _panoramaItems = value;
@@ -52,12 +39,50 @@ namespace CoApp.PackageManager.ViewModel
             }
         }
 
-        
+        private void OnLoaded()
+        {
+            Title = "Home";
+            ScreenWidth = ScreenWidth.FullWidth;
+            PanoramaItems.Clear();
+
+           AddPostLoadTask(Featured.GetSections().ContinueWith(t =>
+                                                                    {
+                                                                        foreach (SectionFeature a in t.Result)
+                                                                        {
+                                                                            var panItem = new PanoramaItemSource
+                                                                                              {
+                                                                                                  Name = a.Name,
+                                                                                                  TopLeft = a.TopLeft,
+                                                                                                  BottomCenter =
+                                                                                                      a.BottomCenter,
+                                                                                                  BottomLeft =
+                                                                                                      a.BottomLeft,
+                                                                                                  BottomRight =
+                                                                                                      a.BottomRight
+                                                                                              };
+                                                                            
+                                                                            UpdateOnUI( () => PanoramaItems.Add(panItem));
+                                                                        }
+                                                                    }
+                               ));
+        }
     }
 
     public class PanoramaItemSource : ViewModelBase
     {
+        private readonly INavigationService _nav = new LocalServiceLocator().NavigationService;
+        private readonly ViewModelLocator _vm = new ViewModelLocator();
+        private ProductInfo _bottomCenter;
+        private ProductInfo _bottomLeft;
+        private ProductInfo _bottomRight;
+
         private string _name;
+        private ProductInfo _topLeft;
+
+        public PanoramaItemSource()
+        {
+            GoToProductPage = new RelayCommand<string>(canonicalName => _nav.GoTo(_vm.GetProductViewModel(canonicalName)));
+        }
 
         public string Name
         {
@@ -72,7 +97,7 @@ namespace CoApp.PackageManager.ViewModel
 
         public ICommand GoToSource { get; set; }
 
-        private ProductInfo _topLeft;
+        public ICommand GoToProductPage { get; set; }
 
         public ProductInfo TopLeft
         {
@@ -84,9 +109,6 @@ namespace CoApp.PackageManager.ViewModel
             }
         }
 
-   
-
-        private ProductInfo _bottomLeft;
 
         public ProductInfo BottomLeft
         {
@@ -97,8 +119,6 @@ namespace CoApp.PackageManager.ViewModel
                 RaisePropertyChanged("BottomLeft");
             }
         }
-
-        private ProductInfo _bottomCenter;
 
         public ProductInfo BottomCenter
         {
@@ -111,8 +131,6 @@ namespace CoApp.PackageManager.ViewModel
         }
 
 
-        private ProductInfo _bottomRight;
-
         public ProductInfo BottomRight
         {
             get { return _bottomRight; }
@@ -122,11 +140,5 @@ namespace CoApp.PackageManager.ViewModel
                 RaisePropertyChanged("BottomRight");
             }
         }
-
-        
-
-        
     }
-
-    
 }

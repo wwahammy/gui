@@ -23,7 +23,7 @@
                 <Primary:NoUpdatesView DataContext="{Binding}"/>
             </DataTemplate>
         <DataTemplate x:Key="UpdatesAvailableTemplate">
-                <Primary:UpdatesAvailableView DataContext="{Binding PresentationTraceSources.TraceLevel=High}"/>
+                <Primary:UpdatesAvailableView DataContext="{Binding}"/>
 
             </DataTemplate>
         </ResourceDictionary>

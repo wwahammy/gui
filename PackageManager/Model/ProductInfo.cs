@@ -17,9 +17,13 @@ namespace CoApp.PackageManager.Model
 
         public string Summary { get; set; }
 
-        public DateTime Posted { get; set; }
+        public DateTime? Posted { get; set; }
 
         public double? Rating { get; set; }
+
+        public string Description { get; set; }
+
+
 
 
     }

@@ -1,7 +1,7 @@
 using System.IO;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 
-using CoApp.Toolkit.Engine.Client;
+using CoApp.Packaging.Client;
 using CoApp.Toolkit.Exceptions;
 using CoApp.Toolkit.Win32;
 using CoApp.Toolkit.Extensions;
@@ -92,7 +92,7 @@ using System.Xml.Linq;
             get { return _prods.Select(p => p.Update).Concat(_prods.Select(p => p.Upgrade)); }
         }
 
-    #region ICoAppService Members
+       #region ICoAppService Members
 
  
 
@@ -204,12 +204,23 @@ using System.Xml.Linq;
 
         public Task<IEnumerable<Package>> GetUpdatablePackages()
         {
-            return Task.Factory.StartNew(() => _prods.Where(p => p.Update != null && p.IsInstalled).Cast<Package>());
+            return Task.Factory.StartNew(() =>
+                                             {
+                                                 Thread.Sleep(5000);
+                                                 return _prods.Where(p => p.Update != null && p.IsInstalled).Cast<Package>();
+
+                                             });
         }
 
         public Task<IEnumerable<Package>> GetUpgradablePackages()
         {
-            return Task.Factory.StartNew(() => _prods.Where(p => p.Upgrade != null && p.IsInstalled).Cast<Package>());
+            return Task.Factory.StartNew(() =>
+                                             {
+                                                 Thread.Sleep(5000);
+                                                 return
+                                                     _prods.Where(p => p.Upgrade != null && p.IsInstalled).Cast<Package>
+                                                         ();
+                                             });
         }
 
         public Task<PackageSet> GetPackageSet(string canonicalName)

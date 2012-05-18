@@ -1,15 +1,33 @@
-﻿<UserControl x:Class="CoApp.PackageManager.View.HomeView"
+﻿<Controls1:CoAppFrameChild x:Class="CoApp.PackageManager.View.HomeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1024" xmlns:my="http://metro.mahapps.com/winfx/xaml/controls"
+             d:DesignHeight="800" d:DesignWidth="1024"
              xmlns:Controls="clr-namespace:CoApp.PackageManager.Controls"
-             xmlns:ViewModel="clr-namespace:CoApp.PackageManager.ViewModel">
+
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+         
+             xmlns:Support="clr-namespace:CoApp.PackageManager.Support"
+             xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
+             xmlns:sys="clr-namespace:System.Collections.Generic;assembly=mscorlib">
+    
+    <Controls1:CoAppWindow.MoreHeaderItems>
+        <x:Array Type="Panel">
+            <Grid>
+                <Button Content="I'm new!" Style="{DynamicResource WinLayout_HeaderSettingButton}"/>
+            </Grid>
+        </x:Array>
+    </Controls1:CoAppWindow.MoreHeaderItems>
+    
+    
     <Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-        <ItemsControl HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="120,0,0,0" Height="600" ItemsSource="{Binding PanoramaItems}">
+            <i:Interaction.Behaviors>
+                <Support:HorizontalScrollBehavior/>
+            </i:Interaction.Behaviors>
+        <ItemsControl HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="120,0,0,0" Height="600" ItemsSource="{Binding Mode=TwoWay, Path=PanoramaItems}">
                 <ItemsControl.Template>
                     <ControlTemplate TargetType="ItemsControl">
                         <ItemsPresenter/>
@@ -23,17 +41,42 @@
                 </ItemsControl.ItemsPanel>
 
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type ViewModel:PanoramaItemSource}">
-                        <Controls:CustomPanoramaItem Header="{Binding Name}">
-                            <Controls:TileGridControl 
-                                TopLeftContent="{Binding TopLeft}" BottomRightContent="{Binding BottomRight}" TopRightContent="TopRight" BottomLeftContent="{Binding BottomLeft}" BottomMiddleContent="{Binding BottomCenter}">
-
-                            </Controls:TileGridControl>
-                        </Controls:CustomPanoramaItem>
+                    
+                    <DataTemplate>
+                        
+                        <Controls:TileGridSection SectionTitle="{Binding Name}" SectionTitleCommand="{Binding GoToSource}"
+                        
+                        TopLeftBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=TopLeftIcon, Converter={StaticResource ImageToColorConverter}}"
+                        TopLeftIcon="{Binding TopLeft.Icon}" TopLeftTitle="{Binding TopLeft.Name}" TopLeftSummary="{Binding TopLeft.Summary}"
+                        TopLeftForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=TopLeftBrush, Converter={StaticResource BgToFgConverter}}"
+                        TopLeftClickCommand="{Binding GoToProductPage}" TopLeftClickCommandParameter="{Binding TopLeft.CanonicalName}"
+                        
+                        
+                        BottomLeftBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomLeftIcon, Converter={StaticResource ImageToColorConverter}}"
+                        BottomLeftIcon="{Binding BottomLeft.Icon}" BottomLeftTitle="{Binding BottomLeft.Name}" BottomLeftSummary="{Binding TopLeft.Summary}"
+                        BottomLeftForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomLeftBrush, Converter={StaticResource BgToFgConverter}}"
+                        BottomLeftClickCommand="{Binding GoToProductPage}" BottomLeftClickCommandParameter="{Binding BottomLeft.CanonicalName}"
+                        
+                        
+                        BottomCenterBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomCenterIcon, Converter={StaticResource ImageToColorConverter}}"
+                        BottomCenterIcon="{Binding BottomCenter.Icon}" BottomCenterTitle="{Binding BottomCenter.Name}" BottomCenterSummary="{Binding TopLeft.Summary}"
+                        BottomCenterForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomCenterBrush, Converter={StaticResource BgToFgConverter}}"
+                        BottomCenterClickCommand="{Binding GoToProductPage}" BottomCenterClickCommandParameter="{Binding BottomCenter.CanonicalName}"
+                        
+                        
+                        BottomRightBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomRightIcon, Converter={StaticResource ImageToColorConverter}}"
+                        BottomRightIcon="{Binding BottomRight.Icon}" BottomRightTitle="{Binding BottomCenter.Name}" BottomRightSummary="{Binding TopLeft.Summary}"
+                        BottomRightForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomRightBrush, Converter={StaticResource BgToFgConverter}}"
+                        BottomRightClickCommand="{Binding GoToProductPage}" BottomRightClickCommandParameter="{Binding BottomRight.CanonicalName}"
+                        
+                                                  Margin="0,0,90,0"
+                        />
+                        
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
         </ScrollViewer>
+        <Button Content="Go To Search" Command="{Binding GoToSearch}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
     </Grid>
-</UserControl>
+</Controls1:CoAppFrameChild>

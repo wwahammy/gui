@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Controls;
 using CoApp.Gui.Toolkit.Messages;
@@ -24,6 +25,8 @@ namespace CoApp.Gui.Toolkit.ViewModels
         {
             Messenger.Default.Register<GoToMessage>(this, ActOnNavigate);
             Messenger.Default.Register<MetroDialogBoxMessage>(this, HandleDialogBoxMessage);
+            Messenger.Default.Register<StartLoadingPageMessage>(this, StartLoadingPage);
+            Messenger.Default.Register<EndLoadingPageMessage>(this, EndLoadingPage);
 
             _nav = new LocalServiceLocator().NavigationService;
             Back = new RelayCommand(() => _nav.Back());
@@ -34,8 +37,20 @@ namespace CoApp.Gui.Toolkit.ViewModels
             //temporary
             Shutdown = new RelayCommand(() => Application.Current.Shutdown());
 
-            CancelDialog = new RelayCommand(() => UpdateOnUI(() => UpdateOnUI(() => DialogBoxVisualState = "Base")));
+            CancelDialog = new RelayCommand(() => UpdateOnUI(() =>  DialogBoxVisualState = "Base"));
         }
+
+        private void EndLoadingPage(EndLoadingPageMessage endLoadingPageMessage)
+        {
+            UpdateOnUI(() => DialogBoxVisualState = "Base");
+        }
+
+        private void StartLoadingPage(StartLoadingPageMessage startLoadingPageMessage)
+        {
+            UpdateOnUI(() => DialogBoxVisualState = "Loading");
+        }
+
+
 
 
         public MetroDialogBoxMessage DialogBoxInfo

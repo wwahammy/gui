@@ -16,6 +16,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <ExpressionBlendVersion>4.0.20901.0</ExpressionBlendVersion>
+    <Utf8Output>true</Utf8Output>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,6 +26,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,6 +60,7 @@
     </Reference>
     <Reference Include="FluentDateTime, Version=1.6.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\FluentDateTime.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -93,11 +97,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\CoAppFrame.cs" />
+    <Compile Include="Controls\CoAppFrameChild.cs" />
     <Compile Include="Controls\CoAppWindow.cs" />
     <Compile Include="Controls\DialogBox.cs" />
     <Compile Include="Controls\ElevateButton.cs" />
     <Compile Include="Controls\ElevateShield.cs" />
+    <Compile Include="Controls\HeaderItem.cs" />
+    <Compile Include="Controls\StyleableHeaderControl.cs" />
+    <Compile Include="Messages\EndLoadingPageMessage.cs" />
     <Compile Include="Messages\GoToMessage.cs" />
+    <Compile Include="Messages\StartLoadingPageMessage.cs" />
     <Compile Include="Messages\MetroDialogBoxMessage.cs" />
     <Compile Include="Model\CoAppService.cs" />
     <Compile Include="Model\Interfaces\ICoAppService.cs" />
@@ -141,20 +150,28 @@
     </Compile>
     <Compile Include="Support\Converters\AlternationEqualityConverter.cs" />
     <Compile Include="Support\Converters\BackgroundToForegroundColorConverter.cs" />
+    <Compile Include="Support\Converters\ByteArrayToBitmapSourceConverter.cs" />
     <Compile Include="Support\Converters\ChoiceToTextConverter.cs" />
     <Compile Include="Support\Converters\DaysOfWeekToTextConverter.cs" />
+    <Compile Include="Support\Converters\EnumerableCountToVisibilityConverter.cs" />
     <Compile Include="Support\Converters\HourConverter.cs" />
     <Compile Include="Support\Converters\ImageToColorConverter.cs" />
     <Compile Include="Support\Converters\InvertBooleanConverter.cs" />
+    <Compile Include="Support\Converters\ItemToObservableCollection.cs" />
     <Compile Include="Support\Converters\NullEmptyStringToVisibilityConverter.cs" />
     <Compile Include="Support\Converters\NullToBooleanConverter.cs" />
     <Compile Include="Support\Converters\ProgressBarConverters.cs" />
     <Compile Include="Support\Converters\UpdateDayOfWeekConverter.cs" />
     <Compile Include="Support\Converters\UrlToBooleanConverter.cs" />
     <Compile Include="Support\Converters\ValueConverterList.cs" />
+    <Compile Include="Support\EnumerableExtensions.cs" />
     <Compile Include="Support\Extensions.cs" />
+    <Compile Include="Support\NavFrameStyleSelector.cs" />
+    <Compile Include="Support\ObservableDictionary.cs" />
     <Compile Include="Support\StateManager.cs" />
     <Compile Include="Support\StringList.cs" />
+    <Compile Include="Support\TaskExtensions.cs" />
+    <Compile Include="Support\UIHelper.cs" />
     <Compile Include="ViewModels\CoAppWindowViewModel.cs" />
     <Compile Include="ViewModels\ScreenViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
@@ -208,10 +225,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\GeneralStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Win8Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

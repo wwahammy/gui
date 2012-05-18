@@ -2,7 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Controls2="clr-namespace:CoApp.Gui.Toolkit.Controls"
                     xmlns:Converters1="clr-namespace:CoApp.Gui.Toolkit.Support.Converters"
-                    xmlns:Support="clr-namespace:CoApp.Gui.Toolkit.Support">
+                    xmlns:Support="clr-namespace:CoApp.Gui.Toolkit.Support"
+                    xmlns:ViewModels="clr-namespace:CoApp.Gui.Toolkit.ViewModels" xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls" 
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
     
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml"/>
@@ -16,8 +19,10 @@
     <Converters1:InvertBooleanConverter x:Key="invertConverter"/>
     <Converters1:NullToBooleanConverter x:Key="NullToBooleanConverter1" />
     <Converters1:UrlToBooleanConverter x:Key="UrlToBooleanConverter1" />
+    <Converters1:ByteArrayToBitmapSourceConverter x:Key="ByteArrayToBitmapSourceConverter1"/>
+    <Converters1:EnumerableCountToVisibilityConverter x:Key="EnumerableCountToVisibilityConverter"/>
     
-    <Style TargetType="TextBlock" x:Key="CoAppUpdateInnerHeader">
+    <Style TargetType="{x:Type TextBlock}" x:Key="CoAppUpdateInnerHeader">
         <Setter Property="FontFamily" Value="{StaticResource HeaderFontFamily}"/>
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -90,17 +95,17 @@
 
     
     <Style x:Key="ChromelessLinkButtonStyle"
-           TargetType="{x:Type Button}">
+        TargetType="{x:Type Button}">
         <Setter Property="Background"
-                Value="#02FFFFFF" />
+            Value="#02FFFFFF" />
         <Setter Property="Foreground"
-                Value="Blue" />
+            Value="Blue" />
         <Setter Property="HorizontalContentAlignment"
-                Value="Center" />
+            Value="Center" />
         <Setter Property="VerticalContentAlignment"
-                Value="Center" />
+            Value="Center" />
         <Setter Property="Padding"
-                Value="1" />
+            Value="1" />
         <Setter Property="TextBlock.TextDecorations" Value="None"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
@@ -108,11 +113,11 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid Background="{TemplateBinding Background}">
                         <ContentPresenter x:Name="contentPresenter"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Margin="{TemplateBinding Padding}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                          RecognizesAccessKey="True"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            Margin="{TemplateBinding Padding}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                            RecognizesAccessKey="True"
                                            >
                             <ContentPresenter.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -135,7 +140,7 @@
     
     
 
-    <Style x:Key="WinLayout_HeaderGrid" TargetType="Grid">
+    <Style x:Key="WinLayout_HeaderGrid" TargetType="{x:Type Grid}">
         <Setter Property="Grid.Row" Value="0"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -143,7 +148,7 @@
     </Style>
 
 
-    <Style x:Key="WinLayout_HeaderStackPanel" TargetType="StackPanel">
+    <Style x:Key="WinLayout_HeaderStackPanel" TargetType="{x:Type StackPanel}">
         <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="Margin" Value="10"/>
@@ -152,10 +157,9 @@
 
     </Style>
     <Style x:Key="WinLayout_HeaderSettingButton" TargetType="{x:Type Button}" BasedOn="{StaticResource ChromelessButtonStyle}">
-        <Setter Property="Content" Value="Settings"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Margin" Value="0,0,20,0"/>
+        <Setter Property="TextBlock.FontSize" Value="15"/>
+        <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+     
     </Style>
 
     <Style x:Key="WinLayout_HeaderUIButton" TargetType="{x:Type Button}" BasedOn="{StaticResource ChromelessButtonStyle}">
@@ -178,12 +182,12 @@
         <Setter Property="Grid.Column" Value="0"/>
         <Setter Property="FontFamily" Value="{DynamicResource HeaderFontFamily}"/>
         <Setter Property="Grid.ColumnSpan" Value="2"/>
-        <Setter Property="Text" Value="{Binding ElementName=NavFrame, Path=Content.Title}"/>
+        <Setter Property="Text" Value="{Binding Content.Title, ElementName=NavFrame}"/>
     </Style>
 
     <Style x:Key="WinLayout_SubTitle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Title}">
-        <Setter Property="Text" Value="{Binding ElementName=NavFrame, Path=Content.SubTitle}"/>
-        <Setter Property="Visibility" Value="{Binding ElementName=NavFrame, Path=Content.SubTitle, Converter={StaticResource NullEmptyStringToVisibilityConverter1}}"/>
+        <Setter Property="Text" Value="{Binding Content.SubTitle, ElementName=NavFrame}"/>
+        <Setter Property="Visibility" Value="{Binding Content.SubTitle, Converter={StaticResource NullEmptyStringToVisibilityConverter1}, ElementName=NavFrame}"/>
         <Setter Property="Grid.Column" Value="1"/>
         <Setter Property="FontFamily" Value="{DynamicResource HeaderFontFamily}"/>
     </Style>
@@ -192,59 +196,34 @@
 
 
     <Style x:Key="WinLayout_CoAppFrame" TargetType="{x:Type Controls2:CoAppFrame}">
-        <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        
         <Setter Property="Margin" Value="0,0,10, 0"/>
 
         <Setter Property="Grid.Row" Value="1"/>
         <Setter Property="Grid.Column" Value="1"/>
-        <Setter Property="IsTabStop" Value="False"/>
-        <Style.Triggers>
-            <!--
-            <DataTrigger Binding="{Binding DataContext.ScreenWidth}" Value="Standard">
-               
-            </DataTrigger>-->
-            <DataTrigger Binding="{Binding MainScreenViewModel.ScreenWidth}" Value="FullWidth">
-                <Setter Property="Grid.Row" Value="1"/>
-                <Setter Property="Grid.Column" Value="0"/>
-                <Setter Property="Grid.ColumnSpan" Value="2"/>
-
-            </DataTrigger>
-        </Style.Triggers>
-
+        <Setter Property="Grid.ColumnSpan" Value="1"/>
     </Style>
     
     
 
-    <Style x:Key="WinLayout_CoAppFrameStandard" BasedOn="{StaticResource WinLayout_CoAppFrame}" TargetType="{x:Type Controls2:CoAppFrame}">
-
-    </Style>
-
-
-    <Style x:Key="WinLayout_CoAppFrameFullWidth" BasedOn="{StaticResource WinLayout_CoAppFrame}" TargetType="{x:Type Controls2:CoAppFrame}">
-
-    </Style>
 
     <ControlTemplate x:Key="CoAppWinTemplate" TargetType="{x:Type Controls2:CoAppWindow}">
         <Grid x:Name="LayoutRoot" Support:StateManager.VisualStateProperty="{Binding DialogBoxVisualState}" Background="White">
 
             <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup Name="MainStates">
-                    <VisualState Name="Base"/>
-
-                    <VisualState Name="Showing">
-                        <Storyboard Duration="00:00:00.25">
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LoadingGrid" Duration="00:00:00">
-                                <DiscreteObjectKeyFrame KeyTime="0"  Value="{x:Static Visibility.Visible}"/>
-                            </ObjectAnimationUsingKeyFrames>
-                            <DoubleAnimation To="1" Storyboard.TargetName="LoadingGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:00.25"/>
-
-
-                        </Storyboard>
-                    </VisualState>
+                <VisualStateGroup x:Name="MainStates">
                     <VisualStateGroup.Transitions>
-                        <VisualTransition To="Base" From="Showing">
+                        <VisualTransition From="Showing">
+                            <Storyboard Duration="00:00:00.25">
+
+                                <DoubleAnimation To="0" Storyboard.TargetName="DialogBoxGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:00.25"/>
+
+                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="DialogBoxGrid" Duration="0" BeginTime="00:00:00.2499999">
+                                    <DiscreteObjectKeyFrame KeyTime="0"  Value="{x:Static Visibility.Collapsed}"/>
+                                </ObjectAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </VisualTransition>
+                        <VisualTransition From="Loading">
                             <Storyboard Duration="00:00:00.25">
 
                                 <DoubleAnimation To="0" Storyboard.TargetName="LoadingGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:00.25"/>
@@ -254,8 +233,34 @@
                                 </ObjectAnimationUsingKeyFrames>
                             </Storyboard>
                         </VisualTransition>
-                        <VisualTransition To="Showing"/>
                     </VisualStateGroup.Transitions>
+                    <VisualState x:Name="Base"/>
+
+                    <VisualState x:Name="Showing">
+                        <Storyboard Duration="00:00:00.25">
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="DialogBoxGrid" Duration="00:00:00">
+                                <DiscreteObjectKeyFrame KeyTime="0"  Value="{x:Static Visibility.Visible}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <DoubleAnimation To="1" Storyboard.TargetName="DialogBoxGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:00.25"/>
+
+
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Loading">
+                        <Storyboard Duration="00:00:00.25">
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="LoadingGrid" Duration="00:00:00">
+                                <DiscreteObjectKeyFrame KeyTime="0"  Value="{x:Static Visibility.Visible}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <DoubleAnimation To="1" Storyboard.TargetName="LoadingGrid" Storyboard.TargetProperty="Opacity" Duration="00:00:00.25"/>
+
+
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="ValidationStates">
+                    <VisualState x:Name="Valid"/>
+                    <VisualState x:Name="InvalidFocused"/>
+                    <VisualState x:Name="InvalidUnfocused"/>
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
 
@@ -265,13 +270,19 @@
             <Grid Grid.Row="0" x:Name="Header" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
 
                 <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Orientation="Horizontal" TextElement.FontFamily="{DynamicResource HeaderFontFamily}">
+                    <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AdditionalHeaderItems}" Margin="0,0,20,0" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
 
-                    <Button x:Name="ShowSettings" Content="Settings" Style="{DynamicResource ChromelessButtonStyle}" FontSize="15" FontWeight="Bold" Margin="0,0,20,0" Command="{Binding Settings}"/>
+
+                    <Button x:Name="ShowSettings" Content="Settings" Style="{DynamicResource WinLayout_HeaderSettingButton}" Margin="0,0,20,0" Command="{Binding Settings}"/>
 
                     <Button x:Name="Minimize"  Style="{DynamicResource ChromelessButtonStyle}" Content="0" FontFamily="Marlett"/>
-                    <Button  x:Name="MaxRestore" Style="{DynamicResource ChromelessButtonStyle}" Content="1" FontFamily="Marlett" >
-
-                    </Button>
+                    <Button  x:Name="MaxRestore" Style="{DynamicResource ChromelessButtonStyle}" Content="1" FontFamily="Marlett" />
                     <Button x:Name="TryClose" Style="{DynamicResource ChromelessButtonStyle}" Content="r" FontFamily="Marlett"  Command="{Binding Shutdown}"/>
                 </StackPanel>
             </Grid>
@@ -286,7 +297,7 @@
                     <RowDefinition Height="122"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Button x:Name="BackButton" Style="{StaticResource BackButtonStyle}" Grid.Column="0" Grid.Row="0" Visibility="{Binding Path=CanGoBack, Converter={StaticResource boolToVisConverter}}" Command="{Binding Back}"/>
+                <Button x:Name="BackButton" Style="{StaticResource BackButtonStyle}" Grid.Column="0" Grid.Row="0" Visibility="{Binding CanGoBack, Converter={StaticResource boolToVisConverter}}" Command="{Binding Back}"/>
 
                 <Grid Grid.Column="1" Grid.Row="0">
                     <Grid.ColumnDefinitions>
@@ -294,21 +305,468 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock x:Name="InnerTitle" Text="{Binding ElementName=NavFrame, Path=Content.Title}" Style="{StaticResource Title}" Grid.Column="0" FontFamily="{DynamicResource HeaderFontFamily}" Grid.ColumnSpan="2"/>
-                    <TextBlock x:Name="SectionTitle" Text="{Binding ElementName=NavFrame, Path=Content.SubTitle}" Style="{StaticResource Title}" Grid.Column="1" FontFamily="{DynamicResource HeaderFontFamily}" Visibility="{Binding ElementName=NavFrame, Path=Content.SubTitle, Converter={StaticResource NullEmptyStringToVisibilityConverter1}}"/>
+                    <TextBlock x:Name="InnerTitle" Text="{Binding Content.Title, ElementName=NavFrame}" Style="{StaticResource Title}" Grid.Column="0" FontFamily="{DynamicResource HeaderFontFamily}" Grid.ColumnSpan="2"/>
+                    <TextBlock x:Name="SectionTitle" Text="{Binding Content.SubTitle, ElementName=NavFrame}" Style="{StaticResource Title}" Grid.Column="1" FontFamily="{DynamicResource HeaderFontFamily}" Visibility="{Binding Content.SubTitle, Converter={StaticResource NullEmptyStringToVisibilityConverter1}, ElementName=NavFrame}"/>
                 </Grid>
 
                 <Controls2:CoAppFrame  Grid.Row="1" Grid.Column="1" x:Name="NavFrame"
-               VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,10, 0" Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent, PresentationTraceSources.TraceLevel=High}, PresentationTraceSources.TraceLevel=High}"/>
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,10, 0" Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" 
+                    Style="{StaticResource WinLayout_CoAppFrame}"/>
+                    
+                <Grid Grid.Row="1" x:Name="LoadingGrid" Visibility="Collapsed" Opacity="0" Background="White" Grid.ColumnSpan="2" Grid.RowSpan="2">
+              
+                    <Custom:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="True"/>
+              
+                </Grid>
 
             </Grid>
-            <Grid Grid.Row="0" Grid.RowSpan="2" x:Name="LoadingGrid" Visibility="Collapsed" Opacity="0">
+
+            <Grid Grid.Row="0" Grid.RowSpan="2" x:Name="DialogBoxGrid" Visibility="Collapsed" Opacity="0">
 
                 <Controls2:DialogBox DataContext="{Binding DialogBoxInfo}" Title="{Binding Title}"  Content="{Binding Content}" ButtonDescriptions="{Binding Buttons}"/>
             </Grid>
         </Grid>
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Content.ScreenWidth, ElementName=NavFrame}">
+                <DataTrigger.Value>
+                    <ViewModels:ScreenWidth>FullWidth</ViewModels:ScreenWidth>
+                </DataTrigger.Value>
+                <Setter TargetName="NavFrame" Property="Grid.Column" Value="0"/>
+                <Setter TargetName="NavFrame" Property="Grid.ColumnSpan" Value="2"/>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
+
+   <Color x:Key="Windows8DialogButtonBg">#FF008287</Color>
+    <SolidColorBrush x:Key="Windows8DialogButtonBgBrush" Color="{StaticResource Windows8DialogButtonBg}"/>
+
+    <Color x:Key="Windows8DisabledButtonFg">#FF9D9D9D</Color>
+    <SolidColorBrush x:Key="Windows8DisabledButtonFgBrush" Color="{StaticResource Windows8DisabledButtonFg}"/>
+
+    <Color x:Key="Windows8DisabledButtonBg">#FFEAEAEA</Color>
+    <SolidColorBrush x:Key="Windows8DisabledButtonBgBrush" Color="{StaticResource Windows8DisabledButtonBg}"/>
+
+    <Color x:Key="Windows8DialogButtonFg">#FFEDF7F7</Color>
+    <SolidColorBrush x:Key="Windows8DialogButtonFgBrush" Color="{StaticResource Windows8DialogButtonFg}"/>
+
+    <Color x:Key="Windows8DialogButtonOverBg">#FF219297</Color>
+    <SolidColorBrush x:Key="Windows8DialogButtonOverBgBrush" Color="{StaticResource Windows8DialogButtonOverBg}"/>
+
+    <Style x:Key="Windows8DialogButtonStyle" TargetType="{x:Type Button}">
+
+        <Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />
+        <Setter Property="Background" Value="{StaticResource Windows8DialogButtonBgBrush}" />
+        <Setter Property="BorderBrush" Value="White" />
+        <Setter Property="Foreground" Value="{StaticResource Windows8DialogButtonFgBrush}" />
+        <Setter Property="Padding" Value="12,4,12,5" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14.666999816894531"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver"/>
+                                <VisualState x:Name="Pressed"/>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusRectangleBlack">
+                                            <DiscreteDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusRectangleWhite">
+                                            <DiscreteDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="ValidationStates">
+                                <VisualState x:Name="Valid"/>
+                                <VisualState x:Name="InvalidFocused"/>
+                                <VisualState x:Name="InvalidUnfocused"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="PART_Background" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <ContentPresenter x:Name="contentPresenter"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Content="{TemplateBinding Content}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" OpacityMask="{x:Null}"  SnapsToDevicePixels="True"/>
+                        </Border>
+                        <Rectangle Margin="4" Fill="{x:Null}" StrokeThickness="1" Stroke="White" SnapsToDevicePixels="True" x:Name="FocusRectangleWhite" Opacity="0"/>
+                        <Rectangle x:Name="FocusRectangleBlack" Margin="4" Fill="{x:Null}" StrokeThickness="1" Stroke="Black" StrokeDashArray="1 1" SnapsToDevicePixels="True" Opacity="0"/>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource Windows8DisabledButtonFgBrush}" />
+                            <Setter Property="Background" Value="{StaticResource Windows8DisabledButtonBgBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" Value="{DynamicResource BlackBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="{DynamicResource Windows8DialogButtonOverBgBrush}"/>
+                        </Trigger>
+
+
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Color x:Key="Windows8ButtonBg1">#FFCCCCCC</Color>
+    <SolidColorBrush x:Key="Windows8ButtonBgBrush1" Color="{DynamicResource Windows8ButtonBg1}" />
+
+    <Color x:Key="Windows8ButtonOverBg">#FFD8D8D8</Color>
+    <SolidColorBrush x:Key="Windows8ButtonOverBgBrush" Color="{DynamicResource Windows8ButtonOverBg}" />
+
+    <SolidColorBrush x:Key="MyWhiteBrush">#FFFFFFFF</SolidColorBrush>
+
+    <SolidColorBrush x:Key="ControlDisabledBrush">#66FFFFFF</SolidColorBrush>
+    <SolidColorBrush x:Key="ControlDisabledTextBrush">#66FFFFFF</SolidColorBrush>
+    
+
+
+    <Style x:Key="Windows8ButtonStyle" TargetType="{x:Type Button}">
+
+        <Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />
+        <Setter Property="Background" Value="{StaticResource Windows8ButtonBgBrush1}" />
+        <Setter Property="BorderBrush" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
+        <Setter Property="Padding" Value="12,4,12,5" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14.666999816894531"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver"/>
+                                <VisualState x:Name="Pressed"/>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusRectangleBlack">
+                                            <DiscreteDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusRectangleWhite">
+                                            <DiscreteDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="ValidationStates">
+                                <VisualState x:Name="Valid"/>
+                                <VisualState x:Name="InvalidFocused"/>
+                                <VisualState x:Name="InvalidUnfocused"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="Background" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True"
+                                TextBlock.Foreground="{TemplateBinding Foreground}">
+                            <ContentPresenter x:Name="contentPresenter"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Content="{TemplateBinding Content}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" OpacityMask="{x:Null}" TextBlock.FontSize="{TemplateBinding FontSize}"  SnapsToDevicePixels="True" 
+                                              />
+                        </Border>
+
+                        <Rectangle Margin="4" Fill="{x:Null}" StrokeThickness="1" Stroke="White" SnapsToDevicePixels="True" x:Name="FocusRectangleWhite" Opacity="0"/>
+                        <Rectangle x:Name="FocusRectangleBlack" Margin="4" Fill="{x:Null}" StrokeThickness="1" Stroke="Black" StrokeDashArray="1 1" SnapsToDevicePixels="True" Opacity="0"/>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource Windows8DisabledButtonFgBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource Windows8DisabledButtonBgBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="{StaticResource Windows8ButtonOverBgBrush}"/>
+
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Foreground" Value="{DynamicResource MyWhiteBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource BlackBrush}"/>
+
+                        </Trigger>
+
+
+
+
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style BasedOn="{StaticResource Windows8ButtonStyle}" TargetType="Button"/>
+
+
+
+    
+
+    <Style BasedOn="{StaticResource Windows8ButtonStyle}" TargetType="Controls2:ElevateButton" x:Key="Windows8DialogElevateButtonStyle">
+        <Setter Property="Background" Value="{StaticResource Windows8DialogButtonBgBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource Windows8DialogButtonFgBrush}" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls2:ElevateButton}">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver"/>
+                                <VisualState x:Name="Pressed"/>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusRectangleBlack">
+                                            <DiscreteDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusRectangleWhite">
+                                            <DiscreteDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="ValidationStates">
+                                <VisualState x:Name="Valid"/>
+                                <VisualState x:Name="InvalidFocused"/>
+                                <VisualState x:Name="InvalidUnfocused"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="PART_Background" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+
+                            <StackPanel Orientation="Horizontal" Margin="{TemplateBinding Padding}"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Controls2:ElevateShield Margin="0,0,10,0" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Visibility="{TemplateBinding MustElevate, Converter={StaticResource boolToVisConverter}}"/>
+                                <ContentPresenter x:Name="contentPresenter"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Content="{TemplateBinding Content}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" OpacityMask="{x:Null}" SnapsToDevicePixels="True" TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                            </StackPanel>
+                        </Border>
+                        <Rectangle Margin="4" Fill="{x:Null}" StrokeThickness="1" Stroke="White" SnapsToDevicePixels="True" x:Name="FocusRectangleWhite" Opacity="0"/>
+                        <Rectangle x:Name="FocusRectangleBlack" Margin="4" Fill="{x:Null}" StrokeThickness="1" Stroke="Black" StrokeDashArray="1 1" SnapsToDevicePixels="True" Opacity="0"/>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource Windows8DisabledButtonFgBrush}" />
+                            <Setter Property="Background" Value="{StaticResource Windows8DisabledButtonBgBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="{StaticResource Windows8DialogButtonOverBgBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" Value="{DynamicResource BlackBrush}"/>
+                        </Trigger>
+
+                        <DataTrigger Binding="{Binding MustElevate, RelativeSource={x:Static RelativeSource.Self}}" Value="True">
+                            <Setter Property="Command" Value="{Binding UnelevatedCommand, RelativeSource={x:Static RelativeSource.Self}}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding MustElevate, RelativeSource={x:Static RelativeSource.Self}}" Value="False">
+                            <Setter Property="Command" Value="{Binding ElevatedCommand, RelativeSource={x:Static RelativeSource.Self}}"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
    
 
+    
+    
+    <Style BasedOn="{StaticResource Windows8DialogButtonStyle}" x:Key="DialogButtonStyle"/>
+    <Style BasedOn="{StaticResource Windows8DialogElevateButtonStyle}" x:Key="DialogElevateButtonStyle"/>
+
+
+    <Style TargetType="Controls2:ElevateButton">
+        <Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />
+        <Setter Property="Background" Value="{StaticResource Windows8ButtonBgBrush1}" />
+        <Setter Property="BorderBrush" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
+        <Setter Property="Padding" Value="12,4,12,5" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14.666999816894531"/>
+    </Style>
+
+<SolidColorBrush Color="#FF01838C" x:Key="MetroHyperlinkForeground"/>
+    <Style x:Key="MetroLinkButtonStyle"
+        TargetType="{x:Type Button}">
+        <Setter Property="Background"
+            Value="#00FFFFFF" />
+        <Setter Property="Foreground"
+            Value="{StaticResource MetroHyperlinkForeground}" />
+        <Setter Property="HorizontalContentAlignment"
+            Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+            Value="Center" />
+        <Setter Property="Padding"
+            Value="1" />
+        <Setter Property="TextBlock.TextDecorations" Value="None"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <ContentPresenter x:Name="contentPresenter"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            Margin="{TemplateBinding Padding}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                            RecognizesAccessKey="True"
+                                           >
+                            <ContentPresenter.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <!--<Setter Property="Foreground" Value="{TemplateBinding Control.Foreground}"/>-->
+                                    
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="Foreground" Value="#FF329AA3"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Windows8ToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+
+        <Setter Property="FontFamily" Value="{StaticResource DefaultFont}" />
+        <Setter Property="Background" Value="{StaticResource Windows8ButtonBgBrush1}" />
+        <Setter Property="BorderBrush" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
+        <Setter Property="Padding" Value="12,4,12,5" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14.666999816894531"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver"/>
+                                <VisualState x:Name="Pressed"/>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusRectangleBlack">
+                                            <DiscreteDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusRectangleWhite">
+                                            <DiscreteDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="ValidationStates">
+                                <VisualState x:Name="Valid"/>
+                                <VisualState x:Name="InvalidFocused"/>
+                                <VisualState x:Name="InvalidUnfocused"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked"/>
+                                <VisualState x:Name="Unchecked"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="Background" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True"
+                                TextBlock.Foreground="{TemplateBinding Foreground}">
+                            <ContentPresenter x:Name="contentPresenter"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Content="{TemplateBinding Content}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" OpacityMask="{x:Null}" TextBlock.FontSize="{TemplateBinding FontSize}"  SnapsToDevicePixels="True" 
+                                              />
+                        </Border>
+
+                        <Rectangle Margin="4" Fill="{x:Null}" StrokeThickness="1" Stroke="White" SnapsToDevicePixels="True" x:Name="FocusRectangleWhite" Opacity="0"/>
+                        <Rectangle x:Name="FocusRectangleBlack" Margin="4" Fill="{x:Null}" StrokeThickness="1" Stroke="Black" StrokeDashArray="1 1" SnapsToDevicePixels="True" Opacity="0"/>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource Windows8DisabledButtonFgBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource Windows8DisabledButtonBgBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="{StaticResource Windows8ButtonOverBgBrush}"/>
+
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Foreground" Value="{DynamicResource MyWhiteBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource BlackBrush}"/>
+
+                        </Trigger>
+
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="Foreground" Value="{DynamicResource MyWhiteBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource BlackBrush}"/>
+                        </Trigger>
+
+
+
+
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

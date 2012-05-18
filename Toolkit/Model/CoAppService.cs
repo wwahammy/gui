@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.Support;
+using CoApp.Packaging.Common;
 using CoApp.Toolkit.Configuration;
-using CoApp.Toolkit.Engine.Client;
+using CoApp.Packaging.Client;
+
+using CoApp.Toolkit.Tasks;
 using CoApp.Toolkit.Win32;
 using CoApp.Toolkit.Extensions;
 
@@ -21,16 +25,16 @@ namespace CoApp.Gui.Toolkit.Model
 
         public const UpdateChoice DEFAULT_UPDATE_CHOICE = UpdateChoice.AutoInstallAll;
         public const bool DEFAULT_TRIM_ON_UPDATE = false;
-        private readonly RegistryView CoAppSystem = RegistryView.CoAppSystem;
+        private readonly RegistryView _coAppSystem = RegistryView.CoAppSystem;
 
 
-        internal readonly EasyPackageManager EPM;
+        internal readonly PackageManager EPM;
 
 
         public CoAppService()
         {
             //TODO downloadprogress, downloadcompleted
-            EPM = new EasyPackageManager();
+            EPM = new PackageManager();
         }
 
         #region ICoAppService Members
@@ -90,13 +94,50 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<IEnumerable<Package>> GetPackages()
         {
-            return EPM.GetPackages("*");
+            return EPM.QueryPackages("*");
         }
 
         public Task<IEnumerable<Package>> GetPackages(string packageName, FourPartVersion? minVersion = new FourPartVersion?(), FourPartVersion? maxVersion = new FourPartVersion?(), bool? dependencies = new bool?(), bool? installed = new bool?(), bool? active = new bool?(), bool? requested = new bool?(), bool? blocked = new bool?(), bool? latest = new bool?(), string locationFeed = null, bool? updates = new bool?(), bool? upgrades = new bool?(), bool? trimable = new bool?())
         {
-            return EPM.GetPackages(packageName, minVersion, maxVersion, dependencies, installed, active, requested,
-                                   blocked, latest, locationFeed, updates, upgrades, trimable);
+            return null;
+            //EPM.QU
+           // return EPM.QueryPackages(packageName, minVersion, maxVersion, dependencies, installed, active, requested,
+           //                        blocked, latest, locationFeed, updates, upgrades, trimable);
+        }
+
+        public Task<Package> GetPackage(string packageName)
+        {
+            return GetPackage(packageName, false);
+        }
+
+        public Task<Package> GetPackage(string packageName, bool withDetails)
+        {
+           
+
+            return EPM.GetPackage(new CanonicalName(packageName)).ContinueAlways((Task<Package> t) =>
+                                                            {
+                                                                if (t.IsCanceled || t.IsFaulted)
+                                                                {
+                                                                    throw t.Exception.Unwrap();
+                                                                }
+                                                                
+
+                                                                if (withDetails)
+                                                                {
+                                                                    return
+                                                                        EPM.GetPackageDetails(t.Result).Result;
+                                                                }
+
+                                                                return t.Result;
+                                                            }
+
+                );
+
+        }
+
+        public Task<IEnumerable<Package>> GetAllVersionsOfPackage(Package p)
+        {
+            return EPM.GetAllVersionsOfPackage(p.CanonicalName);
         }
 
 
@@ -114,12 +155,14 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<IEnumerable<Package>> GetUpdatablePackages()
         {
-            return EPM.GetUpdatablePackages("*");
+            return null;
+           // return EPM.GetUpdatablePackages("*");
         }
 
         public Task<IEnumerable<Package>> GetUpgradablePackages()
         {
-            return EPM.GetUpgradablePackages("*");
+            return null;
+            //return EPM.GetUpgradablePackages("*");
         }
 
         public Task<PackageSet> GetPackageSet(string canonicalName)
@@ -137,29 +180,52 @@ namespace CoApp.Gui.Toolkit.Model
                                           Action<string> packageInstalled = null)
         {
             return
-                EPM.UpdateExistingPackage(canonicalName, autoUpgrade, installProgress, packageInstalled).ContinueWith(
-                    t => LastTimeInstalled = DateTime.Now);
+                Task.Factory.StartNew(() =>
+                                          {
+                                              CurrentTask.Events +=
+                                                  new PackageInstallProgress((name, progress, overallProgress) => installProgress(name, progress,
+                                                                                                                                  overallProgress));
+                                              CurrentTask.Events += new PackageInstalled(name => packageInstalled(name));
+
+                                              return EPM.UpdateExistingPackage(canonicalName, autoUpgrade).ContinueWith(
+                                                  t => LastTimeInstalled = DateTime.Now);
+                                          }
+                    );
+            
         }
 
         public Task UpgradeExistingPackage(string canonicalName, bool? autoUpgrade,
                                            Action<string, int, int> installProgress, Action<string> packageInstalled)
         {
-            return
-                EPM.UpgradeExistingPackage(canonicalName, autoUpgrade, installProgress, packageInstalled).ContinueWith(
-                    t => LastTimeInstalled = DateTime.Now);
+
+            return Task.Factory.StartNew(() =>
+                                             {
+                                                 CurrentTask.Events +=
+                                                     new PackageInstallProgress(
+                                                         (name, progress, overallProgress) =>
+                                                         installProgress(name, progress,
+                                                                         overallProgress));
+                                                 CurrentTask.Events +=
+                                                     new PackageInstalled(name => packageInstalled(name));
+                                                 return
+                                                     EPM.UpgradeExistingPackage(canonicalName, autoUpgrade).
+                                                         ContinueWith(
+                                                             t => LastTimeInstalled = DateTime.Now);
+                                             });
+
         }
 
         public UpdateChoice UpdateChoice
         {
             get
             {
-                if (!CoAppSystem[UPDATECHOICE_KEYNAME].HasValue)
+                if (!_coAppSystem[UPDATECHOICE_KEYNAME].HasValue)
                 {
                     return DEFAULT_UPDATE_CHOICE;
                 }
-                return (UpdateChoice) Enum.Parse(typeof (UpdateChoice), CoAppSystem[UPDATECHOICE_KEYNAME].StringValue);
+                return (UpdateChoice) Enum.Parse(typeof (UpdateChoice), _coAppSystem[UPDATECHOICE_KEYNAME].StringValue);
             }
-            set { CoAppSystem[UPDATECHOICE_KEYNAME].StringValue = value.ToString(); }
+            set { _coAppSystem[UPDATECHOICE_KEYNAME].StringValue = value.ToString(); }
         }
 
 
@@ -167,24 +233,24 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                if (!CoAppSystem[TRIM_ON_UPDATE_KEYNAME].HasValue)
+                if (!_coAppSystem[TRIM_ON_UPDATE_KEYNAME].HasValue)
                 {
                     return DEFAULT_TRIM_ON_UPDATE;
                 }
-                return CoAppSystem[UPDATECHOICE_KEYNAME].BoolValue;
+                return _coAppSystem[UPDATECHOICE_KEYNAME].BoolValue;
             }
-            set { CoAppSystem[UPDATECHOICE_KEYNAME].BoolValue = value; }
+            set { _coAppSystem[UPDATECHOICE_KEYNAME].BoolValue = value; }
         }
 
         public DateTime? LastTimeInstalled
         {
             get
             {
-                if (CoAppSystem[LASTTIMEINSTALLED_KEYNAME].HasValue)
+                if (_coAppSystem[LASTTIMEINSTALLED_KEYNAME].HasValue)
                 {
                     try
                     {
-                        return DateTime.Parse(CoAppSystem[LASTTIMEINSTALLED_KEYNAME].StringValue);
+                        return DateTime.Parse(_coAppSystem[LASTTIMEINSTALLED_KEYNAME].StringValue);
                     }
                     catch
                     {
@@ -198,7 +264,7 @@ namespace CoApp.Gui.Toolkit.Model
             {
                 if (value != null)
                 {
-                    CoAppSystem[LASTTIMEINSTALLED_KEYNAME].StringValue = ((DateTime) value).ToString("en-us");
+                    _coAppSystem[LASTTIMEINSTALLED_KEYNAME].StringValue = ((DateTime) value).ToString("en-us");
                 }
             }
         }
@@ -207,11 +273,11 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                if (CoAppSystem[LASTTIMECHECKED_KEYNAME].HasValue)
+                if (_coAppSystem[LASTTIMECHECKED_KEYNAME].HasValue)
                 {
                     try
                     {
-                        return DateTime.Parse(CoAppSystem[LASTTIMECHECKED_KEYNAME].StringValue);
+                        return DateTime.Parse(_coAppSystem[LASTTIMECHECKED_KEYNAME].StringValue);
                     }
                     catch
                     {
@@ -225,7 +291,7 @@ namespace CoApp.Gui.Toolkit.Model
             {
                 if (value != null)
                 {
-                    CoAppSystem[LASTTIMECHECKED_KEYNAME].StringValue = ((DateTime) value).ToString("en-us");
+                    _coAppSystem[LASTTIMECHECKED_KEYNAME].StringValue = ((DateTime) value).ToString("en-us");
                 }
             }
         }
@@ -260,6 +326,8 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task TrimAll()
         {
+            return null;
+            /*
             return Task.Factory.StartNew<Task>(() => EPM.GetTrimablePackages("*").ContinueWith(t =>
                                                                                              {
                                                                                                  var tasks =
@@ -284,6 +352,37 @@ namespace CoApp.Gui.Toolkit.Model
                                                                                                      throw new AggregateException
                                                                                                          (exceptions);
                                                                                              }));
+             * */
+        }
+
+        public Task InstallPackage(string canonicalName, Action<string, int, int> installProgress, Action<string> packageInstalled)
+        {
+
+            return
+                Task.Factory.StartNew(() =>
+                                          {
+                                              CurrentTask.Events +=
+                                                  new PackageInstallProgress(
+                                                      (name, progress, overallProgress) =>
+                                                      installProgress(name, progress,
+                                                                      overallProgress));
+                                              CurrentTask.Events += new PackageInstalled(name => packageInstalled(name));
+                                              return EPM.InstallPackage(canonicalName);
+                                          });
+        }
+
+        public Task RemovePackage(string canonicalName, Action<string, int> removeProgress, Action<string> packageRemoved)
+        {
+            return
+                Task.Factory.StartNew(() =>
+                                          {
+                                              CurrentTask.Events +=
+                                                  new PackageRemoveProgress(
+                                                      (name, progress) =>
+                                                      removeProgress(name, progress));
+                                              CurrentTask.Events += new PackageRemoved(name => packageRemoved(name));
+                                              return EPM.RemovePackage(canonicalName, false);
+                                          });
         }
 
         #endregion

@@ -1,9 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                    xmlns:Converters="clr-namespace:CoApp.Gui.Toolkit.Support.Converters;assembly=CoApp.Gui.Toolkit">
+                    xmlns:Converters="clr-namespace:CoApp.Gui.Toolkit.Support.Converters;assembly=CoApp.Gui.Toolkit"
+                    xmlns:Converters1="clr-namespace:CoApp.PackageManager.Support.Converters">
    
     <Converters:BackgroundToForegroundColorConverter x:Key="BgToFgConverter"/>
     <Converters:ImageToColorConverter x:Key="ImageToColorConverter"/>
     <Converters:AlternationEqualityConverter x:Key="AlternationEqualityConverter"/>
+    <Converters1:PrettyPackageNameConverter x:Key="PrettyPackageNameConverter"/>
 </ResourceDictionary>

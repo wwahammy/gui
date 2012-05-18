@@ -59,5 +59,12 @@ namespace CoApp.PackageManager.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static byte[] software {
+            get {
+                object obj = ResourceManager.GetObject("software", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace CoApp.PackageManager.View
     /// <summary>
     /// Interaction logic for PackageView.xaml
     /// </summary>
-    public partial class PackageView : UserControl
+    public partial class PackageView
     {
         public PackageView()
         {

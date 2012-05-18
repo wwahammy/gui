@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.Support.Converters;
-using CoApp.Toolkit.Engine.Client;
+using CoApp.Packaging.Client;
 
 namespace CoApp.Gui.Toolkit.Model
 {

@@ -3,7 +3,7 @@
                     xmlns:View="clr-namespace:CoApp.PackageManager.View"
                     xmlns:ViewModel="clr-namespace:CoApp.PackageManager.ViewModel">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppToolkitDictionary.xaml"/>
+        <ResourceDictionary Source="/CoApp.Gui.Toolkit;component/CoAppToolkitDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     <DataTemplate DataType="{x:Type ViewModel:ActivityViewModel}">
         <View:ActivityView/>

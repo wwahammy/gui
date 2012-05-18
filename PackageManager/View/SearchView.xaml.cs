@@ -17,7 +17,7 @@ namespace CoApp.PackageManager.View
     /// <summary>
     /// Interaction logic for SearchView.xaml
     /// </summary>
-    public partial class SearchView : UserControl
+    public partial class SearchView
     {
         public SearchView()
         {

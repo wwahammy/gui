@@ -6,6 +6,8 @@ namespace CoApp.Gui.Toolkit.Controls
 {
     public class CoAppFrame : ContentControl
     {
+
+        
         public static readonly DependencyProperty CanGoBackProperty =
             DependencyProperty.Register("CanGoBack", typeof (bool), typeof (CoAppFrame), new PropertyMetadata(default(bool)));
 

@@ -11,7 +11,8 @@
     <RootNamespace>CoApp.PackageManager</RootNamespace>
     <AssemblyName>CoApp.PackageManager</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -27,6 +28,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Utf8Output>true</Utf8Output>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -80,8 +82,11 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -106,21 +111,56 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\AddIcon.xaml.cs">
+      <DependentUpon>AddIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CloseIcon.xaml.cs">
+      <DependentUpon>CloseIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CommandBorder.cs" />
     <Compile Include="Controls\CustomPanoramaItem.cs" />
     <Compile Include="Controls\CustomTile.cs" />
+    <Compile Include="Controls\DelimitedControl.cs" />
+    <Compile Include="Controls\OtherHeaderItems.cs" />
     <Compile Include="Controls\TileGridControl.cs" />
+    <Compile Include="Controls\TileGridSection.xaml.cs">
+      <DependentUpon>TileGridSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ToggleDropDown.xaml.cs">
+      <DependentUpon>ToggleDropDown.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Messages\ActivitiesUpdatedMessage.cs" />
+    <Compile Include="Messages\InstallationFailedMessage.cs" />
+    <Compile Include="Messages\InstallationFinishedMessage.cs" />
+    <Compile Include="Messages\InstallationProgressMessage.cs" />
+    <Compile Include="Messages\RemoveFinishedMessage.cs" />
+    <Compile Include="Model\ActivityService.cs" />
     <Compile Include="Model\FeaturedService.cs" />
+    <Compile Include="Model\Interfaces\IActivityService.cs" />
     <Compile Include="Model\Interfaces\IFeaturedService.cs" />
+    <Compile Include="Model\Interfaces\IProductService.cs" />
+    <Compile Include="Model\Interfaces\IRatingCommentService.cs" />
+    <Compile Include="Model\ItemComment.cs" />
     <Compile Include="Model\LocalServiceLocator.cs" />
     <Compile Include="Model\ProductInfo.cs" />
+    <Compile Include="Model\RatingCommentService.cs" />
     <Compile Include="Model\SectionFeature.cs" />
+    <Compile Include="SampleData\FilterSource\FilterSource.xaml.cs">
+      <DependentUpon>FilterSource.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Support\Converters\HorizontalAlignmentToPlacementConverter.cs" />
+    <Compile Include="Support\Converters\PrettyPackageNameConverter.cs" />
+    <Compile Include="Support\FilterTemplateSelector.cs" />
+    <Compile Include="Support\Filters\EasyCollectionViewSource.cs" />
+    <Compile Include="Support\HorizontalScrollBehavior.cs" />
+    <Compile Include="Support\PackageExtensions.cs" />
+    <Compile Include="Support\StringExtensions.cs" />
     <Compile Include="Support\TaskExtensions.cs" />
     <Compile Include="ViewModel\ActivityViewModel.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
-    <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\PackageProductCommonViewModel.cs" />
     <Compile Include="ViewModel\PackageViewModel.cs" />
     <Compile Include="ViewModel\ProductViewModel.cs" />
@@ -159,15 +199,33 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <DesignTimeOnly Include="SampleData\FilterSource\FilterSource.xsd" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="BaseStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AddIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CloseIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TileGridSection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ToggleDropDown.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -178,6 +236,18 @@
     <Page Include="PageResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SampleData\FilterSource\FilterSource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\CommonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ProductPackageCommonStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -209,6 +279,9 @@
       <Project>{9B272BA9-4E30-4B81-AA44-41AE82CDB31E}</Project>
       <Name>CoApp.Gui.Toolkit</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\software.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

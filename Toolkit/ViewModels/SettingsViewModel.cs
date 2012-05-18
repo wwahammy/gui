@@ -1,21 +1,21 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Xml.Linq;
 using CoApp.Gui.Toolkit.ViewModels.Settings;
 using GalaSoft.MvvmLight.Command;
 
 namespace CoApp.Gui.Toolkit.ViewModels
 {
-    [Serializable]
     
     public class SettingsViewModel : ScreenViewModel
     {
-
+        private ScreenViewModel _selectedScreen;
+        private ObservableCollection<ScreenViewModel> _tabViewModels = new ObservableCollection<ScreenViewModel> ();
 
         public SettingsViewModel()
         {
-            TabViewModels = new ObservableCollection<ScreenViewModel> { Feeds, Permissions, Update, Privacy};
+            TabViewModels = new ObservableCollection<ScreenViewModel> {Feeds, Permissions, Update, Privacy};
 
             Title = "Settings";
             Loaded += OnLoaded;
@@ -37,23 +37,13 @@ namespace CoApp.Gui.Toolkit.ViewModels
                                                                   UpdateOnUI(() => SelectedScreen = Update);
                                                                   break;
                                                           }
-                                                          
                                                       }
                 );
-            
+
 
             SelectedScreen = Feeds;
-
         }
 
-
-        
-
-        
-
-
-        private ObservableCollection<ScreenViewModel> _tabViewModels = new ObservableCollection<ScreenViewModel> {};
-        
         public ObservableCollection<ScreenViewModel> TabViewModels
         {
             get { return _tabViewModels; }
@@ -64,45 +54,41 @@ namespace CoApp.Gui.Toolkit.ViewModels
             }
         }
 
-        
-        
+
         public ICommand TabChanged { get; set; }
 
-        
+
         public FeedSettingsViewModel Feeds
         {
             get { return ViewModelLocator.FeedSettingsViewModelStatic; }
         }
 
-        
+
         public PrivacySettingsViewModel Privacy
         {
             get { return ViewModelLocator.PrivacySettingsViewModelStatic; }
         }
 
-        
+
         public UpdateSettingsViewModel Update
         {
             get { return ViewModelLocator.UpdateSettingsViewModelStatic; }
         }
 
-        
+
         public PermissionsSettingsViewModel Permissions
         {
             get { return ViewModelLocator.PermissionsSettingsViewModelStatic; }
-           
         }
 
-        private ScreenViewModel _selectedScreen;
-        
-        
+
         public ScreenViewModel SelectedScreen
         {
             get { return _selectedScreen; }
             set
             {
                 _selectedScreen = value;
-                
+
                 RaisePropertyChanged("SelectedScreen");
                 if (_selectedScreen != null)
                 {
@@ -111,37 +97,24 @@ namespace CoApp.Gui.Toolkit.ViewModels
             }
         }
 
-        
 
         private void OnUnloaded()
         {
-            Feeds.FireUnload();
-            Privacy.FireUnload();
-            Update.FireUnload();
-            Permissions.FireUnload();
+            foreach (ScreenViewModel t in TabViewModels)
+            {
+                t.FireUnload();
+            }
         }
 
         private void OnLoaded()
         {
-            Feeds.FireLoad();
-            Privacy.FireLoad();
-            Update.FireLoad();
-            Permissions.FireLoad();
-        }
-
-        public XElement Serialize()
-        {
-            var root = new XElement("SettingsViewModel");
-            var selectedScreen = new XElement("SelectedScreen", SelectedScreen.GetType().Name);
-            root.Add(selectedScreen);
-
-            return root;
-        }
-
-        public void Deserialize(XElement element)
-        {
-            //nothing to do
-            return;
+            foreach (ScreenViewModel t in TabViewModels)
+            {
+                var task = new TaskCompletionSource<object>();
+                t.PostLoadFinished += () => task.TrySetResult(null);
+                AddPostLoadTask(task.Task);
+                t.FireLoad();
+            }
         }
     }
 }

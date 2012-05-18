@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CoApp.Toolkit.Engine.Client;
+using CoApp.Packaging.Client;
 
 namespace CoApp.Gui.Toolkit.Model.Interfaces
 {
@@ -39,7 +39,11 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
                                                bool? requested = null, bool? blocked = null, bool? latest = null,
                                                string locationFeed = null, bool? updates = null, bool? upgrades = null,
                                                bool? trimable = null);
+        Task<Package> GetPackage(string packageName);
+        
+        Task<Package> GetPackage(string packageName, bool withDetails);
 
+        Task<IEnumerable<Package>> GetAllVersionsOfPackage(Package p);
 
         Task<IEnumerable<Package>> GetUpdatablePackages();
 
@@ -75,6 +79,11 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
         Task RemoveScheduledTask(string name);
 
         Task TrimAll();
+
+        Task InstallPackage(string canonicalName, Action<string, int, int> installProgress,
+                            Action<string> packageInstalled);
+
+        Task RemovePackage(string canonicalName, Action<string, int> removeProgress, Action<string> packageRemoved);
     }
 
     public class PolicyProxy

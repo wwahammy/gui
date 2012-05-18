@@ -20,6 +20,8 @@ namespace CoApp.PackageManager
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+
+            
             var mainWindow = new MainWindow();
 
             _loc.NavigationService.GoTo(_vmLoc.HomeViewModel);

@@ -6,8 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.Support;
+using CoApp.Packaging.Client;
 using CoApp.Toolkit.Configuration;
-using CoApp.Toolkit.Engine.Client;
 using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Logging;
 using CoApp.Updater.Messages;
@@ -376,7 +376,7 @@ namespace CoApp.Updater.Model
 
                                                                 //name 
                                                                 var name = ourUpdate.DisplayName ?? ourUpdate.Name;
-                                                                var ver = ourUpdate.AuthorVersion ?? ourUpdate.Version.ToString();
+                                                                var ver = ourUpdate.PackageDetails.AuthorVersion ?? ourUpdate.Version.ToString();
 
                                                                 return new Product
                                                                             {
@@ -385,10 +385,9 @@ namespace CoApp.Updater.Model
                                                                                 OldId = t.Package.CanonicalName,
                                                                                 NewId = ourUpdate.CanonicalName,
                                                                                 IsUpgrade = isUpgrade,
-                                                                                Summary = ourUpdate.Summary,
+                                                                                Summary = ourUpdate.PackageDetails.SummaryDescription,
                                                                                 UpdateTime =
-                                                                                    DateTime.Parse(
-                                                                                        ourUpdate.PublishDate)
+                                                                                    ourUpdate.PackageDetails.PublishDate
                                                                             };
                                                             }
                                               ).Distinct(p => p.NewId.GetHashCode(), (x, y) => x.NewId == y.NewId));

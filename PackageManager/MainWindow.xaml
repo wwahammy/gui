@@ -4,7 +4,7 @@
              xmlns:Controls="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
                       
                       xmlns:System="clr-namespace:System;assembly=mscorlib" Title="MainWindow" 
-                      DataContext="{Binding MainWindowViewModel, Source={StaticResource Locator}}" Content="{Binding MainScreenViewModel, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                      DataContext="{Binding CoAppWindowViewModel, Source={StaticResource Locator}}" Content="{Binding MainScreenViewModel, Mode=TwoWay, UpdateSourceTrigger=Explicit}" Template="{DynamicResource CoAppWinTemplate}"
                       >
     <Controls:CoAppWindow.Resources>
         <ResourceDictionary Source="PageResourceDictionary.xaml"/>

@@ -9,8 +9,10 @@ using System.Windows.Media.Imaging;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.Support;
 using CoApp.PackageManager.Model.Interfaces;
-using CoApp.Toolkit.Engine.Client;
+using CoApp.PackageManager.Properties;
+using CoApp.Packaging.Client;
 using CoApp.Toolkit.Extensions;
+using CoApp.PackageManager.Support;
 
 namespace CoApp.PackageManager.Model
 {
@@ -44,7 +46,7 @@ namespace CoApp.PackageManager.Model
                 {
                     
                     var getFeedPackages =
-                        enumerable.Select(s =>new FeedAndPackages {Feed=s,  Packages= CoApp.GetPackages("*", locationFeed: s)});
+                        enumerable.Select(s =>new FeedAndPackages {Feed=s,  Packages= CoApp.GetPackages("*", locationFeed: s, latest:true)});
                     return getFeedPackages.Select(t => t.Packages).ContinueAlways(
                         tasks => FeedsAndPackages(getFeedPackages));
 
@@ -103,32 +105,54 @@ namespace CoApp.PackageManager.Model
 
         private ProductInfo ConvertPackageToProductInfo(Package p)
         {
-            var bitmapSource = LoadBitmap(p.Icon);
+            //var bitmapSource = LoadBitmap(p.PackageDetails.Icons[0]);
             return new ProductInfo
                        {
                            CanonicalName = p.CanonicalName,
                            Name = p.Name,
                            
-                           Icon = bitmapSource,
-                           Posted = DateTime.Parse(p.PublishDate),
-                           Summary = p.Summary
+                         // Icon = bitmapSource,
+                           Posted = p.PackageDetails.PublishDate,
+                           Summary = p.PackageDetails.SummaryDescription
                        };
         }
 
-        private BitmapImage LoadBitmap(string base64String)
+        private BitmapSource LoadBitmap(string base64String)
         {
-            var bitmapSource = new BitmapImage();
-            using (var mem = new MemoryStream(Convert.FromBase64String(base64String)))
+
+
+            try
             {
+                var array = Convert.FromBase64String(base64String);
+                using (var mem = new MemoryStream(array))
+                {
+                    var bitmapSource = new BitmapImage();
+                    bitmapSource.BeginInit();
+                    bitmapSource.CacheOption = BitmapCacheOption.OnLoad;
 
-            bitmapSource.BeginInit();
-            bitmapSource.CacheOption = BitmapCacheOption.OnLoad;
-          
-                bitmapSource.StreamSource = mem;
-                bitmapSource.EndInit();
+                    bitmapSource.StreamSource = mem;
+                    bitmapSource.EndInit();
+                    bitmapSource.Freeze();
+                    return bitmapSource;
+                }
+                
+
             }
+            catch (Exception)
+            {
+                 
+                using (var mem = new MemoryStream(Resources.software))
+                {
+                    var bitmapSource = new BitmapImage();
+                    bitmapSource.BeginInit();
+                    bitmapSource.CacheOption = BitmapCacheOption.OnLoad;
 
-            return bitmapSource;
+                    bitmapSource.StreamSource = mem;
+                    bitmapSource.EndInit();
+                    bitmapSource.Freeze();
+                    return bitmapSource;
+                }
+            }
 
         }
     }

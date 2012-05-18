@@ -1,13 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Controls;
 using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Model;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Toolkit.Extensions;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
@@ -16,6 +18,8 @@ namespace CoApp.Gui.Toolkit.ViewModels
 {
     public abstract class ScreenViewModel : ViewModelBase
     {
+        private readonly object _postLoadLock = new object();
+        private ObservableCollection<object> _additionalHeaderItems;
         private bool? _canBlock;
         private bool? _canChangeSettings;
         private bool? _canInstall;
@@ -25,12 +29,14 @@ namespace CoApp.Gui.Toolkit.ViewModels
         private bool? _canSetSystemFeeds;
         private bool? _canUpdate;
         internal IPolicyService _policyService;
+        private ScreenWidth _screenWidth = ScreenWidth.Standard;
         private string _subTitle;
         private string _title;
 
         protected ScreenViewModel()
         {
             _policyService = new LocalServiceLocator().PolicyService;
+            PostLoadTasks = new List<Task>();
 
             Loaded += OnLoaded;
             Restart = new RelayCommand(RunRestart);
@@ -51,6 +57,8 @@ namespace CoApp.Gui.Toolkit.ViewModels
                                                                  }
                                                }));
         }
+
+        protected List<Task> PostLoadTasks { get; private set; }
 
         public ICommand DefaultElevate { get; set; }
         public ICommand Restart { get; set; }
@@ -159,9 +167,29 @@ namespace CoApp.Gui.Toolkit.ViewModels
             }
         }
 
+        public ScreenWidth ScreenWidth
+        {
+            get { return _screenWidth; }
+            set
+            {
+                _screenWidth = value;
+                RaisePropertyChanged("ScreenWidth");
+            }
+        }
+
+        public ObservableCollection<object> AdditionalHeaderItems
+        {
+            get { return _additionalHeaderItems; }
+            set
+            {
+                _additionalHeaderItems = value;
+                RaisePropertyChanged("AdditionalHeaderItems");
+            }
+        }
+
         private void RunRestart()
         {
-            var startInfo = new ProcessStartInfo(Process.GetCurrentProcess().MainModule.FileName) { Verb = "runas"};
+            var startInfo = new ProcessStartInfo(Process.GetCurrentProcess().MainModule.FileName) {Verb = "runas"};
 
 
             Process.Start(startInfo);
@@ -190,16 +218,11 @@ namespace CoApp.Gui.Toolkit.ViewModels
         }
 
 
-        public virtual void LoadOnRestart()
-        {
-        }
-
-
 // ReSharper disable InconsistentNaming
         protected static void UpdateOnUI(Action action)
 // ReSharper restore InconsistentNaming
         {
-            if (DispatcherHelper.UIDispatcher == null)
+            if (DispatcherHelper.UIDispatcher != null)
             {
                 DispatcherHelper.CheckBeginInvokeOnUI(action.Invoke);
             }
@@ -212,8 +235,28 @@ namespace CoApp.Gui.Toolkit.ViewModels
 
         public virtual void FireLoad()
         {
+            MessengerInstance.Send(new StartLoadingPageMessage());
             if (Loaded != null)
                 Loaded();
+
+            //after loading is finished
+            Task task = Task.Factory.StartNew(() =>
+                                                  {
+                                                      PostLoadTasks.ContinueAlways(
+                                                          (tasks) =>
+                                                              {
+                                                                  ClearPostLoadTasks();
+                                                                  MessengerInstance.Send(new EndLoadingPageMessage());
+                                                                  FirePostLoadFinished();
+                                                              }
+                                                          );
+                                                  });
+        }
+
+        private void FirePostLoadFinished()
+        {
+            if (PostLoadFinished != null)
+                PostLoadFinished();
         }
 
         public virtual void FireUnload()
@@ -226,29 +269,24 @@ namespace CoApp.Gui.Toolkit.ViewModels
 
         public event Action Unloaded;
 
+        public event Action PostLoadFinished;
 
-        private ScreenWidth _screenWidth = ScreenWidth.Standard;
 
-        public ScreenWidth ScreenWidth
+        public void AddPostLoadTask(Task task)
         {
-            get { return _screenWidth; }
-            set
+            lock (_postLoadLock)
             {
-                _screenWidth = value;
-                RaisePropertyChanged("ScreenWidth");
+                PostLoadTasks.Add(task);
             }
         }
 
-        
-     
-
-        
-
-        /*
-        public abstract XElement Serialize();
-
-        public abstract void Deserialize(XElement element);
-        */
+        private void ClearPostLoadTasks()
+        {
+            lock (_postLoadLock)
+            {
+                PostLoadTasks.Clear();
+            }
+        }
     }
 
     public enum ScreenWidth

@@ -4,7 +4,9 @@
  xmlns:Controls="clr-namespace:CoApp.PackageManager.Controls"
     xmlns:Controls1="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:ViewModel="clr-namespace:CoApp.PackageManager.ViewModel"
-    xmlns:Model="clr-namespace:CoApp.PackageManager.Model">
+    xmlns:Model="clr-namespace:CoApp.PackageManager.Model"
+    xmlns:Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
 
     <Style TargetType="{x:Type Controls1:PanoramaItem}">
@@ -20,6 +22,11 @@
 
                     <Border BorderBrush="{TemplateBinding PrimaryColorBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="OnClick">
+                                <Command:EventToCommand Command="{Binding Path=GoToProduct, RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:TileGridControl, AncestorLevel=1}}" CommandParameter="{Binding CanonicalName}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -50,6 +57,11 @@
 
                     <Border BorderBrush="{TemplateBinding PrimaryColorBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="OnClick">
+                                <Command:EventToCommand Command="{Binding Path=GoToProduct, RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:TileGridControl, AncestorLevel=1}}" CommandParameter="{Binding DataContext.CanonicalName}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -88,8 +100,7 @@
                                                  TextBlock.Foreground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=PrimaryColorBrush, Converter={StaticResource BgToFgConverter}}"
                                                          Title="{Binding Name}" Summary="{Binding Summary}"  IconSource="{Binding Icon}" />
 
-                            <!--<Controls:CustomTile 
-                                                         Title="{Binding Name}" Summary="{Binding Summary}"  IconSource="{Binding Icon}" />-->
+             
                         </DataTemplate>
                     </ControlTemplate.Resources>
                     <Grid>
@@ -114,9 +125,9 @@
                                     <Controls:CustomTile PrimaryColorBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=IconSource, Converter={StaticResource ImageToColorConverter}}" 
                                                          IconSource="{Binding Icon}" TextBlock.Foreground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=PrimaryColorBrush, Converter={StaticResource BgToFgConverter}}"
                                                          Title="{Binding Name}" Summary="{Binding Summary}" Style="{StaticResource CustomTile2x2}">
-                                        
-                                        
-                                    
+                                       
+
+
                                     </Controls:CustomTile> 
 
                                     <!--<Controls:CustomTile 
@@ -186,4 +197,47 @@
     </Style>
 
     
+
+    <Style TargetType="{x:Type Controls:DelimitedControl}">
+        <Setter Property="ItemDelimiter" Value=", "/>
+        <Setter Property="ValueTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding PresentationTraceSources.TraceLevel=High}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="commaTextBlock" Text="{Binding ItemDelimiter, RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:DelimitedControl, AncestorLevel=1}}"/>
+                        <ContentPresenter Content="{Binding PresentationTraceSources.TraceLevel=High}" ContentTemplate="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:DelimitedControl, AncestorLevel=1}, Path=ValueTemplate}"/>
+                    </StackPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                            <Setter Property="Visibility" TargetName="commaTextBlock" Value="Collapsed"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:DelimitedControl}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

@@ -34,11 +34,11 @@
                     </Grid>
                 </Border>
 
-                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="0" Text="{Binding NumberOfProductsSelected,  StringFormat={}{0} updates selected, PresentationTraceSources.TraceLevel=High}" d:LayoutOverrides="Height" VerticalAlignment="Center" RenderTransformOrigin="3.263,7.163"/>
+                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="0" Text="{Binding NumberOfProductsSelected,  StringFormat={}{0} updates selected}" d:LayoutOverrides="Height" VerticalAlignment="Center" RenderTransformOrigin="3.263,7.163"/>
 
-                <Button Grid.Column="0" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,0,0,8"  Command="{Binding CheckForUpdates, PresentationTraceSources.TraceLevel=High}" Content="Check For Updates"/>
+                <Button Grid.Column="0" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,0,0,8"  Command="{Binding CheckForUpdates}" Content="Check For Updates"/>
 
-                <Controls1:ElevateButton Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Margin="10,15,0,8" Content="Install Updates" MustElevate="{Binding CanUpdate, Converter={StaticResource invertConverter}, PresentationTraceSources.TraceLevel=High}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install}" Visibility="{Binding HideInstallButton, Converter={StaticResource boolToVisConverter}}"/>
+                <Controls1:ElevateButton Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Margin="10,15,0,8" Content="Install Updates" MustElevate="{Binding CanUpdate, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install}" Visibility="{Binding HideInstallButton, Converter={StaticResource boolToVisConverter}}"/>
             </Grid>
             
         </Controls:PrimaryViewControl>

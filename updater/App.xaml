@@ -13,9 +13,7 @@
            
             
             <!--Global View Model Locator-->
-            <vm:ViewModelLocator x:Key="Locator"
-                           />
-
+           
  
 
             <ResourceDictionary.MergedDictionaries>
@@ -27,8 +25,10 @@
                 <ResourceDictionary Source="Styles/PrimaryViewStyles.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
+            <vm:ViewModelLocator x:Key="Locator"
+                           />
 
-            
+
         </ResourceDictionary>
     </Application.Resources>
     

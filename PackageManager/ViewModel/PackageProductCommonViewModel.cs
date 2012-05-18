@@ -1,19 +1,66 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using CoApp.Gui.Toolkit.ViewModels;
+using CoApp.PackageManager.Model;
 using GalaSoft.MvvmLight;
 
 namespace CoApp.PackageManager.ViewModel
 {
     public abstract class PackageProductCommonViewModel : ScreenViewModel
     {
+        public string InitializationName;
+
+
         private double _averageRating;
         private string _bugTrackerUrl;
-        private byte[] _icon;
-        private bool _isSafeForWork;
+        private ObservableCollection<ContributorToCommand> _contributors;
+        private ObservableCollection<PackageToCommand> _dependencies;
+        private string _description;
+        private string _displayName;
+        private BitmapSource _icon;
+        private ICommand _install;
+        private bool _isInstalled;
+        private bool _isSafeForWork = true;
         private int _numberOfRatings;
         private string _publisherName;
+        private ICommand _remove;
+        private string _summary;
+        private ObservableCollection<TagToCommand> _tags;
         private int _usersDisagree;
+        public ICommand ReportNSFW { get; set; }
+
+        public bool IsInstalled
+        {
+            get { return _isInstalled; }
+            set
+            {
+                _isInstalled = value;
+                RaisePropertyChanged("IsInstalled");
+            }
+        }
+
+
+        public ICommand Install
+        {
+            get { return _install; }
+            set
+            {
+                _install = value;
+                RaisePropertyChanged("Install");
+            }
+        }
+
+        public ICommand Remove
+        {
+            get { return _remove; }
+            set
+            {
+                _remove = value;
+                RaisePropertyChanged("Remove");
+            }
+        }
+
 
         public string PublisherName
         {
@@ -55,7 +102,7 @@ namespace CoApp.PackageManager.ViewModel
             }
         }
 
-        public byte[] Icon
+        public BitmapSource Icon
         {
             get { return _icon; }
             set
@@ -86,19 +133,27 @@ namespace CoApp.PackageManager.ViewModel
             }
         }
 
-        private string _authorName;
-
-        public string AuthorName
+        public string DisplayName
         {
-            get { return _authorName; }
+            get { return _displayName; }
             set
             {
-                _authorName = value;
-                RaisePropertyChanged("AuthorName");
+                _displayName = value;
+                RaisePropertyChanged("DisplayName");
             }
         }
 
-        private ObservableCollection<TagToCommand> _tags;
+
+        public ObservableCollection<PackageToCommand> Dependencies
+        {
+            get { return _dependencies; }
+            set
+            {
+                _dependencies = value;
+                RaisePropertyChanged("Dependencies");
+            }
+        }
+
 
         public ObservableCollection<TagToCommand> Tags
         {
@@ -109,8 +164,6 @@ namespace CoApp.PackageManager.ViewModel
                 RaisePropertyChanged("Tags");
             }
         }
-
-        private ObservableCollection<ContributorToCommand> _contributors;
 
         public ObservableCollection<ContributorToCommand> Contributors
         {
@@ -123,11 +176,6 @@ namespace CoApp.PackageManager.ViewModel
         }
 
 
-
-
-
-        private string _summary;
-
         public string Summary
         {
             get { return _summary; }
@@ -137,8 +185,6 @@ namespace CoApp.PackageManager.ViewModel
                 RaisePropertyChanged("Summary");
             }
         }
-
-        private string _description;
 
         public string Description
         {
@@ -150,8 +196,6 @@ namespace CoApp.PackageManager.ViewModel
             }
         }
 
-        
-      
 
         public ICommand GoToPublisher { get; set; }
     }
@@ -173,6 +217,7 @@ namespace CoApp.PackageManager.ViewModel
 
         public ICommand Navigate { get; set; }
     }
+
     public class TagToCommand : ViewModelBase
     {
         private string _tag;
@@ -188,7 +233,22 @@ namespace CoApp.PackageManager.ViewModel
         }
 
         public ICommand Navigate { get; set; }
+    }
 
-        
+    public class PackageToCommand : ViewModelBase
+    {
+        private ProductInfo _upper;
+
+        public ProductInfo Package
+        {
+            get { return _upper; }
+            set
+            {
+                _upper = value;
+                RaisePropertyChanged("Dependency");
+            }
+        }
+
+        public ICommand Navigate { get; set; }
     }
 }

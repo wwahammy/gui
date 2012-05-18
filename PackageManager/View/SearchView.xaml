@@ -1,11 +1,132 @@
-﻿<UserControl x:Class="CoApp.PackageManager.View.SearchView"
+﻿<Controls1:CoAppFrameChild
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Support="clr-namespace:CoApp.PackageManager.Support"
+             xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
+             xmlns:Controls="clr-namespace:CoApp.PackageManager.Controls"
+             xmlns:Controls2="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             x:Class="CoApp.PackageManager.View.SearchView" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="439" d:DesignWidth="765">
+
+    <Controls1:CoAppFrameChild.Resources>
+        
+        <DataTemplate x:Key="ActualFilter">
+            <Button Command="{Binding DataContext.RemoveFilter, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" CommandParameter="{Binding}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Title}"/>
+                    <Controls:CloseIcon/>
+                </StackPanel>
+            </Button>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="NewFilter">
+            <Controls:ToggleDropDown>
+                <Controls:ToggleDropDown.ButtonContent>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Add filter..."/>
+                        <Controls:AddIcon/>
+                    </StackPanel>
+                </Controls:ToggleDropDown.ButtonContent>
+                <Controls:ToggleDropDown.PopupContent>
+                    <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                        <TabControl TabStripPlacement="Left" ItemsSource="{Binding PossibleFilters}">
+                            <TabControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="Black" BorderThickness="0,1, 0, 1">
+                                        <TextBlock Text="{Binding Title}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </TabControl.ItemTemplate>
+                            <TabControl.ContentTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Button Content="Sort" Controls:ToggleDropDown.CloseContainingDropDown="True" Command="{Binding DataContext.Sort, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" CommandParameter="{Binding}"/>
+                                        <Button Content="Sort Descending" Controls:ToggleDropDown.CloseContainingDropDown="True" Command="{Binding DataContext.SortDescending, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}"  CommandParameter="{Binding}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TabControl.ContentTemplate>
+
+                        </TabControl>
+                    </Border>
+                </Controls:ToggleDropDown.PopupContent>
+            </Controls:ToggleDropDown>
+        </DataTemplate>
+    
+        <Support:FilterTemplateSelector x:Key="FilterTemplateSelector" ItemTemplate="{StaticResource ActualFilter}" NewItemTemplate="{StaticResource NewFilter}"/>
+        
+
+        
+
+        
+
+
+    </Controls1:CoAppFrameChild.Resources>
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition  Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <!--Filters -->
+        <ItemsControl ItemTemplateSelector="{StaticResource FilterTemplateSelector}" ItemsSource="{Binding Filters}"  Grid.Column="0" Grid.Row="0">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+        </ItemsControl>
+
+
+
+        <Controls:ToggleDropDown Grid.Row="0" Grid.Column="1" PopupAlignment="Right">
+            <Controls:ToggleDropDown.ButtonContent>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="Sort by {0} {1}">
+                            <Binding Path="SortTitle"/>
+                            <Binding Path="SortDirection"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Controls:ToggleDropDown.ButtonContent>
+            <Controls:ToggleDropDown.PopupContent>
+                <Border BorderThickness="1" BorderBrush="Black" Background="White">
+                    <TabControl TabStripPlacement="Right" ItemsSource="{Binding PossibleSorts}">
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Black" BorderThickness="0,1,0, 1">
+                                    <TextBlock Text="{Binding Title}"/>
+                                </Border>
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                            <StackPanel>
+                                    <Button Content="Sort" Controls:ToggleDropDown.CloseContainingDropDown="True" Command="{Binding DataContext.Sort, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" CommandParameter="{Binding}"/>
+                                    <Button Content="Sort Descending" Controls:ToggleDropDown.CloseContainingDropDown="True" Command="{Binding DataContext.SortDescending, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}"  CommandParameter="{Binding}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
+                </Border>
+            </Controls:ToggleDropDown.PopupContent>
+        </Controls:ToggleDropDown>
+           
+        <Controls2:MetroProgressBar Visibility="Visible" IsIndeterminate="True" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <ItemsControl ItemsSource="{Binding Packages}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
     </Grid>
-</UserControl>
+</Controls1:CoAppFrameChild>

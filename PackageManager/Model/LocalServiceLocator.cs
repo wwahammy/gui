@@ -14,11 +14,17 @@ namespace CoApp.PackageManager.Model
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<IFeaturedService, FeaturedService>();
+            SimpleIoc.Default.Register<IActivityService, ActivityService>();
         }
 
         public IFeaturedService FeaturedService
         {
             get { return ServiceLocator.Current.GetInstance<IFeaturedService>(); }
+        }
+
+        public IActivityService ActivityService
+        {
+            get { return ServiceLocator.Current.GetInstance<IActivityService>(); }
         }
     }
 }

@@ -4,6 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
+using CoApp.Gui.Toolkit.Support;
+using CoApp.PackageManager.Support;
+using CoApp.Packaging.Client;
+using CoApp.Packaging.Common;
 
 namespace CoApp.PackageManager.Model
 {
@@ -23,8 +27,16 @@ namespace CoApp.PackageManager.Model
 
         public string Description { get; set; }
 
-
-
-
+        public static ProductInfo FromIPackage(IPackage package)
+        {
+            return new ProductInfo
+                       {
+                           Name = package.GetNicestPossibleName(),
+                           CanonicalName = package.CanonicalName,
+                           Description = package.PackageDetails.Description,
+                           Summary = package.PackageDetails.SummaryDescription,
+                           Posted = package.PackageDetails.PublishDate
+                       };
+        }
     }
 }

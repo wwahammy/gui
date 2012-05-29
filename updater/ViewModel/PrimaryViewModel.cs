@@ -7,11 +7,9 @@ using CoApp.Gui.Toolkit.Controls;
 using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.ViewModels;
-using CoApp.Updater.Controls;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
-using CoApp.Updater.Support.Errors;
 using CoApp.Updater.ViewModel.Errors;
 using GalaSoft.MvvmLight.Command;
 
@@ -24,13 +22,14 @@ namespace CoApp.Updater.ViewModel
         internal IUpdateService UpdateService;
         private ScreenViewModel _error;
 
-       
+
         private bool _hideInstallButton;
-        private DateTime? _lastTimeChecked;
+
         private DateTime? _lastTimeInstalled;
         private int _numberOfProducts;
         private int _numberOfProductsSelected;
-        private IList<string> _warnings;
+        private bool _showDates;
+        private IList<string> _warnings = new List<string>();
 
         public PrimaryViewModel()
         {
@@ -45,7 +44,7 @@ namespace CoApp.Updater.ViewModel
             NavigationService = loc.NavigationService;
             RunAdmin = new RelayCommand(() => { });
             SelectUpdates = new RelayCommand(() => NavigationService.GoTo(ViewModelLocator.SelectUpdatesViewModelStatic));
-            Install = new RelayCommand(() => NavigationService.GoTo(ViewModelLocator.InstallingViewModelStatic));
+            Install = new RelayCommand(() => NavigationService.GoTo(ViewModelLocator.InstallingViewModelStatic, false));
             CheckForUpdates = new RelayCommand(() => NavigationService.GoTo(ViewModelLocator.UpdatingViewModelStatic));
 
             FeedWarning = new RelayCommand(() => MessengerInstance.Send(new MetroDialogBoxMessage
@@ -73,8 +72,6 @@ namespace CoApp.Updater.ViewModel
         public ICommand Install { get; set; }
 
 
-        private bool _showDates;
-
         public bool ShowDates
         {
             get { return _showDates; }
@@ -85,7 +82,6 @@ namespace CoApp.Updater.ViewModel
             }
         }
 
-        
 
         public int NumberOfProducts
         {
@@ -115,11 +111,15 @@ namespace CoApp.Updater.ViewModel
             {
                 _warnings = new List<string>(value);
                 RaisePropertyChanged("Warnings");
+                RaisePropertyChanged("ShowFeedFailureButton");
             }
         }
 
+        public bool ShowFeedFailureButton
+        {
+            get { return Warnings.Any(); }
+        }
 
-        
 
         public bool HideInstallButton
         {
@@ -156,8 +156,6 @@ namespace CoApp.Updater.ViewModel
                 _error = value;
                 RaisePropertyChanged("Error");
             }
-
-            
         }
 
         private void OnLoaded()
@@ -168,7 +166,14 @@ namespace CoApp.Updater.ViewModel
 
         private void HandleInstallFailed(InstallationFailedMessage m)
         {
-            UpdateOnUI(() => Error = new UpdateFailureViewModel { InnerException = m.Exceptions.First(), UpdateExceptions = new ObservableCollection<Exception>(m.Exceptions)} );
+            UpdateOnUI(
+                () =>
+                Error =
+                new UpdateFailureViewModel
+                    {
+                        InnerException = m.Exceptions.First(),
+                        UpdateExceptions = new ObservableCollection<Exception>(m.Exceptions)
+                    });
         }
 
         private void HandleInstallFinished(InstallationFinishedMessage m)

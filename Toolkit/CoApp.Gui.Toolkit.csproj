@@ -150,6 +150,7 @@
     </Compile>
     <Compile Include="Support\Converters\AlternationEqualityConverter.cs" />
     <Compile Include="Support\Converters\BackgroundToForegroundColorConverter.cs" />
+    <Compile Include="Support\Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Support\Converters\ByteArrayToBitmapSourceConverter.cs" />
     <Compile Include="Support\Converters\ChoiceToTextConverter.cs" />
     <Compile Include="Support\Converters\DaysOfWeekToTextConverter.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Support\Extensions.cs" />
     <Compile Include="Support\NavFrameStyleSelector.cs" />
     <Compile Include="Support\ObservableDictionary.cs" />
+    <Compile Include="Support\PackageExtensions.cs" />
     <Compile Include="Support\StateManager.cs" />
     <Compile Include="Support\StringList.cs" />
     <Compile Include="Support\TaskExtensions.cs" />

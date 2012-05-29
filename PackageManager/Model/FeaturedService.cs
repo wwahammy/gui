@@ -46,7 +46,7 @@ namespace CoApp.PackageManager.Model
                 {
                     
                     var getFeedPackages =
-                        enumerable.Select(s =>new FeedAndPackages {Feed=s,  Packages= CoApp.GetPackages("*", locationFeed: s, latest:true)});
+                        enumerable.Select(s =>new FeedAndPackages {Feed=s,  Packages= CoApp.GetPackages("*", locationFeed: s)});
                     return getFeedPackages.Select(t => t.Packages).ContinueAlways(
                         tasks => FeedsAndPackages(getFeedPackages));
 

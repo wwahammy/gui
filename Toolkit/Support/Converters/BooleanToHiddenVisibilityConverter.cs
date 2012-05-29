@@ -3,26 +3,22 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Data;
-using CoApp.Gui.Toolkit.Support;
-using CoApp.Packaging.Client;
 
-
-namespace CoApp.PackageManager.Support.Converters
+namespace CoApp.Gui.Toolkit.Support.Converters
 {
-    
-    [ValueConversion(typeof(Package), typeof(string))]
-    public class PrettyPackageNameConverter : IValueConverter
+    [ValueConversion(typeof(bool), typeof(Visibility))]
+    public class BooleanToHiddenVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var p = value as Package;
-            if (p != null)
+            if (value is bool)
             {
-                return p.GetNicestPossibleName();
+                var val = (bool) value;
+                return val ? Visibility.Visible : Visibility.Hidden;
             }
-
-            return null;
+            return Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

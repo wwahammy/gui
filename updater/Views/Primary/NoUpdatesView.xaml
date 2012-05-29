@@ -23,7 +23,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock  HorizontalAlignment="Left" Margin="0" Grid.Row="0"  Text="There are no updates available for your computer" />
-                <Button  HorizontalAlignment="Left" Margin="0" Grid.Row="1"  Content="Note: one or more feeds could not be reached" Style="{StaticResource ChromelessLinkButtonStyle}"/>
+                <Button  HorizontalAlignment="Left" Margin="0" Grid.Row="1"  Content="Note: one or more feeds could not be reached" Style="{StaticResource ChromelessLinkButtonStyle}" Command="{Binding FeedWarning}" Visibility="{Binding Path=ShowFeedFailureButton, Converter={StaticResource boolToVisConverter}}"/>
                 <Button Content="Check for updates" HorizontalAlignment="Left" Margin="0,15,0,10" Grid.Row="2"  Command="{Binding CheckForUpdates}"/>
             </Grid>
         </Controls:PrimaryViewControl>

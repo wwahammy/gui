@@ -5,7 +5,8 @@ using System.Text;
 
 namespace CoApp.PackageManager.ViewModel.Filter
 {
-    class FilterCreator
+    public interface IFilter
     {
+        FrictionlessFilter Create();
     }
 }

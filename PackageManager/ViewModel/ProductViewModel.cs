@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Gui.Toolkit.Support;
 using CoApp.PackageManager.Model;
 using CoApp.PackageManager.Model.Interfaces;
 using CoApp.PackageManager.Properties;
 using CoApp.PackageManager.Support;
 using CoApp.Packaging.Client;
+using CoApp.Packaging.Common;
 using CoApp.Toolkit.Extensions;
 using GalaSoft.MvvmLight.Command;
 
@@ -95,25 +97,15 @@ namespace CoApp.PackageManager.ViewModel
 
         private void OnLoad()
         {
-            AddPostLoadTask(CoApp.GetPackage(InitializationName, true).ContinueAlways(t =>
-                                                                                          {
-                                                                                              t.RethrowWhenFaulted();
-
-
-                                                                                              return CoApp.GetPackageSet
-                                                                                                  (
-                                                                                                      t.Result.
-                                                                                                          CanonicalName);
-                                                                                          })
+            AddPostLoadTask(CoApp.GetPackage(InitializationName, true)
                                 .ContinueAlways(
                                     t =>
                                         {
                                             t.RethrowWhenFaulted();
 
                                             //this is our package!
-                                            Package p =
-                                                t.Result.
-                                                    AvailableNewer ?? t.Result.InstalledNewest;
+                                            IPackage p =
+                                                t.Result.AvailableNewest ?? t.Result.InstalledNewest;
 
 
                                             Install = new RelayCommand(() => Activity.InstallPackage(p));
@@ -126,7 +118,7 @@ namespace CoApp.PackageManager.ViewModel
         }
 
 
-        private Task<IEnumerable<Package>> GetAllPackageVersions(Package p)
+        private Task<IEnumerable<Package>> GetAllPackageVersions(IPackage p)
         {
             return CoApp.GetAllVersionsOfPackage(p)
                 .ContinueWith(t =>
@@ -146,7 +138,7 @@ namespace CoApp.PackageManager.ViewModel
                 );
         }
 
-        private void LoadFromPackage(Package p)
+        private void LoadFromPackage(IPackage p)
         {
             //TODO what happens if this throws?
             Task<IEnumerable<Package>> packages = GetAllPackageVersions(p);
@@ -181,7 +173,7 @@ namespace CoApp.PackageManager.ViewModel
             UpdateOnUI(() => Tags = tags);
 
             var dep = new ObservableCollection<PackageToCommand>(
-                p.Dependencies.Select(d => new PackageToCommand {Package = new ProductInfo {Name = d}}));
+                p.Dependencies.Select(d => new PackageToCommand {Package = new ProductInfo {Name = d.Name}}));
             UpdateOnUI(() => Dependencies = dep);
 
             var allV =

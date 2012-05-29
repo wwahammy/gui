@@ -5,7 +5,7 @@ using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.PackageManager.Messages;
 using CoApp.PackageManager.Model.Interfaces;
 using CoApp.Packaging.Client;
-
+using CoApp.Packaging.Common;
 using CoApp.Toolkit.Extensions;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -25,7 +25,7 @@ namespace CoApp.PackageManager.Model
 
         #region IActivityService Members
 
-        public Task InstallPackage(Package p)
+        public Task InstallPackage(IPackage p)
         {
             return
                 Task.Factory.StartNew(() =>
@@ -47,7 +47,7 @@ namespace CoApp.PackageManager.Model
                                           });
         }
 
-        public Task RemovePackage(Package p)
+        public Task RemovePackage(IPackage p)
         {
             return Task.Factory.StartNew(() =>
                                              {
@@ -73,7 +73,7 @@ namespace CoApp.PackageManager.Model
 
         #endregion
 
-        private Activity CreateActivity(Package p, ActivityType type)
+        private Activity CreateActivity(IPackage p, ActivityType type)
         {
             var a = new Activity(p, type);
             a.PropertyChanged += (sender, args) => Messenger.Default.Send(new ActivitiesUpdatedMessage());

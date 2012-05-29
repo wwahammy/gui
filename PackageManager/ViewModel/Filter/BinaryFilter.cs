@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CoApp.Toolkit.Linq;
 using GalaSoft.MvvmLight;
 
 namespace CoApp.PackageManager.ViewModel.Filter
@@ -47,7 +48,7 @@ namespace CoApp.PackageManager.ViewModel.Filter
                 _title = value;
                 RaisePropertyChanged("Title");
             }
-        }
+        } 
 
         private bool _isSetToTrue;
 
@@ -63,6 +64,10 @@ namespace CoApp.PackageManager.ViewModel.Filter
 
 
 
+
+
+
+     
         
         
 

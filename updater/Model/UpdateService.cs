@@ -4,9 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.Support;
 using CoApp.Packaging.Client;
+using CoApp.Packaging.Common;
 using CoApp.Toolkit.Configuration;
 using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Logging;
@@ -49,12 +51,14 @@ namespace CoApp.Updater.Model
 
         public Task CheckForUpdates()
         {
-            return CoApp.SetAllFeedsStale().ContinueWith(t => RunCheckForUpdates(null));
+            return CoApp.SetAllFeedsStale().ContinueWith(t => 
+                RunCheckForUpdates(null));
         }
 
         public Task CheckForUpdates(CancellationToken token)
         {
-            return CoApp.SetAllFeedsStale().ContinueWith(t => RunCheckForUpdates(token));
+            return CoApp.SetAllFeedsStale().ContinueWith(t =>
+                                                         RunCheckForUpdates(token));
         }
 
         public int NumberOfProducts
@@ -86,15 +90,16 @@ namespace CoApp.Updater.Model
                                                                          {
                                                                              if (!t.IsFaulted)
                                                                              {
-                                                                                 bool trim =
+                                                                                 var trim =
                                                                                      UpdateSettings.AutoTrim.Result;
                                                                                  if (trim)
                                                                                  {
-                                                                                     Task task = CoApp.TrimAll();
-                                                                                     if (task.IsFaulted)
-                                                                                     {
-                                                                                         // TODO do something?
-                                                                                     }
+                                                                                     var task = CoApp.TrimAll();
+                                                                                     task.ContinueOnFail(
+                                                                                         e => Logger.Warning(e));
+
+                                                                                     task.Continue(num =>
+                                                                                         Logger.Message("Trimmed {0}", num));
                                                                                  }
                                                                              }
                                                                              else
@@ -199,42 +204,43 @@ namespace CoApp.Updater.Model
                     var realProd = prod;
                     if (prod.Key.IsUpgrade)
                     {
-                        t = CoApp.UpgradeExistingPackage(prod.Key.OldId, true, (ignore1, ignore2, totalPackageProgress) =>
-                                                                            Messenger.Default.Send(new InstallationProgressMessage
-                                                                                                       {
-                                                                                                           CurrentProduct
-                                                                                                               =
-                                                                                                               realProd.
-                                                                                                               Key,
-                                                                                                           CurrentProductNumber
-                                                                                                               =
-                                                                                                               realProd.
-                                                                                                                   num +
-                                                                                                               1,
-                                                                                                           ProductProgressCompleted
-                                                                                                               =
-                                                                                                               totalPackageProgress,
-                                                                                                           TotalNumberOfProducts
-                                                                                                               =
-                                                                                                               selectedProds
-                                                                                                               .Count(),
-                                                                                                           TotalProgressCompleted
-                                                                                                               =
-                                                                                                               GetTotalProgress
-                                                                                                               (
-                                                                                                                   selectedProds
-                                                                                                                       .
-                                                                                                                       Count
-                                                                                                                       (),
-                                                                                                                   realProd
-                                                                                                                       .
-                                                                                                                       num,
-                                                                                                                   totalPackageProgress)
-                                                                                                       }), null);
+                        t = CoApp.UpgradeExistingPackage( prod.Key.NewId, false
+                            , (ignore1, ignore2, totalPackageProgress) =>
+                                    Messenger.Default.Send(new InstallationProgressMessage
+                                                                {
+                                                                    CurrentProduct
+                                                                        =
+                                                                        realProd.
+                                                                        Key,
+                                                                    CurrentProductNumber
+                                                                        =
+                                                                        realProd.
+                                                                            num +
+                                                                        1,
+                                                                    ProductProgressCompleted
+                                                                        =
+                                                                        totalPackageProgress,
+                                                                    TotalNumberOfProducts
+                                                                        =
+                                                                        selectedProds
+                                                                        .Count(),
+                                                                    TotalProgressCompleted
+                                                                        =
+                                                                        GetTotalProgress
+                                                                        (
+                                                                            selectedProds
+                                                                                .
+                                                                                Count
+                                                                                (),
+                                                                            realProd
+                                                                                .
+                                                                                num,
+                                                                            totalPackageProgress)
+                                                                }), null, prod.Key.OldId);
                     }
                     else
                     {
-                        t = CoApp.UpdateExistingPackage(prod.Key.OldId, true, (ignore1, ignore2, totalPackageProgress) =>
+                        t = CoApp.UpdateExistingPackage(prod.Key.NewId, false, (ignore1, ignore2, totalPackageProgress) =>
                                                                            Messenger.Default.Send(new InstallationProgressMessage
                                                                                                       {
                                                                                                           CurrentProduct
@@ -265,7 +271,7 @@ namespace CoApp.Updater.Model
                                                                                                                       .
                                                                                                                       num,
                                                                                                                   totalPackageProgress)
-                                                                                                      }), null);
+                                                                                                      }), null, prod.Key.OldId);
                     }
 
                     //wait for THIS update/upgrade to finish
@@ -310,46 +316,63 @@ namespace CoApp.Updater.Model
 
         private void RunCheckForUpdates(CancellationToken? token)
         {
+          /*  
             var tasks = new[]
                             {
                                 CoApp.GetUpdatablePackages(),
                                 CoApp.GetUpgradablePackages()
                             };
+            */
 
+            var tasks = new List<Task<IEnumerable<Package>>>();
             //TODO this won't get all the errors, just one of them
-
-
-            if (token != null)
-            {
-                Task.WaitAll(tasks, (CancellationToken) token);
-                ((CancellationToken) token).ThrowIfCancellationRequested();
-            }
-            else
-            {
-                Task.WaitAll(tasks);
-            }
-
-            IEnumerable<Product> updatableResults = HandleGetUpdatablePackages(tasks[0], token);
-            IEnumerable<Product> upgradableResults = HandleGetUpdatablePackages(tasks[1], token, true);
-
-            if (token != null)
-            {
-                ((CancellationToken) token).ThrowIfCancellationRequested();
-            }
-            //you had your chance, you can't cancel
-
-            lock (AllPossibleProducts)
-            {
-                AllPossibleProducts.Clear();
-                UpdateChoice choice = CoApp.UpdateChoice;
-                foreach (Product product in updatableResults.Concat(upgradableResults))
+                if (token != null)
                 {
-                    AllPossibleProducts[product] = (choice == UpdateChoice.AutoInstallAll) ||
-                                                   (choice == UpdateChoice.Notify) ||
-                                                   (choice == UpdateChoice.AutoInstallJustUpdates &&
-                                                    !product.IsUpgrade);
+                    var t = CoApp.GetUpdatablePackages();
+                   t.Wait((CancellationToken)token);
+                    tasks.Add(t);
+//                    Task.WaitAll(tasks, (CancellationToken) token);
+                    ((CancellationToken) token).ThrowIfCancellationRequested();
+                    t = CoApp.GetUpgradablePackages();
+                    t.Wait((CancellationToken)token);
+                    tasks.Add(t);
+                    ((CancellationToken)token).ThrowIfCancellationRequested();
                 }
-            }
+                else
+                {
+                    //Task.WaitAll(tasks);
+                    var t = CoApp.GetUpdatablePackages();
+                    t.Wait();
+                    tasks.Add(t);
+                    t = CoApp.GetUpgradablePackages();
+                    t.Wait();
+                    tasks.Add(t);
+
+
+                }
+
+                IEnumerable<Product> updatableResults = HandleGetUpdatablePackages(tasks[0], token);
+                IEnumerable<Product> upgradableResults = HandleGetUpdatablePackages(tasks[1], token, true);
+
+                if (token != null)
+                {
+                    ((CancellationToken) token).ThrowIfCancellationRequested();
+                }
+                //you had your chance, you can't cancel
+
+                lock (AllPossibleProducts)
+                {
+                    AllPossibleProducts.Clear();
+                    UpdateChoice choice = CoApp.UpdateChoice;
+                    foreach (Product product in updatableResults.Concat(upgradableResults))
+                    {
+                        AllPossibleProducts[product] = (choice == UpdateChoice.AutoInstallAll) ||
+                                                       (choice == UpdateChoice.Notify) ||
+                                                       (choice == UpdateChoice.AutoInstallJustUpdates &&
+                                                        !product.IsUpgrade);
+                    }
+                }
+
             Messenger.Default.Send(new SelectedProductsChangedMessage());
         }
 
@@ -362,27 +385,33 @@ namespace CoApp.Updater.Model
                 throw task.Exception.Unwrap();
             }
 
+           
+            
 
-            var all = task.Result.Select(GetDetailedPackageSet).ToArray();
 
-            all.ContinueOnFail(e => { throw e.Unwrap(); });
-
-            var c = all.Continue(tasks => tasks.Select(t =>
+            var c = task.ContinueWith(t => t.Result.Select(p =>
                                                             {
-                                                                Package ourUpdate = null;
+                                                                IPackage ourUpdate = null;
                                                                 ourUpdate = isUpgrade
-                                                                                ? t.AvailableNewer
-                                                                                : t.AvailableNewerCompatible;
+                                                                                ? p.AvailableNewestUpgrade
+                                                                                : p.AvailableNewestUpdate;
+
+                                                                var update = ourUpdate;
+
+
+                                                                ourUpdate =
+                                                                   
+                                                                        CoApp.GetPackageDetails(update.CanonicalName).Result;
+                                                                
 
                                                                 //name 
-                                                                var name = ourUpdate.DisplayName ?? ourUpdate.Name;
-                                                                var ver = ourUpdate.PackageDetails.AuthorVersion ?? ourUpdate.Version.ToString();
+                                                                
 
                                                                 return new Product
                                                                             {
-                                                                                DisplayName = name + " " + ver,
+                                                                                DisplayName = ourUpdate.GetNicestPossibleName(),
 
-                                                                                OldId = t.Package.CanonicalName,
+                                                                                OldId = p.CanonicalName,
                                                                                 NewId = ourUpdate.CanonicalName,
                                                                                 IsUpgrade = isUpgrade,
                                                                                 Summary = ourUpdate.PackageDetails.SummaryDescription,
@@ -392,8 +421,11 @@ namespace CoApp.Updater.Model
                                                             }
                                               ).Distinct(p => p.NewId.GetHashCode(), (x, y) => x.NewId == y.NewId));
 
-            c.ContinueOnFail(e => { throw e.Unwrap(); });
-            return c.Result;
+            c.ContinueOnFail(e =>
+                                 {
+                                     throw e.Unwrap();
+                                 });
+            return c.Result.ToArray();
         }
 
     
@@ -408,49 +440,10 @@ namespace CoApp.Updater.Model
         }
 
 
-        private Task<PackageSet> GetDetailedPackageSet(Package p)
-        {
-            return GetDetailedPackageSet(p.CanonicalName);
-        }
+  
 
 
-        private Task<PackageSet> GetDetailedPackageSet(string canonicalName)
-        {
-            return Task.Factory.StartNew(() =>
-                                             {
-                                                 Task<PackageSet> psT = CoApp.GetPackageSet(canonicalName);
-                                                 psT.Wait();
-                                                 if (psT.IsFaulted)
-                                                     throw psT.Exception.Unwrap();
-
-                                                 PackageSet ps = psT.Result;
-
-                                                 var tasks = new List<Task>();
-                                                 if (ps.AvailableNewer != null)
-                                                 {
-                                                     tasks.Add(
-                                                         CoApp.GetPackageDetails(ps.AvailableNewer).ContinueWith(
-                                                             t => ps.AvailableNewer = t.Result));
-                                                 }
-                                                 if (ps.AvailableNewerCompatible != null)
-                                                 {
-                                                     tasks.Add(
-                                                         CoApp.GetPackageDetails(ps.AvailableNewerCompatible).
-                                                             ContinueWith(
-                                                                 t => ps.AvailableNewerCompatible = t.Result));
-                                                 }
-
-                                                 Task.WaitAll(tasks.ToArray());
-
-                                                 Exception[] exceptions = tasks.FindAllExceptions();
-                                                 if (exceptions.Length != 0)
-                                                     throw new AggregateException(exceptions);
-
-
-                                                 return ps;
-                                             }
-                );
-        }
+      
 
 
         private static ScheduledTask DefaultTask()

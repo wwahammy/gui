@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CoApp.Gui.Toolkit.Model.Interfaces;
-using CoApp.Gui.Toolkit.Support;
-using CoApp.Packaging.Common;
-using CoApp.Toolkit.Configuration;
 using CoApp.Packaging.Client;
-
-using CoApp.Toolkit.Tasks;
-using CoApp.Toolkit.Win32;
+using CoApp.Packaging.Common;
+using CoApp.Packaging.Common.Model;
+using CoApp.Toolkit.Configuration;
 using CoApp.Toolkit.Extensions;
+using CoApp.Toolkit.Logging;
+using CoApp.Toolkit.Tasks;
 
 namespace CoApp.Gui.Toolkit.Model
 {
@@ -25,10 +24,10 @@ namespace CoApp.Gui.Toolkit.Model
 
         public const UpdateChoice DEFAULT_UPDATE_CHOICE = UpdateChoice.AutoInstallAll;
         public const bool DEFAULT_TRIM_ON_UPDATE = false;
-        private readonly RegistryView _coAppSystem = RegistryView.CoAppSystem;
 
 
         internal readonly PackageManager EPM;
+        private readonly RegistryView _coAppSystem = RegistryView.CoAppSystem;
 
 
         public CoAppService()
@@ -52,8 +51,11 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<IEnumerable<string>> SystemFeeds
         {
-            get { return EPM.Feeds.ContinueWith((a) => 
-                a.Result.Where(f => !f.IsSession).Select(f => f.Location)); }
+            get
+            {
+                return EPM.Feeds.ContinueWith((a) =>
+                                              a.Result.Where(f => !f.IsSession).Select(f => f.Location));
+            }
         }
 
         public Task AddSystemFeed(string feedUrl)
@@ -82,60 +84,77 @@ namespace CoApp.Gui.Toolkit.Model
         }
 
 
-        public Task BlockPackage(string packageName)
+        public Task BlockPackage(CanonicalName packageName)
         {
-            return EPM.BlockPackage(packageName);
+            return EPM.SetGeneralPackageInformation(50, packageName, "state", PackageState.Blocked.ToString());
         }
 
-        public Task UnblockPackage(string packageName)
+        public Task UnblockPackage(CanonicalName packageName)
         {
-            return EPM.UnBlockPackage(packageName);
+            return EPM.SetGeneralPackageInformation(50, packageName, "state", null);
         }
 
-        public Task<IEnumerable<Package>> GetPackages()
+
+        public Task<IEnumerable<Package>> GetPackages(Expression<Func<IPackage, bool>> pkgFilter = null,
+                                                      Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>>
+                                                          collectionFilter = null, bool withDetails = false,
+                                                      string locationFeed = null)
         {
-            return EPM.QueryPackages("*");
+            return GetPackages("coapp:*", pkgFilter, collectionFilter, withDetails, locationFeed);
         }
 
-        public Task<IEnumerable<Package>> GetPackages(string packageName, FourPartVersion? minVersion = new FourPartVersion?(), FourPartVersion? maxVersion = new FourPartVersion?(), bool? dependencies = new bool?(), bool? installed = new bool?(), bool? active = new bool?(), bool? requested = new bool?(), bool? blocked = new bool?(), bool? latest = new bool?(), string locationFeed = null, bool? updates = new bool?(), bool? upgrades = new bool?(), bool? trimable = new bool?())
+        public Task<IEnumerable<Package>> GetPackages(CanonicalName packageName,
+                                                      Expression<Func<IPackage, bool>> pkgFilter = null,
+                                                      Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>>
+                                                          collectionFilter = null, bool withDetails = false,
+                                                      string locationFeed = null)
         {
-            return null;
-            //EPM.QU
-           // return EPM.QueryPackages(packageName, minVersion, maxVersion, dependencies, installed, active, requested,
-           //                        blocked, latest, locationFeed, updates, upgrades, trimable);
+            return EPM.FindPackages(packageName, pkgFilter, collectionFilter, locationFeed).ContinueWith(t =>
+                                                                                                             {
+                                                                                                                 t.
+                                                                                                                     RethrowWhenFaulted
+                                                                                                                     ();
+                                                                                                                 if (
+                                                                                                                     withDetails)
+                                                                                                                 {
+                                                                                                                     foreach
+                                                                                                                         (
+                                                                                                                         var
+                                                                                                                             p
+                                                                                                                             in
+                                                                                                                             t
+                                                                                                                                 .
+                                                                                                                                 Result
+                                                                                                                         )
+                                                                                                                     {
+                                                                                                                         var
+                                                                                                                             pd
+                                                                                                                                 =
+                                                                                                                                 p
+                                                                                                                                     .
+                                                                                                                                     PackageDetails;
+                                                                                                                     }
+                                                                                                                 }
+
+                                                                                                                 return
+                                                                                                                     t.
+                                                                                                                         Result;
+                                                                                                             }
+                );
         }
 
-        public Task<Package> GetPackage(string packageName)
+        public Task<Package> GetPackage(CanonicalName packageName)
         {
             return GetPackage(packageName, false);
         }
 
-        public Task<Package> GetPackage(string packageName, bool withDetails)
+        public Task<Package> GetPackage(CanonicalName packageName, bool withDetails)
         {
-           
-
-            return EPM.GetPackage(new CanonicalName(packageName)).ContinueAlways((Task<Package> t) =>
-                                                            {
-                                                                if (t.IsCanceled || t.IsFaulted)
-                                                                {
-                                                                    throw t.Exception.Unwrap();
-                                                                }
-                                                                
-
-                                                                if (withDetails)
-                                                                {
-                                                                    return
-                                                                        EPM.GetPackageDetails(t.Result).Result;
-                                                                }
-
-                                                                return t.Result;
-                                                            }
-
-                );
-
+            return withDetails ? EPM.GetPackageDetails(packageName) : EPM.GetPackage(packageName);
         }
 
-        public Task<IEnumerable<Package>> GetAllVersionsOfPackage(Package p)
+
+        public Task<IEnumerable<Package>> GetAllVersionsOfPackage(IPackage p)
         {
             return EPM.GetAllVersionsOfPackage(p.CanonicalName);
         }
@@ -146,58 +165,55 @@ namespace CoApp.Gui.Toolkit.Model
             get
             {
                 return EPM.Policies.ContinueWith(t =>
-                                              {
-                                                  t.RethrowWhenFaulted();
-                                                  return t.Result.Select(PolicyProxy.Convert);
-                                              });
+                                                     {
+                                                         t.RethrowWhenFaulted();
+                                                         return t.Result.Select(PolicyProxy.Convert);
+                                                     });
             }
         }
 
         public Task<IEnumerable<Package>> GetUpdatablePackages()
         {
-            return null;
-           // return EPM.GetUpdatablePackages("*");
+            return GetPackages(pkgFilter: Package.Filters.PackagesWithUpdateAvailable, withDetails: true);
+            // return EPM.GetUpdatablePackages("*");
         }
 
         public Task<IEnumerable<Package>> GetUpgradablePackages()
         {
-            return null;
+            return GetPackages(Package.Filters.PackagesWithUpgradeAvailable, null, true);
             //return EPM.GetUpgradablePackages("*");
         }
 
-        public Task<PackageSet> GetPackageSet(string canonicalName)
-        {
-            return EPM.GetPackageSet(canonicalName);
-        }
-
-        public Task<Package> GetPackageDetails(string canonicalName)
+        public Task<Package> GetPackageDetails(CanonicalName canonicalName)
         {
             return EPM.GetPackageDetails(canonicalName);
         }
 
-        public Task UpdateExistingPackage(string canonicalName, bool? autoUpgrade = null,
-                                          Action<string, int, int> installProgress = null,
-                                          Action<string> packageInstalled = null)
+        public Task UpdateExistingPackage(CanonicalName canonicalName, bool? autoUpgrade,
+                                          Action<string, int, int> installProgress, Action<string> packageInstalled,
+                                          CanonicalName packageToUpdateFrom)
         {
             return
                 Task.Factory.StartNew(() =>
                                           {
                                               CurrentTask.Events +=
-                                                  new PackageInstallProgress((name, progress, overallProgress) => installProgress(name, progress,
-                                                                                                                                  overallProgress));
-                                              CurrentTask.Events += new PackageInstalled(name => packageInstalled(name));
+                                                  new PackageInstallProgress(
+                                                      (name, progress, overallProgress) =>
+                                                      installProgress(name, progress,
+                                                                      overallProgress));
+                                              //CurrentTask.Events += new PackageInstalled(name => packageInstalled(name));
 
-                                              return EPM.UpdateExistingPackage(canonicalName, autoUpgrade).ContinueWith(
-                                                  t => LastTimeInstalled = DateTime.Now);
+                                              return EPM.Install(canonicalName, autoUpgrade,
+                                                                 replacingPackage: packageToUpdateFrom).ContinueWith(
+                                                                     t => LastTimeInstalled = DateTime.Now);
                                           }
                     );
-            
         }
 
-        public Task UpgradeExistingPackage(string canonicalName, bool? autoUpgrade,
-                                           Action<string, int, int> installProgress, Action<string> packageInstalled)
+        public Task UpgradeExistingPackage(CanonicalName canonicalName, bool? autoUpgrade,
+                                           Action<string, int, int> installProgress, Action<string> packageInstalled,
+                                           CanonicalName packageToUpgradeFrom)
         {
-
             return Task.Factory.StartNew(() =>
                                              {
                                                  CurrentTask.Events +=
@@ -208,11 +224,11 @@ namespace CoApp.Gui.Toolkit.Model
                                                  CurrentTask.Events +=
                                                      new PackageInstalled(name => packageInstalled(name));
                                                  return
-                                                     EPM.UpgradeExistingPackage(canonicalName, autoUpgrade).
+                                                     EPM.Install(canonicalName, autoUpgrade,
+                                                                 replacingPackage: packageToUpgradeFrom).
                                                          ContinueWith(
                                                              t => LastTimeInstalled = DateTime.Now);
                                              });
-
         }
 
         public UpdateChoice UpdateChoice
@@ -297,12 +313,6 @@ namespace CoApp.Gui.Toolkit.Model
         }
 
 
-        public Task<Package> GetPackageDetails(Package package)
-        {
-            return EPM.GetPackageDetails(package);
-        }
-
-
         public Task SetAllFeedsStale()
         {
             return EPM.SetAllFeedsStale();
@@ -324,40 +334,28 @@ namespace CoApp.Gui.Toolkit.Model
             return EPM.RemoveScheduledTask(name);
         }
 
-        public Task TrimAll()
+        public Task<int> TrimAll()
         {
-            return null;
-            /*
-            return Task.Factory.StartNew<Task>(() => EPM.GetTrimablePackages("*").ContinueWith(t =>
-                                                                                             {
-                                                                                                 var tasks =
-                                                                                                     Enumerable.ToArray<Task>(t.Result.Select(
-                                                                                                             p =>
-                                                                                                             EPM.
-                                                                                                                 RemovePackage
-                                                                                                                 (
-                                                                                                                     p.
-                                                                                                                         CanonicalName,
-                                                                                                                     false)));
+            return GetPackages(Package.Filters.Trimable).ContinueWith(
+                t =>
+                    {
+                        if (t.IsCanceled || t.IsFaulted)
+                        {
+                            Logger.Warning(t.Exception.Unwrap());
+                            t.RethrowWhenFaulted();
+                        }
 
+                        var task = EPM.RemovePackages(t.Result.Cast<CanonicalName>(), false);
+                        task.ContinueOnFail(e => Logger.Warning(e.Unwrap()));
+                        return task.Result;
+                    });
 
-                                                                                                 Task.WaitAll(tasks);
-                                                                                                 var exceptions
-                                                                                                     =
-                                                                                                     tasks.
-                                                                                                         FindAllExceptions
-                                                                                                         ();
-                                                                                                 if (exceptions.Length >
-                                                                                                     0)
-                                                                                                     throw new AggregateException
-                                                                                                         (exceptions);
-                                                                                             }));
-             * */
+   
         }
 
-        public Task InstallPackage(string canonicalName, Action<string, int, int> installProgress, Action<string> packageInstalled)
+        public Task InstallPackage(CanonicalName canonicalName, Action<string, int, int> installProgress,
+                                   Action<string> packageInstalled)
         {
-
             return
                 Task.Factory.StartNew(() =>
                                           {
@@ -367,11 +365,12 @@ namespace CoApp.Gui.Toolkit.Model
                                                       installProgress(name, progress,
                                                                       overallProgress));
                                               CurrentTask.Events += new PackageInstalled(name => packageInstalled(name));
-                                              return EPM.InstallPackage(canonicalName);
+                                              return EPM.Install(canonicalName);
                                           });
         }
 
-        public Task RemovePackage(string canonicalName, Action<string, int> removeProgress, Action<string> packageRemoved)
+        public Task RemovePackage(CanonicalName canonicalName, Action<string, int> removeProgress,
+                                  Action<string> packageRemoved)
         {
             return
                 Task.Factory.StartNew(() =>
@@ -386,5 +385,10 @@ namespace CoApp.Gui.Toolkit.Model
         }
 
         #endregion
+
+        public Task<Package> GetPackageDetails(Package package)
+        {
+            return EPM.GetPackageDetails(package);
+        }
     }
 }

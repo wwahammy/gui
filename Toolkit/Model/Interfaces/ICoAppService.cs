@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CoApp.Packaging.Client;
+using CoApp.Packaging.Common;
+using CoApp.Toolkit.Linq;
 
 namespace CoApp.Gui.Toolkit.Model.Interfaces
 {
@@ -26,40 +30,31 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
 
         Task SetOptedIn(bool optedIn);
 
-        Task BlockPackage(string packageName);
+        Task BlockPackage(CanonicalName packageName);
         
-        Task UnblockPackage(string packageName);
+        Task UnblockPackage(CanonicalName packageName);
 
-        Task<IEnumerable<Package>> GetPackages();
+        Task<IEnumerable<Package>> GetPackages(Expression<Func<IPackage, bool>> pkgFilter = null, Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> collectionFilter = null, bool withDetails = false, string locationFeed = null);
 
-        Task<IEnumerable<Package>> GetPackages(string packageName,
-                                               CoApp.Toolkit.Win32.FourPartVersion? minVersion = null,
-                                               CoApp.Toolkit.Win32.FourPartVersion? maxVersion = null,
-                                               bool? dependencies = null, bool? installed = null, bool? active = null,
-                                               bool? requested = null, bool? blocked = null, bool? latest = null,
-                                               string locationFeed = null, bool? updates = null, bool? upgrades = null,
-                                               bool? trimable = null);
-        Task<Package> GetPackage(string packageName);
+        Task<IEnumerable<Package>> GetPackages(CanonicalName packageName, Expression<Func<IPackage, bool>> pkgFilter = null, Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> collectionFilter = null, bool withDetails = false, string locationFeed = null);
+
+        Task<Package> GetPackage(CanonicalName packageName);
         
-        Task<Package> GetPackage(string packageName, bool withDetails);
+        Task<Package> GetPackage(CanonicalName packageName, bool withDetails);
 
-        Task<IEnumerable<Package>> GetAllVersionsOfPackage(Package p);
+        Task<IEnumerable<Package>> GetAllVersionsOfPackage(IPackage p);
 
         Task<IEnumerable<Package>> GetUpdatablePackages();
 
         Task<IEnumerable<Package>> GetUpgradablePackages();
 
-        Task<PackageSet> GetPackageSet(string canonicalName);
+        Task<Package> GetPackageDetails(CanonicalName canonicalName);
 
-        Task<Package> GetPackageDetails(Package package);
+        Task UpdateExistingPackage(CanonicalName canonicalName, bool? autoUpgrade, Action<string, int, int> installProgress,
+                                   Action<string> packageInstalled, CanonicalName packageToUpdateFrom);
 
-        Task<Package> GetPackageDetails(string canonicalName);
-
-        Task UpdateExistingPackage(string canonicalName, bool? autoUpgrade, Action<string, int, int> installProgress,
-                                   Action<string> packageInstalled);
-
-        Task UpgradeExistingPackage(string canonicalName, bool? autoUpgrade, Action<string, int, int> installProgress,
-                                   Action<string> packageInstalled);
+        Task UpgradeExistingPackage(CanonicalName canonicalName, bool? autoUpgrade, Action<string, int, int> installProgress,
+                                   Action<string> packageInstalled, CanonicalName packageToUpdateFrom);
 
         UpdateChoice UpdateChoice { get; set; }
 
@@ -78,12 +73,12 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
 
         Task RemoveScheduledTask(string name);
 
-        Task TrimAll();
+        Task<int> TrimAll();
 
-        Task InstallPackage(string canonicalName, Action<string, int, int> installProgress,
+        Task InstallPackage(CanonicalName canonicalName, Action<string, int, int> installProgress,
                             Action<string> packageInstalled);
 
-        Task RemovePackage(string canonicalName, Action<string, int> removeProgress, Action<string> packageRemoved);
+        Task RemovePackage(CanonicalName canonicalName, Action<string, int> removeProgress, Action<string> packageRemoved);
     }
 
     public class PolicyProxy

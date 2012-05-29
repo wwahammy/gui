@@ -94,20 +94,7 @@ namespace CoApp.Updater.ViewModel
                             }
                         }
 
-                    }
-                , TaskContinuationOptions.NotOnCanceled);
-        }
-
-        public XElement Serialize()
-        {
-            var root = new XElement("UpdatingViewModel");
-            return root;
-        }
-
-        public void Deserialize(XElement element)
-        {
-            //nothing to do
-            return;
+                    });
         }
     }
 }

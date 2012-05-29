@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CoApp.PackageManager.Messages;
 using CoApp.Packaging.Client;
+using CoApp.Packaging.Common;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -11,15 +12,15 @@ namespace CoApp.PackageManager.Model.Interfaces
 {
     public interface IActivityService
     {
-        Task InstallPackage(Package p);
-        Task RemovePackage(Package p);
+        Task InstallPackage(IPackage p);
+        Task RemovePackage(IPackage p);
 
         IList<Activity> Activities { get; }
     }
 
     public class Activity : ObservableObject
     {
-        public Activity(Package p, ActivityType a)
+        public Activity(IPackage p, ActivityType a)
         {
             Package = p;
             ActivityType = a;
@@ -29,7 +30,7 @@ namespace CoApp.PackageManager.Model.Interfaces
        
 
 
-        public Package Package { get; private set; }
+        public IPackage Package { get; private set; }
 
         public ActivityType ActivityType { get; private set; }
        

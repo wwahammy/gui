@@ -7,7 +7,9 @@
              xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
              xmlns:Controls="clr-namespace:CoApp.PackageManager.Controls"
              xmlns:Controls2="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             x:Class="CoApp.PackageManager.View.SearchView" 
+             xmlns:Filter="clr-namespace:CoApp.PackageManager.ViewModel.Filter"
+             xmlns:Model="clr-namespace:CoApp.PackageManager.Model" x:Class="CoApp.PackageManager.View.SearchView" 
+            x:Name="Root"
              mc:Ignorable="d" 
              d:DesignHeight="439" d:DesignWidth="765">
 
@@ -16,7 +18,7 @@
         <DataTemplate x:Key="ActualFilter">
             <Button Command="{Binding DataContext.RemoveFilter, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" CommandParameter="{Binding}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Title}"/>
+                    <TextBlock Text="{Binding FilterDisplay}"/>
                     <Controls:CloseIcon/>
                 </StackPanel>
             </Button>
@@ -32,20 +34,25 @@
                 </Controls:ToggleDropDown.ButtonContent>
                 <Controls:ToggleDropDown.PopupContent>
                     <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                        <TabControl TabStripPlacement="Left" ItemsSource="{Binding PossibleFilters}">
+                        <TabControl TabStripPlacement="Left" ItemsSource="{Binding DataContext.FiltersToShow, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}">
+                            <TabControl.Resources>
+                                <DataTemplate DataType="{x:Type Filter:FilterOnText}">
+                                    <StackPanel>
+                                        <TextBox Text="{Binding Input}"/>
+                                        <Button Command="{Binding DataContext.AddFilter, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" CommandParameter="{Binding}" Controls:ToggleDropDown.CloseContainingDropDown="True"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </TabControl.Resources>
                             <TabControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="Black" BorderThickness="0,1, 0, 1">
-                                        <TextBlock Text="{Binding Title}"/>
+                                        <TextBlock Text="{Binding NiceName}"/>
                                     </Border>
                                 </DataTemplate>
                             </TabControl.ItemTemplate>
                             <TabControl.ContentTemplate>
                                 <DataTemplate>
-                                    <StackPanel>
-                                        <Button Content="Sort" Controls:ToggleDropDown.CloseContainingDropDown="True" Command="{Binding DataContext.Sort, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" CommandParameter="{Binding}"/>
-                                        <Button Content="Sort Descending" Controls:ToggleDropDown.CloseContainingDropDown="True" Command="{Binding DataContext.SortDescending, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}"  CommandParameter="{Binding}"/>
-                                    </StackPanel>
+                                    <ContentPresenter Content="{Binding .}"/>
                                 </DataTemplate>
                             </TabControl.ContentTemplate>
 
@@ -56,6 +63,92 @@
         </DataTemplate>
     
         <Support:FilterTemplateSelector x:Key="FilterTemplateSelector" ItemTemplate="{StaticResource ActualFilter}" NewItemTemplate="{StaticResource NewFilter}"/>
+        
+        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+            <Setter Property="FontFamily" Value="{DynamicResource DefaultFont}"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="AliceBlue"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Foreground" Value="{DynamicResource BlackBrush}"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0,0, 20, 10"/>
+            <Setter Property="FontSize" Value="14.6669998168945"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="150"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition GeneratedDuration="0:0:0.15" To="Pressed"/>
+                                        <VisualTransition GeneratedDuration="0:0:0.15" From="Pressed"/>
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="MouseOver"/>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="Background">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.95"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="Background">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.95"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled"/>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused">
+                                        <!--
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusRectangleBlack">
+                                                <DiscreteDoubleKeyFrame KeyTime="0" Value="1"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusRectangleWhite">
+                                                <DiscreteDoubleKeyFrame KeyTime="0" Value="1"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>-->
+                                    </VisualState>
+                                    <VisualState x:Name="Unfocused"/>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="ValidationStates">
+                                    <VisualState x:Name="Valid"/>
+                                    <VisualState x:Name="InvalidFocused"/>
+                                    <VisualState x:Name="InvalidUnfocused"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border x:Name="Background" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" TextElement.Foreground="{TemplateBinding Foreground}" SnapsToDevicePixels="True" RenderTransformOrigin="0.5,0.5">
+                                <Border.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>						
+                                </Border.RenderTransform>
+                                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" TextElement.FontSize="{TemplateBinding FontSize}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" OpacityMask="{x:Null}" SnapsToDevicePixels="True" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <!--
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource MyWhiteBrush}"/>
+                                <Setter Property="Background" Value="{DynamicResource BlackBrush}"/>
+                            </Trigger>-->
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
         
 
         
@@ -75,7 +168,7 @@
             <ColumnDefinition  Width="Auto"/>
         </Grid.ColumnDefinitions>
         <!--Filters -->
-        <ItemsControl ItemTemplateSelector="{StaticResource FilterTemplateSelector}" ItemsSource="{Binding Filters}"  Grid.Column="0" Grid.Row="0">
+        <ItemsControl ItemTemplateSelector="{StaticResource FilterTemplateSelector}" ItemsSource="{Binding AppliedFilters}"  Grid.Column="0" Grid.Row="0">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel/>
@@ -91,8 +184,8 @@
                 <TextBlock>
                     <TextBlock.Text>
                         <MultiBinding StringFormat="Sort by {0} {1}">
-                            <Binding Path="SortTitle"/>
-                            <Binding Path="SortDirection"/>
+                            <Binding Path="FrictionlessSort.Title"/>
+                            <Binding Path="FrictionlessSort.Direction"/>
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -120,13 +213,58 @@
             </Controls:ToggleDropDown.PopupContent>
         </Controls:ToggleDropDown>
            
-        <Controls2:MetroProgressBar Visibility="Visible" IsIndeterminate="True" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <ItemsControl ItemsSource="{Binding Packages}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+        <Controls2:MetroProgressBar Visibility="{Binding Path=InMiddleOfSearch, Converter={StaticResource BooleanToHiddenVisibilityConverter1}}" IsIndeterminate="True" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="0, 10"/>
+        <ItemsControl  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Packages}">
+
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type Model:ProductInfo}">
+                   
+                    <Button Style="{DynamicResource ButtonStyle1}" Background="{Binding Icon, Converter={StaticResource ImageToColorConverter}, FallbackValue=AliceBlue}" TextBlock.Foreground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Background, Converter={StaticResource BgToFgConverter}}"  Height="150"
+                            Command="{Binding ElementName=Root, Path=DataContext.GoToProduct}" CommandParameter="{Binding}">
+                        
+                           <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="64"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="64"/>
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Image Source="{Binding Icon}" Grid.Row="0" Grid.Column="0" Margin="0,0,3,3"/>
+                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"  Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TextTrimming="CharacterEllipsis"/>
+                        </Grid>
+                        
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
+            <!--
+            <ItemsControl.Items>
+                <Button Style="{DynamicResource ButtonStyle1}" Background="{Binding Icon, Converter={StaticResource ImageToColorConverter}, FallbackValue=AliceBlue}" TextBlock.Foreground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Background, Converter={StaticResource BgToFgConverter}}" 
+                Command="{">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="64"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding Icon}" Grid.Row="0" Grid.Column="0"/>
+                            <TextBlock Text="Name" TextWrapping="Wrap"  Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" FontWeight="SemiBold"/>
+                            <TextBlock Text="Summary" TextWrapping="Wrap" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  HorizontalAlignment="Left"/>
+                        </Grid>
+                    
+                </Button>
+            </ItemsControl.Items>-->
         </ItemsControl>
     </Grid>
 </Controls1:CoAppFrameChild>

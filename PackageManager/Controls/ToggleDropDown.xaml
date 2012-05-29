@@ -14,6 +14,6 @@
     
     <Grid>
         <ToggleButton Content="{Binding ButtonContent, ElementName=Root}" Style="{DynamicResource Windows8ToggleButtonStyle}" x:Name="Button" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="{Binding IsChecked, ElementName=Root}"/>
-        <Popup PlacementTarget="{Binding ElementName=Button}" x:Name="Popup" Child="{Binding PopupContent, ElementName=Root}" Placement="{Binding PopupAlignment, ElementName=Root, Converter={StaticResource HorizontalAlignmentToPlacementConverter1}, PresentationTraceSources.TraceLevel=High}" IsOpen="{Binding IsChecked, ElementName=Button}" StaysOpen="False"/>
+        <Popup PlacementTarget="{Binding ElementName=Button}" x:Name="Popup" Child="{Binding PopupContent, ElementName=Root}" Placement="{Binding PopupAlignment, ElementName=Root, Converter={StaticResource HorizontalAlignmentToPlacementConverter1}}" IsOpen="{Binding IsChecked, ElementName=Button}" StaysOpen="False"/>
     </Grid>
 </UserControl>

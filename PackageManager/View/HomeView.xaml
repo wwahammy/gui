@@ -11,11 +11,15 @@
          
              xmlns:Support="clr-namespace:CoApp.PackageManager.Support"
              xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
-             xmlns:sys="clr-namespace:System.Collections.Generic;assembly=mscorlib">
+             xmlns:sys="clr-namespace:System.Collections.Generic;assembly=mscorlib" x:Name="Root">
     
     <Controls1:CoAppWindow.MoreHeaderItems>
         <x:Array Type="Panel">
             <Grid>
+                <Button Content="Search" Style="{DynamicResource WinLayout_HeaderSettingButton}" Command="{Binding GoToSearch}" Margin="0,0,20,0"/>
+            </Grid>
+            <Grid>
+                
                 <Button Content="I'm new!" Style="{DynamicResource WinLayout_HeaderSettingButton}"/>
             </Grid>
         </x:Array>
@@ -77,6 +81,6 @@
             </ItemsControl>
 
         </ScrollViewer>
-        <Button Content="Go To Search" Command="{Binding GoToSearch}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+       
     </Grid>
 </Controls1:CoAppFrameChild>

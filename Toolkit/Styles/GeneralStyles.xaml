@@ -270,7 +270,7 @@
             <Grid Grid.Row="0" x:Name="Header" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
 
                 <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Orientation="Horizontal" TextElement.FontFamily="{DynamicResource HeaderFontFamily}">
-                    <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AdditionalHeaderItems}" Margin="0,0,20,0" >
+                    <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=AdditionalHeaderItems}" Margin="0,0,20,0" DataContext="{Binding MainScreenViewModel}" >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal"/>
@@ -769,4 +769,5 @@
             </Setter.Value>
         </Setter>
     </Style>
+  <Converters1:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter1" />
 </ResourceDictionary>

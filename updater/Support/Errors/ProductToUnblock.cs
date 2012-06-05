@@ -40,7 +40,7 @@ namespace CoApp.Updater.Support.Errors
             if (propertyChangedEventArgs.PropertyName == "CanBlock" && sender is ScreenViewModel)
             {
                 var vm = (ScreenViewModel)sender;
-                CanBlock = vm.CanBlock;
+               // CanBlock = vm.CanBlock;
             }
         }
 

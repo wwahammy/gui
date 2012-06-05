@@ -1,0 +1,267 @@
+<CoApp_Updater_ViewModel:SelectUpdatesViewModel xmlns:CoApp_Updater_ViewModel="clr-namespace:CoApp.Updater.ViewModel" xmlns:CoApp_Updater_Model="clr-namespace:CoApp.Updater.Model" xmlns:CoApp_Packaging_Common="clr-namespace:CoApp.Packaging.Common;assembly=CoApp.Client" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" IsInDesignMode="False" IsInDesignModeStatic="True" ScreenWidth="FullWidth" SubTitle="Dictum adipiscing" Title="Lectus parturient eros libero sed">
+	<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+		<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="True">
+			<CoApp_Updater_ViewModel:SelectableProduct.Product>
+				<CoApp_Updater_Model:Product DisplayName="Aliquam class aenean vestibulum integer" IsUpgrade="False" Summary="Est dignissim" UpdateTime="06/01/2012 15:39:25">
+					<CoApp_Updater_Model:Product.NewId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Curabitur adipiscing cras" IsCanonical="True" IsPartial="False" MatchVersionOrGreater="True" Name="Parturient maecenas nam praesent" PackageName="Mauris sed curae dis" PublicKeyToken="Vestibulum vestibulum" SimpleName="Adipiscing phasellus nullam quisque"/>
+					</CoApp_Updater_Model:Product.NewId>
+					<CoApp_Updater_Model:Product.OldId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Accumsan bibendum donec vivamus consequat" IsCanonical="False" IsPartial="True" MatchVersionOrGreater="False" Name="Dictumst aptent eleifend parturient vestibulum" PackageName="Facilisi faucibus duis" PublicKeyToken="Auctor etiam" SimpleName="Aliquam fusce convallis lorem"/>
+					</CoApp_Updater_Model:Product.OldId>
+				</CoApp_Updater_Model:Product>
+			</CoApp_Updater_ViewModel:SelectableProduct.Product>
+			<CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+				<CoApp_Updater_ViewModel:SelectUpdatesViewModel IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="FullWidth" SubTitle="Aliquet blandit commodo morbi" Title="Nunc nulla">
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+						<CollectionViewSource IsLiveFilteringRequested="False" IsLiveSortingRequested="False" IsLiveGroupingRequested="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+				</CoApp_Updater_ViewModel:SelectUpdatesViewModel>
+			</CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+		</CoApp_Updater_ViewModel:SelectableProduct>
+		<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="True">
+			<CoApp_Updater_ViewModel:SelectableProduct.Product>
+				<CoApp_Updater_Model:Product DisplayName="Congue cursus proin amet elementum" IsUpgrade="False" Summary="Vestibulum euismod vestibulum" UpdateTime="06/01/2012 15:39:25">
+					<CoApp_Updater_Model:Product.NewId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Ante vestibulum conubia habitant" IsCanonical="True" IsPartial="False" MatchVersionOrGreater="True" Name="Inceptos hac adipiscing augue" PackageName="Interdum arcu lobortis leo" PublicKeyToken="Mus facilisis fermentum parturient fringilla" SimpleName="Dolor nascetur diam"/>
+					</CoApp_Updater_Model:Product.NewId>
+					<CoApp_Updater_Model:Product.OldId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Cubilia dictum habitasse" IsCanonical="False" IsPartial="True" MatchVersionOrGreater="False" Name="Nec eget hendrerit" PackageName="Fames dapibus felis non ipsum" PublicKeyToken="Pharetra himenaeos imperdiet" SimpleName="Egestas elit"/>
+					</CoApp_Updater_Model:Product.OldId>
+				</CoApp_Updater_Model:Product>
+			</CoApp_Updater_ViewModel:SelectableProduct.Product>
+			<CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+				<CoApp_Updater_ViewModel:SelectUpdatesViewModel IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="Standard" SubTitle="Enim malesuada per justo" Title="Placerat penatibus">
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+						<CollectionViewSource IsLiveFilteringRequested="False" IsLiveSortingRequested="False" IsLiveGroupingRequested="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+				</CoApp_Updater_ViewModel:SelectUpdatesViewModel>
+			</CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+		</CoApp_Updater_ViewModel:SelectableProduct>
+		<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="True">
+			<CoApp_Updater_ViewModel:SelectableProduct.Product>
+				<CoApp_Updater_Model:Product DisplayName="Feugiat gravida" IsUpgrade="False" Summary="Adipiscing posuere nisl nam" UpdateTime="06/01/2012 15:39:25">
+					<CoApp_Updater_Model:Product.NewId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Lectus lacus libero" IsCanonical="True" IsPartial="False" MatchVersionOrGreater="True" Name="Iaculis sed" PackageName="Lacinia sem" PublicKeyToken="Lorem pulvinar erat ligula laoreet" SimpleName="Adipiscing porttitor litora parturient natoque"/>
+					</CoApp_Updater_Model:Product.NewId>
+					<CoApp_Updater_Model:Product.OldId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Vestibulum sit eros magna massa" IsCanonical="False" IsPartial="True" MatchVersionOrGreater="False" Name="Sagittis vestibulum metus luctus" PackageName="Magnis morbi mattis vel" PublicKeyToken="Nibh neque" SimpleName="Senectus nisi tincidunt netus"/>
+					</CoApp_Updater_Model:Product.OldId>
+				</CoApp_Updater_Model:Product>
+			</CoApp_Updater_ViewModel:SelectableProduct.Product>
+			<CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+				<CoApp_Updater_ViewModel:SelectUpdatesViewModel IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="FullWidth" SubTitle="Tristique mauris" Title="Ultricies sed mollis parturient">
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+						<CollectionViewSource IsLiveFilteringRequested="False" IsLiveSortingRequested="False" IsLiveGroupingRequested="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+				</CoApp_Updater_ViewModel:SelectUpdatesViewModel>
+			</CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+		</CoApp_Updater_ViewModel:SelectableProduct>
+		<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="True">
+			<CoApp_Updater_ViewModel:SelectableProduct.Product>
+				<CoApp_Updater_Model:Product DisplayName="Dis montes nostra est" IsUpgrade="False" Summary="Vestibulum rutrum quis" UpdateTime="06/01/2012 15:39:25">
+					<CoApp_Updater_Model:Product.NewId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Venenatis sociosqu vulputate" IsCanonical="True" IsPartial="False" MatchVersionOrGreater="True" Name="Nulla nunc" PackageName="Odio suscipit ornare" PublicKeyToken="Orci torquent pede ultrices" SimpleName="Curabitur vehicula"/>
+					</CoApp_Updater_Model:Product.NewId>
+					<CoApp_Updater_Model:Product.OldId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Hac quam vestibulum volutpat" IsCanonical="False" IsPartial="True" MatchVersionOrGreater="False" Name="Vestibulum leo adipiscing mus" PackageName="Maecenas parturient" PublicKeyToken="Platea phasellus potenti" SimpleName="Pretium rhoncus primis porta vestibulum"/>
+					</CoApp_Updater_Model:Product.OldId>
+				</CoApp_Updater_Model:Product>
+			</CoApp_Updater_ViewModel:SelectableProduct.Product>
+			<CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+				<CoApp_Updater_ViewModel:SelectUpdatesViewModel IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="FullWidth" SubTitle="Sapien semper" Title="Purus adipiscing sodales praesent">
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+						<CollectionViewSource IsLiveFilteringRequested="False" IsLiveSortingRequested="False" IsLiveGroupingRequested="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+				</CoApp_Updater_ViewModel:SelectUpdatesViewModel>
+			</CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+		</CoApp_Updater_ViewModel:SelectableProduct>
+		<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="True">
+			<CoApp_Updater_ViewModel:SelectableProduct.Product>
+				<CoApp_Updater_Model:Product DisplayName="Sociis risus viverra" IsUpgrade="False" Summary="Aenean aliquam donec mauris parturient" UpdateTime="06/01/2012 15:39:25">
+					<CoApp_Updater_Model:Product.NewId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Parturient urna" IsCanonical="True" IsPartial="False" MatchVersionOrGreater="True" Name="Aliquam nec non" PackageName="Cras vestibulum taciti tellus" PublicKeyToken="Velit per consequat vestibulum convallis" SimpleName="Dignissim tempor accumsan sed adipiscing"/>
+					</CoApp_Updater_Model:Product.NewId>
+					<CoApp_Updater_Model:Product.OldId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Elementum vitae duis bibendum tempus" IsCanonical="False" IsPartial="True" MatchVersionOrGreater="False" Name="Tortor integer" PackageName="Dictumst quisque eleifend turpis varius" PublicKeyToken="Vivamus facilisi nunc sem" SimpleName="Class curae"/>
+					</CoApp_Updater_Model:Product.OldId>
+				</CoApp_Updater_Model:Product>
+			</CoApp_Updater_ViewModel:SelectableProduct.Product>
+			<CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+				<CoApp_Updater_ViewModel:SelectUpdatesViewModel IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="Standard" SubTitle="Nullam faucibus" Title="Etiam aptent">
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+						<CollectionViewSource IsLiveFilteringRequested="False" IsLiveSortingRequested="False" IsLiveGroupingRequested="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+				</CoApp_Updater_ViewModel:SelectUpdatesViewModel>
+			</CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+		</CoApp_Updater_ViewModel:SelectableProduct>
+		<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="True">
+			<CoApp_Updater_ViewModel:SelectableProduct.Product>
+				<CoApp_Updater_Model:Product DisplayName="Auctor habitant" IsUpgrade="False" Summary="Morbi adipiscing nulla fringilla" UpdateTime="06/01/2012 15:39:25">
+					<CoApp_Updater_Model:Product.NewId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Aliquet blandit vestibulum" IsCanonical="True" IsPartial="False" MatchVersionOrGreater="True" Name="Commodo conubia congue amet facilisis" PackageName="Cursus sit cubilia" PublicKeyToken="Dictum dapibus fusce" SimpleName="Inceptos vel vestibulum egestas nam"/>
+					</CoApp_Updater_Model:Product.NewId>
+					<CoApp_Updater_Model:Product.OldId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Fermentum interdum euismod sed" IsCanonical="False" IsPartial="True" MatchVersionOrGreater="False" Name="Lorem feugiat lobortis lectus" PackageName="Libero nascetur" PublicKeyToken="Dis ante adipiscing est parturient" SimpleName="Hac leo ligula vestibulum vestibulum"/>
+					</CoApp_Updater_Model:Product.OldId>
+				</CoApp_Updater_Model:Product>
+			</CoApp_Updater_ViewModel:SelectableProduct.Product>
+			<CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+				<CoApp_Updater_ViewModel:SelectUpdatesViewModel IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="Standard" SubTitle="Arcu habitasse mus pharetra" Title="Nec diam litora">
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+						<CollectionViewSource IsLiveFilteringRequested="False" IsLiveSortingRequested="False" IsLiveGroupingRequested="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+				</CoApp_Updater_ViewModel:SelectUpdatesViewModel>
+			</CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+		</CoApp_Updater_ViewModel:SelectableProduct>
+		<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="True">
+			<CoApp_Updater_ViewModel:SelectableProduct.Product>
+				<CoApp_Updater_Model:Product DisplayName="Placerat pulvinar" IsUpgrade="False" Summary="Lacinia laoreet montes" UpdateTime="06/01/2012 15:39:25">
+					<CoApp_Updater_Model:Product.NewId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Luctus sagittis parturient non" IsCanonical="True" IsPartial="False" MatchVersionOrGreater="True" Name="Magnis senectus vestibulum" PackageName="Vestibulum per hendrerit" PublicKeyToken="Eget proin adipiscing sociosqu" SimpleName="Augue gravida dolor"/>
+					</CoApp_Updater_Model:Product.NewId>
+					<CoApp_Updater_Model:Product.OldId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Suscipit iaculis parturient" IsCanonical="False" IsPartial="True" MatchVersionOrGreater="False" Name="Torquent himenaeos imperdiet" PackageName="Mattis ultrices vestibulum mauris" PublicKeyToken="Mollis vestibulum" SimpleName="Fames elit enim felis"/>
+					</CoApp_Updater_Model:Product.OldId>
+				</CoApp_Updater_Model:Product>
+			</CoApp_Updater_ViewModel:SelectableProduct.Product>
+			<CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+				<CoApp_Updater_ViewModel:SelectUpdatesViewModel IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="Standard" SubTitle="Sed sem natoque malesuada sit" Title="Vel erat eros nam">
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+						<CollectionViewSource IsLiveFilteringRequested="False" IsLiveSortingRequested="False" IsLiveGroupingRequested="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+				</CoApp_Updater_ViewModel:SelectUpdatesViewModel>
+			</CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+		</CoApp_Updater_ViewModel:SelectableProduct>
+		<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="True">
+			<CoApp_Updater_ViewModel:SelectableProduct.Product>
+				<CoApp_Updater_Model:Product DisplayName="Posuere nibh nisi" IsUpgrade="False" Summary="Praesent accumsan integer" UpdateTime="06/01/2012 15:39:25">
+					<CoApp_Updater_Model:Product.NewId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Vehicula nisl penatibus" IsCanonical="True" IsPartial="False" MatchVersionOrGreater="True" Name="Potenti porttitor" PackageName="Tincidunt sed volutpat adipiscing" PublicKeyToken="Nostra ipsum pretium nunc ornare" SimpleName="Dis tristique rhoncus"/>
+					</CoApp_Updater_Model:Product.NewId>
+					<CoApp_Updater_Model:Product.OldId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Parturient est platea hac" IsCanonical="False" IsPartial="True" MatchVersionOrGreater="False" Name="Vestibulum sodales justo leo" PackageName="Ultricies vestibulum viverra aliquam" PublicKeyToken="Maecenas lacus odio" SimpleName="Venenatis lorem"/>
+					</CoApp_Updater_Model:Product.OldId>
+				</CoApp_Updater_Model:Product>
+			</CoApp_Updater_ViewModel:SelectableProduct.Product>
+			<CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+				<CoApp_Updater_ViewModel:SelectUpdatesViewModel IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="FullWidth" SubTitle="Bibendum primis" Title="Quisque vivamus vulputate rutrum aliquam">
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+						<CollectionViewSource IsLiveFilteringRequested="False" IsLiveSortingRequested="False" IsLiveGroupingRequested="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+				</CoApp_Updater_ViewModel:SelectUpdatesViewModel>
+			</CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+		</CoApp_Updater_ViewModel:SelectableProduct>
+		<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="True">
+			<CoApp_Updater_ViewModel:SelectableProduct.Product>
+				<CoApp_Updater_Model:Product DisplayName="Dictumst mus eleifend aliquet nec" IsUpgrade="False" Summary="Nam duis habitant vestibulum nunc" UpdateTime="06/01/2012 15:39:25">
+					<CoApp_Updater_Model:Product.NewId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Sapien blandit orci commodo" IsCanonical="True" IsPartial="False" MatchVersionOrGreater="True" Name="Curabitur non phasellus facilisi" PackageName="Semper sociis per" PublicKeyToken="Consequat taciti" SimpleName="Sed pede sem"/>
+					</CoApp_Updater_Model:Product.NewId>
+					<CoApp_Updater_Model:Product.OldId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Quam convallis adipiscing faucibus magna" IsCanonical="False" IsPartial="True" MatchVersionOrGreater="False" Name="Quis dignissim tellus" PackageName="Tempor parturient massa" PublicKeyToken="Tempus sit conubia vel urna" SimpleName="Metus cubilia cras"/>
+					</CoApp_Updater_Model:Product.OldId>
+				</CoApp_Updater_Model:Product>
+			</CoApp_Updater_ViewModel:SelectableProduct.Product>
+			<CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+				<CoApp_Updater_ViewModel:SelectUpdatesViewModel IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="Standard" SubTitle="Vestibulum sed dis morbi tortor" Title="Inceptos est interdum neque">
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+						<CollectionViewSource IsLiveFilteringRequested="False" IsLiveSortingRequested="False" IsLiveGroupingRequested="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+				</CoApp_Updater_ViewModel:SelectUpdatesViewModel>
+			</CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+		</CoApp_Updater_ViewModel:SelectableProduct>
+		<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="True">
+			<CoApp_Updater_ViewModel:SelectableProduct.Product>
+				<CoApp_Updater_Model:Product DisplayName="Turpis varius netus lobortis" IsUpgrade="False" Summary="Auctor senectus" UpdateTime="06/01/2012 15:39:25">
+					<CoApp_Updater_Model:Product.NewId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Elementum nascetur amet facilisis" IsCanonical="True" IsPartial="False" MatchVersionOrGreater="True" Name="Fermentum hac adipiscing fringilla" PackageName="Nulla dapibus habitasse aenean parturient" PublicKeyToken="Egestas hendrerit himenaeos ante vestibulum" SimpleName="Euismod imperdiet pharetra placerat arcu"/>
+					</CoApp_Updater_Model:Product.NewId>
+					<CoApp_Updater_Model:Product.OldId>
+						<CoApp_Packaging_Common:CanonicalName GeneralName="Diam feugiat" IsCanonical="False" IsPartial="True" MatchVersionOrGreater="False" Name="Leo malesuada penatibus gravida" PackageName="Eget iaculis mus pulvinar mauris" PublicKeyToken="Nullam vestibulum nec" SimpleName="Elit aptent sagittis non"/>
+					</CoApp_Updater_Model:Product.OldId>
+				</CoApp_Updater_Model:Product>
+			</CoApp_Updater_ViewModel:SelectableProduct.Product>
+			<CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+				<CoApp_Updater_ViewModel:SelectUpdatesViewModel IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="Standard" SubTitle="Congue enim porttitor cursus erat" Title="Porta tincidunt per">
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="True" IsInDesignModeStatic="False" IsSelected="False"/>
+						<CoApp_Updater_ViewModel:SelectableProduct IsInDesignMode="False" IsInDesignModeStatic="True" IsSelected="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+					<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+						<CollectionViewSource IsLiveFilteringRequested="False" IsLiveSortingRequested="False" IsLiveGroupingRequested="True"/>
+					</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+				</CoApp_Updater_ViewModel:SelectUpdatesViewModel>
+			</CoApp_Updater_ViewModel:SelectableProduct.ViewModel>
+		</CoApp_Updater_ViewModel:SelectableProduct>
+	</CoApp_Updater_ViewModel:SelectUpdatesViewModel.ProductList>
+	<CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+		<CollectionViewSource IsLiveFilteringRequested="True" IsLiveSortingRequested="True" IsLiveGroupingRequested="False"/>
+	</CoApp_Updater_ViewModel:SelectUpdatesViewModel.Products>
+</CoApp_Updater_ViewModel:SelectUpdatesViewModel>

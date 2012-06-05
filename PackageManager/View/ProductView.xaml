@@ -7,7 +7,10 @@
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:Converters="clr-namespace:CoApp.Gui.Toolkit.Support.Converters;assembly=CoApp.Gui.Toolkit"
              xmlns:Controls="clr-namespace:CoApp.PackageManager.Controls"
-             xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit" mc:Ignorable="d" 
+             xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
+                           xmlns:Support="clr-namespace:CoApp.PackageManager.Support"
+                           xmlns:Support1="clr-namespace:CoApp.Gui.Toolkit.Support;assembly=CoApp.Gui.Toolkit"
+                           mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="1024"  TextBlock.FontSize="14">
     <Controls1:CoAppFrameChild.Resources>
     	
@@ -105,31 +108,46 @@
 
 
                     <Controls1:StyleableHeaderControl Header="Tags" Style="{DynamicResource PackageSectionStyle}" Visibility="{Binding Tags, Converter={StaticResource EnumerableCountToVisibilityConverter}}">
-                        <Controls:DelimitedControl ItemsSource="{Binding Tags}">
+                        <!--<Controls1:CommaItemsControl ItemsSource="{Binding Tags}">
+                            <Controls1:CommaItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <Run Text="{Binding Tag}"/>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </Controls1:CommaItemsControl.ItemTemplate>
+                        </Controls1:CommaItemsControl>
+                        
+                        <Controls:DelimitedControl >
 
                             <Controls:DelimitedControl.ValueTemplate>
                                 <DataTemplate>
                                     <Button Content="{Binding Tag}" Style="{StaticResource MetroLinkButtonStyle}" Command="{Binding Navigate}"/>
                                 </DataTemplate>
                             </Controls:DelimitedControl.ValueTemplate>
-                        </Controls:DelimitedControl>
+                        </Controls:DelimitedControl>-->
                     </Controls1:StyleableHeaderControl>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Details" Style="{DynamicResource ProductPackageTabStyle}">
                 <StackPanel>
                     <Controls1:StyleableHeaderControl Header="Dependencies" Style="{DynamicResource PackageSectionStyle}">
-                        <Controls:DelimitedControl ItemsSource="{Binding Dependencies}">
 
-                            <Controls:DelimitedControl.ValueTemplate>
-                                <DataTemplate>
-                                    <Button Content="{Binding Package.Name}" Style="{StaticResource MetroLinkButtonStyle}" Command="{Binding Navigate}"/>
-                                </DataTemplate>
-                            </Controls:DelimitedControl.ValueTemplate>
-                        </Controls:DelimitedControl>
+                        <TextBlock Support1:TextBlockExtensions.InlinesList="{Binding Path=Dependencies, Converter={StaticResource CommaDelimitedConverter1}}" TextWrapping="Wrap" />
+        
                     </Controls1:StyleableHeaderControl>
                     
                     <Controls1:StyleableHeaderControl Header="All Versions" Style="{DynamicResource PackageSectionStyle}">
+                        <!--<Controls1:CommaItemsControl ItemsSource="{Binding AllVersions}">
+                            <Controls1:CommaItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <Run Text="{Binding Package.Name, PresentationTraceSources.TraceLevel=High}"/>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </Controls1:CommaItemsControl.ItemTemplate>
+                        </Controls1:CommaItemsControl>
+                        
                         <Controls:DelimitedControl ItemsSource="{Binding AllVersions}" >
 
                             <Controls:DelimitedControl.ValueTemplate>
@@ -137,7 +155,7 @@
                                     <Button Content="{Binding Package.Name}" Style="{StaticResource MetroLinkButtonStyle}" Command="{Binding Navigate}"/>
                                 </DataTemplate>
                             </Controls:DelimitedControl.ValueTemplate>
-                        </Controls:DelimitedControl>
+                        </Controls:DelimitedControl>-->
                     </Controls1:StyleableHeaderControl>
                 </StackPanel>
             </TabItem>

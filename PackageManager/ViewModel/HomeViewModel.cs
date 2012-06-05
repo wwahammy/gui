@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.ViewModels;
@@ -12,16 +15,18 @@ namespace CoApp.PackageManager.ViewModel
     public class HomeViewModel : ScreenViewModel
     {
         internal IFeaturedService Featured;
+        internal ICoAppService CoApp;
 
         private ObservableCollection<PanoramaItemSource> _panoramaItems = new ObservableCollection<PanoramaItemSource>();
 
         public HomeViewModel()
         {
             Loaded += OnLoaded;
-           
-            Featured = new LocalServiceLocator().FeaturedService;
+            var loc = new LocalServiceLocator();
+            Featured = loc.FeaturedService;
+            CoApp = loc.CoAppService;
 
-            GoToSearch = new RelayCommand(() => new LocalServiceLocator().NavigationService.GoTo(new ViewModelLocator().SearchViewModel));
+            GoToSearch = new RelayCommand(() => loc.NavigationService.GoTo(new ViewModelLocator().SearchViewModel));
         }
 
         public ICommand GoToSearch { get; set; }
@@ -45,28 +50,40 @@ namespace CoApp.PackageManager.ViewModel
             ScreenWidth = ScreenWidth.FullWidth;
             PanoramaItems.Clear();
 
-           AddPostLoadTask(Featured.GetSections().ContinueWith(t =>
-                                                                    {
-                                                                        foreach (SectionFeature a in t.Result)
-                                                                        {
-                                                                            var panItem = new PanoramaItemSource
-                                                                                              {
-                                                                                                  Name = a.Name,
-                                                                                                  TopLeft = a.TopLeft,
-                                                                                                  BottomCenter =
-                                                                                                      a.BottomCenter,
-                                                                                                  BottomLeft =
-                                                                                                      a.BottomLeft,
-                                                                                                  BottomRight =
-                                                                                                      a.BottomRight
-                                                                                              };
-                                                                            
-                                                                            UpdateOnUI( () => PanoramaItems.Add(panItem));
-                                                                        }
-                                                                    }
-                               ));
+            AddPostLoadTask(
+                CoApp.SystemFeeds.ContinueWith(CreateSectionsFromTask));
+              
         }
+
+        private void CreateSectionsFromTask(Task<IEnumerable<string>> feedsTask)
+        {
+            if (feedsTask.IsCanceled || feedsTask.IsFaulted)
+            {
+                //TODO something bad;
+            }
+
+            //if this crashes we're screwed
+            foreach (SectionFeature a in feedsTask.Result.Select(f => Featured.GetSectionFeatureForFeed(f).Result))
+            {
+                var panItem = new PanoramaItemSource
+                {
+                    Name = a.Name,
+                    TopLeft = a.TopLeft,
+                    BottomCenter =
+                        a.BottomCenter,
+                    BottomLeft =
+                        a.BottomLeft,
+                    BottomRight =
+                        a.BottomRight
+                };
+
+                UpdateOnUI(() => PanoramaItems.Add(panItem));
+            }
+        }
+
     }
+
+    
 
     public class PanoramaItemSource : ViewModelBase
     {

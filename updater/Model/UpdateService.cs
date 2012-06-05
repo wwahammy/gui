@@ -9,6 +9,7 @@ using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.Support;
 using CoApp.Packaging.Client;
 using CoApp.Packaging.Common;
+using CoApp.Toolkit.Collections;
 using CoApp.Toolkit.Configuration;
 using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Logging;
@@ -401,9 +402,11 @@ namespace CoApp.Updater.Model
 
                                                                 ourUpdate =
                                                                    
-                                                                        CoApp.GetPackageDetails(update.CanonicalName).Result;
-                                                                
+                                                                        CoApp.GetPackage(update.CanonicalName, true).Result;
 
+
+                                                                var unsatifiedDependencies = ourUpdate.Dependencies.Where(package => 
+                                                                    package.SatisfiedBy == null).Select(pack => pack.AvailableNewestUpdate).ToArray();
                                                                 //name 
                                                                 
 
@@ -416,7 +419,10 @@ namespace CoApp.Updater.Model
                                                                                 IsUpgrade = isUpgrade,
                                                                                 Summary = ourUpdate.PackageDetails.SummaryDescription,
                                                                                 UpdateTime =
-                                                                                    ourUpdate.PackageDetails.PublishDate
+                                                                                    ourUpdate.PackageDetails.PublishDate,
+                                                                                DependenciesThatNeedToUpdate =  new XList<string>(unsatifiedDependencies.Select(pack => pack.GetNicestPossibleName())),
+                                                                                
+
                                                                             };
                                                             }
                                               ).Distinct(p => p.NewId.GetHashCode(), (x, y) => x.NewId == y.NewId));

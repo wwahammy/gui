@@ -8,6 +8,12 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Colours.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Fonts.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Controls.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppStyle.xaml"/>
+                <ResourceDictionary Source="..\BaseStyle.xaml"/>
+                
                 <ResourceDictionary Source="..\Styles\PrimaryViewStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -1,0 +1,88 @@
+package {
+	name: "CoApp.GUI";
+    display-name: "CoApp GUI";
+    location: "http://coapp.org/repository/${OutputFilename}";
+    feed: "http://coapp.org/repository/packages.atom.xml";
+    publisher: "CoApp Project";
+}
+
+requires {
+	package: "microsoft.blend.sdk-4.0.0.0-any-${Package.PublicKeyToken}";
+	package: "MahApps.Metro-0.7.1-any-${Package.PublicKeyToken}";
+	package: "FluentDateTime-1.6-any-${Package.PublicKeyToken}";
+	package: "GalaSoft.MvvmLight-4-any-${Package.PublicKeyToken}";
+}
+
+metadata {
+    licenses : {
+        "Apache"
+    };
+    
+	description: "A UI kit for creating Metro-style WPF applications";
+    summary: "A UI kit for creating Metro-style WPF applications";
+	author-version : "pre-0.8";
+	stability : "-10";
+}
+
+files[dlls] {
+    root: "..\out";
+	include: {
+        "CoApp.Gui.Toolkit.dll"
+    };
+	
+	trim-path: minimal;
+}
+
+files[xmls] {
+    root: "..\out";
+	include: {
+        "CoApp.Gui.Toolkit.xml"
+    };
+}
+
+assemblies {
+    include : {
+      dlls
+    };
+}
+
+developer-library[dlls] {
+	reference-assemblies:
+	{
+	dlls,
+	xmls
+	};
+    
+}
+
+files[exes] {
+    root: "..\out";
+	include: {
+        "CoApp.Updater.exe"
+    };
+}
+
+
+
+
+
+
+
+application {
+    include : {
+    exes,
+	xmls
+    };
+}
+
+
+
+package-composition {
+    symlinks : { 
+        exes => @"${bin}\${each.Name}" = @"${packagedir}\${each.Name}";
+    };
+    
+    shortcuts : { 
+        @"${apps}\start menu\CoApp\CoApp Updater.lnk" = @"${packagedir}\CoApp.Updater.exe";
+    };
+}

@@ -1,26 +1,25 @@
-﻿<Application x:Class="CoApp.PackageManager.App"
+﻿<Toolkit:CoAppApplication x:Class="CoApp.PackageManager.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:CoApp.PackageManager.ViewModel" mc:Ignorable="d" Startup="Application_Startup" Exit="Application_Exit">
-    <Application.Resources>
+             xmlns:vm="clr-namespace:CoApp.PackageManager.ViewModel"
+                      xmlns:Toolkit="clr-namespace:CoApp.Gui.Toolkit;assembly=CoApp.Gui.Toolkit" mc:Ignorable="d" Startup="Application_Startup" Exit="Application_Exit">
+    <Toolkit:CoAppApplication.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Colours.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Fonts.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Controls.xaml"/>
                 <ResourceDictionary Source="BaseStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppToolkitDictionary.xaml"/>
                 <ResourceDictionary Source="/CoApp.PackageManager;component/Themes/Generic.xaml"/>
-               
-                <ResourceDictionary Source="/CoApp.PackageManager;component/PageResourceDictionary.xaml"/>
-                <ResourceDictionary Source="/CoApp.PackageManager;component/Styles/ProductPackageCommonStyle.xaml"/>
+                <ResourceDictionary Source="/CoApp.Gui.Toolkit;component/Properties/DesignTimeResources.xaml"/>
                 
             </ResourceDictionary.MergedDictionaries>
 			<vm:ViewModelLocator x:Key="Locator"
                              d:IsDataSource="True" />
         </ResourceDictionary>
-    </Application.Resources>
-</Application>
+    </Toolkit:CoAppApplication.Resources>
+</Toolkit:CoAppApplication>

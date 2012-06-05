@@ -20,14 +20,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
     {
         private readonly object _postLoadLock = new object();
         private ObservableCollection<object> _additionalHeaderItems;
-        private bool? _canBlock;
-        private bool? _canChangeSettings;
-        private bool? _canInstall;
-        private bool? _canRemove;
-        private bool? _canRequire;
-        private bool? _canSetSessionFeeds;
-        private bool? _canSetSystemFeeds;
-        private bool? _canUpdate;
+
         internal IPolicyService _policyService;
         private ScreenWidth _screenWidth = ScreenWidth.Standard;
         private string _subTitle;
@@ -83,89 +76,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
             }
         }
 
-        public bool? CanUpdate
-        {
-            get { return _canUpdate; }
-            set
-            {
-                _canUpdate = value;
-                RaisePropertyChanged("CanUpdate");
-            }
-        }
-
-
-        public bool? CanBlock
-        {
-            get { return _canBlock; }
-            set
-            {
-                _canBlock = value;
-                RaisePropertyChanged("CanBlock");
-            }
-        }
-
-
-        public bool? CanRequire
-        {
-            get { return _canRequire; }
-            set
-            {
-                _canRequire = value;
-                RaisePropertyChanged("CanRequire");
-            }
-        }
-
-        public bool? CanSetSystemFeeds
-        {
-            get { return _canSetSystemFeeds; }
-            set
-            {
-                _canSetSystemFeeds = value;
-                RaisePropertyChanged("CanSetSystemFeeds");
-            }
-        }
-
-        public bool? CanSetSessionFeeds
-        {
-            get { return _canSetSessionFeeds; }
-            set
-            {
-                _canSetSessionFeeds = value;
-                RaisePropertyChanged("CanSetSessionFeeds");
-            }
-        }
-
-
-        public bool? CanRemove
-        {
-            get { return _canRemove; }
-            set
-            {
-                _canRemove = value;
-                RaisePropertyChanged("CanRemove");
-            }
-        }
-
-
-        public bool? CanInstall
-        {
-            get { return _canInstall; }
-            private set
-            {
-                _canInstall = value;
-                RaisePropertyChanged("CanInstall");
-            }
-        }
-
-        public bool? CanChangeSettings
-        {
-            get { return _canChangeSettings; }
-            set
-            {
-                _canChangeSettings = value;
-                RaisePropertyChanged("CanChangeSettings");
-            }
-        }
+       
 
         public ScreenWidth ScreenWidth
         {
@@ -199,8 +110,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
 
         private void OnLoaded()
         {
-            _policyService.CanUpdate.ContinueWith(
-                t => UpdateOnUI(() => CanUpdate = t.Result));
+          /*
             _policyService.CanBlock.ContinueWith(
                 t => UpdateOnUI(() => CanBlock = t.Result));
             _policyService.CanRequire.ContinueWith(
@@ -214,7 +124,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
             _policyService.CanInstall.ContinueWith(
                 t => UpdateOnUI(() => CanInstall = t.Result));
             _policyService.CanChangeSettings.ContinueWith(
-                t => UpdateOnUI(() => CanChangeSettings = t.Result));
+                t => UpdateOnUI(() => CanChangeSettings = t.Result));*/
         }
 
 

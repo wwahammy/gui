@@ -1,13 +1,14 @@
-﻿<Application x:Class="CoApp.Updater.App"
+﻿<Toolkit:CoAppApplication x:Class="CoApp.Updater.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:CoApp.Updater.ViewModel"
-             Exit="Application_Exit"
+                      xmlns:Toolkit="clr-namespace:CoApp.Gui.Toolkit;assembly=CoApp.Gui.Toolkit"
+                      Exit="Application_Exit"
              mc:Ignorable="d" Startup="Application_Startup">
-    
-    <Application.Resources>
+
+    <Toolkit:CoAppApplication.Resources>
         <ResourceDictionary>
             
            
@@ -17,9 +18,9 @@
  
 
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Colours.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Fonts.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Controls.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppStyle.xaml"/>
                 <ResourceDictionary Source="BaseStyle.xaml"/>
                 <ResourceDictionary Source="Styles/PrimaryViewStyles.xaml"/>
@@ -30,6 +31,6 @@
 
 
         </ResourceDictionary>
-    </Application.Resources>
+    </Toolkit:CoAppApplication.Resources>
     
-</Application>
+</Toolkit:CoAppApplication>

@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoApp.Gui.Toolkit", "Toolki
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoApp.PackageManager", "PackageManager\CoApp.PackageManager.csproj", "{20C5F32D-4542-465C-B949-C7D4265CB5F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{87C5068A-7DE6-405F-BBAC-04662FBAE225}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,12 +32,6 @@ Global
 		{20C5F32D-4542-465C-B949-C7D4265CB5F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{20C5F32D-4542-465C-B949-C7D4265CB5F0}.SampleData|Any CPU.ActiveCfg = SampleData|Any CPU
 		{20C5F32D-4542-465C-B949-C7D4265CB5F0}.SampleData|Any CPU.Build.0 = SampleData|Any CPU
-		{87C5068A-7DE6-405F-BBAC-04662FBAE225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87C5068A-7DE6-405F-BBAC-04662FBAE225}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87C5068A-7DE6-405F-BBAC-04662FBAE225}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87C5068A-7DE6-405F-BBAC-04662FBAE225}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87C5068A-7DE6-405F-BBAC-04662FBAE225}.SampleData|Any CPU.ActiveCfg = Debug|Any CPU
-		{87C5068A-7DE6-405F-BBAC-04662FBAE225}.SampleData|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

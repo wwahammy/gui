@@ -11,6 +11,7 @@ using CoApp.Gui.Toolkit.Support;
 using CoApp.PackageManager.Model.Interfaces;
 using CoApp.PackageManager.Properties;
 using CoApp.Packaging.Client;
+using CoApp.Packaging.Common;
 using CoApp.Toolkit.Extensions;
 using CoApp.PackageManager.Support;
 
@@ -27,11 +28,12 @@ namespace CoApp.PackageManager.Model
         public Task<IEnumerable<SectionFeature>> GetSections()
         {
 
-            return Task.Factory.StartNew(() => GetSectionsInternal());
+            return null;
+            //return Task.Factory.StartNew(() => GetSectionsInternal());
            
 
         }
-
+        /*
         private IEnumerable<SectionFeature> GetSectionsInternal()
         {
             var feeds = CoApp.SystemFeeds;
@@ -44,16 +46,40 @@ namespace CoApp.PackageManager.Model
 
             return feeds.Continue(enumerable =>
                 {
-                    
+                    var hmmm = new List<FeedAndPackages>()
+                    foreach 
                     var getFeedPackages =
-                        enumerable.Select(s =>new FeedAndPackages {Feed=s,  Packages= CoApp.GetPackages("*", locationFeed: s)});
+                        enumerable.Select(s =>new FeedAndPackages {Feed=s,  
+                            Packages= CoApp.GetPackages("*", collectionFilter: p => p.HighestPackages(), locationFeed: s)});
+
                     return getFeedPackages.Select(t => t.Packages).ContinueAlways(
                         tasks => FeedsAndPackages(getFeedPackages));
 
 
                 }
                ).Result;
+        }*/
+
+        public Task<SectionFeature> GetSectionFeatureForFeed(string feed)
+        {
+            return Task.Factory.StartNew(() =>
+                                      {
+                                          var f = new FeedAndPackages
+                                                      {
+                                                          Feed = feed,
+                                                          Packages =
+                                                              CoApp.GetPackages("*",
+                                                                                collectionFilter:
+                                                                                    p => p.HighestPackages(),
+                                                                                locationFeed: feed)
+                                                      };
+                                          return CreateSectionFeature(f);
+
+                                      });
+
         }
+
+       
 
         
         class FeedAndPackages
@@ -63,98 +89,52 @@ namespace CoApp.PackageManager.Model
             public Task<IEnumerable<Package>>  Packages { get; set; }
         }
         
-        private IEnumerable<SectionFeature> FeedsAndPackages(IEnumerable<FeedAndPackages> feeds)
+     
+
+        private SectionFeature CreateSectionFeature(FeedAndPackages f)
         {
-            foreach (var f in feeds)
-            {
+          
                 if (!f.Packages.IsFaulted && !f.Packages.IsCanceled && f.Packages.Result.Any())
                 {
                     var packages = f.Packages.Result;
                     switch (packages.Count())
                     {
                         case 1:
-                            yield return new SectionFeature {Name = f.Feed, TopLeft = ConvertPackageToProductInfo( packages.First())};
-                            break;
+                            return new SectionFeature { Name = f.Feed, TopLeft = ProductInfo.FromIPackage((IPackage)packages.First()) };
+                           
                         case 2:
-                            yield return new SectionFeature {Name = f.Feed, TopLeft = ConvertPackageToProductInfo( packages.First()), BottomLeft = ConvertPackageToProductInfo( packages.Skip(1).First())};
-                            break;
+                            return new SectionFeature { Name = f.Feed, TopLeft = ProductInfo.FromIPackage((IPackage)packages.First()), 
+                                BottomLeft = ProductInfo.FromIPackage((IPackage)packages.Skip(1).First()) };
+                           
                         case 3:
-                            yield return new SectionFeature
+                            return new SectionFeature
                                              {
                                                  Name = f.Feed,
-                                                 TopLeft = ConvertPackageToProductInfo(packages.First()),
-                                                 BottomLeft = ConvertPackageToProductInfo(packages.Skip(1).First()),
-                                                 BottomCenter = ConvertPackageToProductInfo(packages.Skip(2).First())
+                                                 TopLeft = ProductInfo.FromIPackage((IPackage)packages.First()),
+                                                 BottomLeft = ProductInfo.FromIPackage((IPackage)packages.Skip(1).First()),
+                                                 BottomCenter = ProductInfo.FromIPackage((IPackage)packages.Skip(2).First())
                                              };
-                            break;
+                           
                         default:
-                            yield return new SectionFeature
+                            return new SectionFeature
                                              {
                                                  Name = f.Feed,
-                                                 TopLeft = ConvertPackageToProductInfo(packages.First()),
-                                                 BottomLeft = ConvertPackageToProductInfo(packages.Skip(1).First()),
-                                                 BottomCenter = ConvertPackageToProductInfo(packages.Skip(2).First()),
-                                                 BottomRight = ConvertPackageToProductInfo(packages.Skip(3).First())
+                                                 TopLeft = ProductInfo.FromIPackage(packages.First()),
+                                                 BottomLeft = ProductInfo.FromIPackage(packages.Skip(1).First()),
+                                                 BottomCenter = ProductInfo.FromIPackage(packages.Skip(2).First()),
+                                                 BottomRight = ProductInfo.FromIPackage(packages.Skip(3).First())
                                              };
-                            break;
+                            
 
                     }
                 }
-            }
-        }
-
-        private ProductInfo ConvertPackageToProductInfo(Package p)
-        {
-            //var bitmapSource = LoadBitmap(p.PackageDetails.Icons[0]);
-            return new ProductInfo
-                       {
-                           CanonicalName = p.CanonicalName,
-                           Name = p.Name,
-                           
-                         // Icon = bitmapSource,
-                           Posted = p.PackageDetails.PublishDate,
-                           Summary = p.PackageDetails.SummaryDescription
-                       };
-        }
-
-        private BitmapSource LoadBitmap(string base64String)
-        {
-
-
-            try
-            {
-                var array = Convert.FromBase64String(base64String);
-                using (var mem = new MemoryStream(array))
-                {
-                    var bitmapSource = new BitmapImage();
-                    bitmapSource.BeginInit();
-                    bitmapSource.CacheOption = BitmapCacheOption.OnLoad;
-
-                    bitmapSource.StreamSource = mem;
-                    bitmapSource.EndInit();
-                    bitmapSource.Freeze();
-                    return bitmapSource;
-                }
-                
-
-            }
-            catch (Exception)
-            {
-                 
-                using (var mem = new MemoryStream(Resources.software))
-                {
-                    var bitmapSource = new BitmapImage();
-                    bitmapSource.BeginInit();
-                    bitmapSource.CacheOption = BitmapCacheOption.OnLoad;
-
-                    bitmapSource.StreamSource = mem;
-                    bitmapSource.EndInit();
-                    bitmapSource.Freeze();
-                    return bitmapSource;
-                }
-            }
+            return null;
 
         }
+
+
+
+       
     }
 
    

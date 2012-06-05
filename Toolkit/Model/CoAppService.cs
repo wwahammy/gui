@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Packaging.Client;
 using CoApp.Packaging.Common;
-using CoApp.Packaging.Common.Model;
 using CoApp.Toolkit.Configuration;
 using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Logging;
@@ -109,37 +108,19 @@ namespace CoApp.Gui.Toolkit.Model
                                                           collectionFilter = null, bool withDetails = false,
                                                       string locationFeed = null)
         {
-            return EPM.FindPackages(packageName, pkgFilter, collectionFilter, locationFeed).ContinueWith(t =>
-                                                                                                             {
-                                                                                                                 t.
-                                                                                                                     RethrowWhenFaulted
-                                                                                                                     ();
-                                                                                                                 if (
-                                                                                                                     withDetails)
-                                                                                                                 {
-                                                                                                                     foreach
-                                                                                                                         (
-                                                                                                                         var
-                                                                                                                             p
-                                                                                                                             in
-                                                                                                                             t
-                                                                                                                                 .
-                                                                                                                                 Result
-                                                                                                                         )
-                                                                                                                     {
-                                                                                                                         var
-                                                                                                                             pd
-                                                                                                                                 =
-                                                                                                                                 p
-                                                                                                                                     .
-                                                                                                                                     PackageDetails;
-                                                                                                                     }
-                                                                                                                 }
+            return EPM.FindPackages(packageName, pkgFilter, collectionFilter, locationFeed)
+                .ContinueWith(t =>
+                                  {
+                                      t.RethrowWhenFaulted();
+                                      if (withDetails)
+                                      {
+                                          return
+                                              GetPackagesWithDetails
+                                                  (t.Result);
+                                      }
 
-                                                                                                                 return
-                                                                                                                     t.
-                                                                                                                         Result;
-                                                                                                             }
+                                      return t.Result;
+                                  }
                 );
         }
 
@@ -345,12 +326,10 @@ namespace CoApp.Gui.Toolkit.Model
                             t.RethrowWhenFaulted();
                         }
 
-                        var task = EPM.RemovePackages(t.Result.Cast<CanonicalName>(), false);
+                        Task<int> task = EPM.RemovePackages(t.Result.Cast<CanonicalName>(), false);
                         task.ContinueOnFail(e => Logger.Warning(e.Unwrap()));
                         return task.Result;
                     });
-
-   
         }
 
         public Task InstallPackage(CanonicalName canonicalName, Action<string, int, int> installProgress,
@@ -385,6 +364,12 @@ namespace CoApp.Gui.Toolkit.Model
         }
 
         #endregion
+
+        private IList<Package> GetPackagesWithDetails(IEnumerable<Package> packages)
+        {
+            //doing this so hell doesn't break loose
+            return packages.Select(p => GetPackageDetails(p).Result).ToList();
+        }
 
         public Task<Package> GetPackageDetails(Package package)
         {

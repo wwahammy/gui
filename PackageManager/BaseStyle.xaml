@@ -8,4 +8,7 @@
     <Converters:ImageToColorConverter x:Key="ImageToColorConverter"/>
     <Converters:AlternationEqualityConverter x:Key="AlternationEqualityConverter"/>
     <Converters1:PrettyPackageNameConverter x:Key="PrettyPackageNameConverter"/>
+  <Converters1:CommaDelimitedPackageListConverter x:Key="CommaDelimitedConverter1" />
+  <Converters1:CommaDelimitedLicenseListConverter x:Key="CommaDelimitedLicenseListConverter1" />
+  <Converters1:CommaDelimitedTagListConverter x:Key="CommaDelimitedTagListConverter1" />
 </ResourceDictionary>

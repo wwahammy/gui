@@ -22,7 +22,8 @@ namespace CoApp.Gui.Toolkit.Support
 
         public static string GetNicestVersion(this IPackage p)
         {
-            return String.IsNullOrWhiteSpace(p.PackageDetails.AuthorVersion)
+
+            return p.PackageDetails == null || String.IsNullOrWhiteSpace(p.PackageDetails.AuthorVersion)
                        ? p.Version.ToString()
                        : p.PackageDetails.AuthorVersion;
         }

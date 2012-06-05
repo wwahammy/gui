@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Controls;
 using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.ViewModels;
+using CoApp.Toolkit.Extensions;
 using CoApp.Updater.Messages;
 using CoApp.Updater.Model;
 using CoApp.Updater.Model.Interfaces;
@@ -37,6 +39,7 @@ namespace CoApp.Updater.ViewModel
             MessengerInstance.Register<InstallationFailedMessage>(this, HandleInstallFailed);
             MessengerInstance.Register<InstallationFinishedMessage>(this, HandleInstallFinished);
             MessengerInstance.Register<SelectedProductsChangedMessage>(this, HandleChanged);
+            MessengerInstance.Register<PoliciesUpdatedMessage>(this, PoliciesUpdated);
             Loaded += OnLoaded;
             var loc = new LocalServiceLocator();
             UpdateService = loc.UpdateService;
@@ -63,6 +66,27 @@ namespace CoApp.Updater.ViewModel
                                                                                                 }
                                                                                         }
                                                                             }));
+        }
+
+
+        private bool? _canUpdate;
+
+        public bool? CanUpdate
+        {
+            get { return _canUpdate; }
+            set
+            {
+                _canUpdate = value;
+                RaisePropertyChanged("CanUpdate");
+            }
+        }
+
+        
+
+        private void PoliciesUpdated(PoliciesUpdatedMessage policiesUpdatedMessage= null)
+        {
+            PolicyService.CanUpdate.ContinueAlways(
+                t => UpdateOnUI(() => CanUpdate = t.Result));
         }
 
         public ICommand ShowScreen { get; set; }
@@ -160,7 +184,8 @@ namespace CoApp.Updater.ViewModel
 
         private void OnLoaded()
         {
-            ResetUI();
+            
+            AddPostLoadTask(Task.Factory.StartNew(() => PoliciesUpdated()).ContinueWith(t => ResetUI()));
         }
 
 

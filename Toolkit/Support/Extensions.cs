@@ -44,5 +44,25 @@ namespace CoApp.Gui.Toolkit.Support
             }
         }
 
+        private const byte mask = 15;
+        private const string hex = "0123456789ABCDEF";
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pkt"></param>
+        /// <returns></returns>
+        /// <from>http://msdn.microsoft.com/en-us/library/system.reflection.assemblyname.getpublickeytoken(v=vs.95).aspx</from>
+        public static string PublicKeyTokenAsString(this byte[] pkt)
+        {
+            System.Text.StringBuilder output = new System.Text.StringBuilder();
+            foreach (byte b in pkt)
+            {
+                output.Append(hex[b / 16 & mask]);
+                output.Append(hex[b & mask]);
+            }
+
+            return output.ToString();
+        }
     }
 }

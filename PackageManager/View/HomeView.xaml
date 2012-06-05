@@ -57,19 +57,19 @@
                         
                         
                         BottomLeftBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomLeftIcon, Converter={StaticResource ImageToColorConverter}}"
-                        BottomLeftIcon="{Binding BottomLeft.Icon}" BottomLeftTitle="{Binding BottomLeft.Name}" BottomLeftSummary="{Binding TopLeft.Summary}"
+                        BottomLeftIcon="{Binding BottomLeft.Icon}" BottomLeftTitle="{Binding BottomLeft.Name}" BottomLeftSummary="{Binding ButtomLeft.Summary}"
                         BottomLeftForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomLeftBrush, Converter={StaticResource BgToFgConverter}}"
                         BottomLeftClickCommand="{Binding GoToProductPage}" BottomLeftClickCommandParameter="{Binding BottomLeft.CanonicalName}"
                         
                         
                         BottomCenterBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomCenterIcon, Converter={StaticResource ImageToColorConverter}}"
-                        BottomCenterIcon="{Binding BottomCenter.Icon}" BottomCenterTitle="{Binding BottomCenter.Name}" BottomCenterSummary="{Binding TopLeft.Summary}"
+                        BottomCenterIcon="{Binding BottomCenter.Icon}" BottomCenterTitle="{Binding BottomCenter.Name}" BottomCenterSummary="{Binding BottomCenter.Summary}"
                         BottomCenterForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomCenterBrush, Converter={StaticResource BgToFgConverter}}"
                         BottomCenterClickCommand="{Binding GoToProductPage}" BottomCenterClickCommandParameter="{Binding BottomCenter.CanonicalName}"
                         
                         
                         BottomRightBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomRightIcon, Converter={StaticResource ImageToColorConverter}}"
-                        BottomRightIcon="{Binding BottomRight.Icon}" BottomRightTitle="{Binding BottomCenter.Name}" BottomRightSummary="{Binding TopLeft.Summary}"
+                        BottomRightIcon="{Binding BottomRight.Icon}" BottomRightTitle="{Binding BottomCenter.Name}" BottomRightSummary="{Binding BottomRight.Summary}"
                         BottomRightForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomRightBrush, Converter={StaticResource BgToFgConverter}}"
                         BottomRightClickCommand="{Binding GoToProductPage}" BottomRightClickCommandParameter="{Binding BottomRight.CanonicalName}"
                         

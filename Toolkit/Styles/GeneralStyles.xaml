@@ -8,9 +8,9 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
     
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Colours.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Fonts.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Controls.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
     <Converters1:NullEmptyStringToVisibilityConverter x:Key="NullEmptyStringToVisibilityConverter1"/>
@@ -770,4 +770,5 @@
         </Setter>
     </Style>
   <Converters1:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter1" />
+   <Converters1:CommaConverter x:Key="CommaConverter1"/>
 </ResourceDictionary>

@@ -5,49 +5,39 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using CoApp.Gui.Toolkit;
+using CoApp.Gui.Toolkit.Messages;
 using CoApp.Toolkit.Extensions;
+using CoApp.Toolkit.Logging;
 using CoApp.Updater.Model;
 using CoApp.Updater.Support;
 using CoApp.Updater.ViewModel;
 using GalaSoft.MvvmLight.Threading;
+using MahApps.Metro;
 
 namespace CoApp.Updater
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App
+    public partial class App : CoAppApplication
     {
         private NotifyIcon _notifyIcon;
         private LocalServiceLocator loc = new LocalServiceLocator();
 
         public App() : base()
         {
-            DispatcherUnhandledException += OnDispatcherUnhandledException;
-            System.AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
-        }
 
-        System.Reflection.Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            if (!args.Name.Contains(".resources,"))
-            {
-                AssemblyName name = new AssemblyName(args.Name);
-                name.SetPublicKeyToken(null);
-                //return Assembly.Load(name);
-                //Assembly.Load()
-            }
-            return null;
+            //load possible assemblies
+            var n = new GoToMessage();
+            var a = new Accent();
+            DispatcherUnhandledException += OnDispatcherUnhandledException;
+            
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs dispatcherUnhandledExceptionEventArgs)
         {
-            throw new NotImplementedException();
-        }
-
-        static App()
-        {
-            
-            DispatcherHelper.Initialize();
+            Logger.Error(dispatcherUnhandledExceptionEventArgs.Exception);
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
@@ -86,12 +76,6 @@ namespace CoApp.Updater
                 if (quietSupport.HandleScheduledTaskCall().Result)
                     return;
             }
-
-            
-            
-
-
-
 
             var mainWindow = new MainWindow();
 

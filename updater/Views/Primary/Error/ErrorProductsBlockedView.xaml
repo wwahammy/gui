@@ -11,11 +11,12 @@
         <ItemsControl ItemsSource="{Binding}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type Errors:ProductToUnblock}">
+                    <!--
                     <Controls:UnblockControl Title="{Binding Title}" ElevatedCommand="{Binding Unblock}" ElevatedCommandParameter="{Binding}" 
                                              UnelevatedCommand="{Binding Unelevated}" UnelevatedCommandParameter="{Binding}" WaitingOnUnblock="{Binding WaitingOnUnblock}"
                                              InError="{Binding Error}" ShowError="{Binding ShowErrorMessage}" MustElevate="{Binding Path=(Support:CanBlockProperties.CanBlock), RelativeSource={RelativeSource TemplatedParent}}"/>
                     
-                    
+                    -->
                 </DataTemplate>
                               
             </ItemsControl.ItemTemplate>

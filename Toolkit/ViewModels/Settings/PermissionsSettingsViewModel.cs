@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Linq;
+using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Model;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using GalaSoft.MvvmLight.Command;
@@ -27,6 +28,7 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
         public PermissionsSettingsViewModel()
         {
             Title = "Permissions";
+            MessengerInstance.Register<PoliciesUpdatedMessage>(this, GetPoliciesAgain);
             Updating = new PermissionViewModel();
             Installing = new PermissionViewModel();
             Remove = new PermissionViewModel();
@@ -35,19 +37,38 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
             Require = new PermissionViewModel();
             ChangeSessionFeed = new PermissionViewModel();
             ChangeSystemFeed = new PermissionViewModel();
-            
-
-            Loaded += OnLoaded;
-
             Policy = new LocalServiceLocator().PolicyService;
             Save = new RelayCommand(ExecuteSave);
 
+
+            Loaded += OnLoaded;
+
+           
             UserName = Policy.UserName;
+        }
+
+        private void GetPoliciesAgain(PoliciesUpdatedMessage policiesUpdatedMessage = null)
+        {
+            Policy.InstallPolicy.ContinueWith((t) =>
+                                              UpdateOnUI(() => Installing.Result = t.Result));
+            Policy.UpdatePolicy.ContinueWith((t) =>
+                                             UpdateOnUI(() => Updating.Result = t.Result));
+
+            Policy.RemovePolicy.ContinueWith((t) =>
+                                             UpdateOnUI(() => Remove.Result = t.Result));
+            Policy.ActivePolicy.ContinueWith(t => UpdateOnUI(() => Active.Result = t.Result));
+
+            Policy.BlockPolicy.ContinueWith(t => UpdateOnUI(() => Block.Result = t.Result));
+
+            Policy.RequirePolicy.ContinueWith(t => UpdateOnUI(() => Require.Result = t.Result));
+            Policy.SystemFeedsPolicy.ContinueWith(t => UpdateOnUI(() => ChangeSystemFeed.Result = t.Result));
+
+            Policy.SessionFeedsPolicy.ContinueWith(t => UpdateOnUI(() => ChangeSessionFeed.Result = t.Result));
         }
 
         private void ExecuteSave()
         {
-            var saveTasks = new Task[]
+            var saveTasks = new []
                                 {
                                     Policy.SetUpdatePolicy(Updating.Result),
                                     Policy.SetInstallPolicy(Installing.Result),
@@ -158,22 +179,10 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
 
         private void OnLoaded()
         {
-            Policy.InstallPolicy.ContinueWith((t) =>
-                                              UpdateOnUI(() => Installing.Result = t.Result));
-            Policy.UpdatePolicy.ContinueWith((t) =>
-                                             UpdateOnUI(() => Updating.Result = t.Result));
-
-            Policy.RemovePolicy.ContinueWith((t) =>
-                                             UpdateOnUI(() => Remove.Result = t.Result));
-            Policy.ActivePolicy.ContinueWith(t => UpdateOnUI(() => Active.Result = t.Result));
-
-            Policy.BlockPolicy.ContinueWith(t => UpdateOnUI(() => Block.Result = t.Result));
-
-            Policy.RequirePolicy.ContinueWith(t => UpdateOnUI(() => Require.Result = t.Result));
-            Policy.SystemFeedsPolicy.ContinueWith(t => UpdateOnUI(() => ChangeSystemFeed.Result = t.Result));
-
-            Policy.SessionFeedsPolicy.ContinueWith(t => UpdateOnUI(() => ChangeSessionFeed.Result = t.Result));
+            GetPoliciesAgain();
         }
+
+        
         
         public  ICommand Save { get; set; }
 

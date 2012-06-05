@@ -1,0 +1,12 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:CoApp_PackageManager_Controls="clr-namespace:CoApp.PackageManager.Controls;assembly=CoApp.PackageManager"
+        xmlns:Controls="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
+        x:Class="TestProject.MainWindow"
+        Title="MainWindow" Height="806" Width="801" x:Name="Me">
+    <Grid>
+
+        
+
+        <ItemsPresenter/>
+       
+    </Grid>
+</Window>

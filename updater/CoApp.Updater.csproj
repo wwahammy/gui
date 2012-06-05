@@ -55,6 +55,7 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="CoApp.Client, Version=1.2.0.140, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
@@ -76,8 +77,8 @@
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>lib\MahApps.Metro.dll</HintPath>
+    <Reference Include="MahApps.Metro, Version=0.7.1.0, Culture=neutral, PublicKeyToken=e4472823608665b4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\Microsoft.Expression.Interactions.dll</HintPath>
@@ -303,6 +304,7 @@
     <ProjectReference Include="..\Toolkit\CoApp.Gui.Toolkit.csproj">
       <Project>{9B272BA9-4E30-4B81-AA44-41AE82CDB31E}</Project>
       <Name>CoApp.Gui.Toolkit</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -310,6 +312,7 @@
   </ItemGroup>
   <ItemGroup>
     <DesignData Include="SampleData\BlockedProductErrorSampleData.xaml" />
+    <DesignData Include="SampleData\SelectUpdatesViewModelSampleData.xaml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SampleData\kwrite.png">

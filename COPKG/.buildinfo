@@ -1,0 +1,128 @@
+#product-info {
+    product-name: "MahApp.Metro";
+    version: "0.7.1";
+    original-source-location: "https://github.com/MahApps/MahApps.Metro.git";
+    original-source-website: "https://github.com/MahApps/MahApps.Metro";
+    license: "MSPL";
+    packager: "Eric Schultz <wwahammy@gmail.com>";
+}
+
+release { 
+    // builds the binaries in "Release" mode but does not sign them.
+    set : cfg = "Release";
+    uses : {
+        anycpu 
+    };
+    
+    build-command: @"echo build done.";
+}
+
+test
+{
+
+	uses: release;
+	build-command:  @"echo built singed binaries. done.";
+}
+debug {
+    // builds binaries in debug mode
+    default: false;
+    set : cfg = "Debug";
+    uses : {
+        anycpu 
+    };
+    
+    build-command: @"echo build done.";
+}
+
+package {
+    uses: sign;
+    build-command: @"autopackage.exe COPKG\*.autopkg";
+}
+
+sign { 
+    // builds all the binaries in "Release" mode and digitally signs and 
+    // strong-names the binaries.
+    // 
+    default: false;
+    set : cfg = "Release";
+    uses : {
+		release,
+        sign-binaries
+    };
+        
+    
+    build-command: @"echo built singed binaries. done.";
+}
+
+
+
+sign-binaries {
+    
+    default: false;
+    
+    uses: {
+        anycpu
+    };
+    
+    targets: {
+    };
+    
+    build-command: @"
+        REM sign files in release directory
+        simplesigner --sign --strong-name ""out\**.dll""
+        simplesigner --sign --strong-name ""out\**.exe""
+        
+        REM Everything went ok!
+        exit /b 0
+        
+        REM Something not ok :(
+        :failed
+        echo ERROR: Failure in script. aborting.
+        exit /b 1
+    ";
+}
+
+
+anycpu {
+    default: no;
+    platform : x86;
+    compiler: vc10;
+    requires: "MahApps.Metro-0.7.1";
+	requires: "FluentDateTime-1.6";
+	requires: "GalaSoft.MvvmLight-4";
+    uses: clean;
+    targets: { 
+	
+        @"output\any\${cfg}\bin\CoApp.Gui.Toolkit.dll",
+       @"output\any\${cfg}\bin\CoApp.Updater.exe",
+	   @"output\any\${cfg}\bin\CoApp.Gui.Toolkit.xml"
+
+    };
+
+    build-command: @"
+        msbuild  /p:Configuration=${cfg} ""/p:Platform=Any CPU""  ""CoApp.Gui.sln"" || goto failed
+    
+		xcopy /Q /D /Y  /I ""output\any\${cfg}\bin\CoApp.Gui.Toolkit.xml"" ""out\""  || goto failed
+		xcopy /Q /D /Y  /I ""output\any\${cfg}\bin\CoApp.Gui.Toolkit.dll"" ""out\""  || goto failed
+		xcopy /Q /D /Y  /I ""output\any\${cfg}\bin\CoApp.Updater.exe"" ""out\""  || goto failed
+		
+        REM Everything went ok!
+        exit /b 0
+        
+        REM Something not ok :(
+        :failed
+        echo ERROR: Failure in script. aborting.
+        exit /b 1
+    ";
+  
+}
+
+clean {
+    default: no;
+    
+    clean-command: @"
+        rmdir /s /q out > nul 2>&1
+        for /d %%v in (*) do if exist %%v\obj rmdir /s /q %%v\obj        
+        for /d %%v in (*) do if exist %%v\bin rmdir /s /q %%v\bin
+    ";
+}

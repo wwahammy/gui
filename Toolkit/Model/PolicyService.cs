@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using GalaSoft.MvvmLight.Messaging;
+using CoApp.Toolkit.Extensions;
 
 namespace CoApp.Gui.Toolkit.Model
 {
@@ -46,7 +49,15 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task SetInstallPolicy(PolicyResult policyToSet)
         {
-            return InstallPolicy.ContinueWith(t => ModifyPolicy(t, policyToSet, PolicyType.InstallPackage));
+            return
+                InstallPolicy.ContinueWith(t => ModifyPolicy(t, policyToSet, PolicyType.InstallPackage)).ContinueWith(
+                    t => {
+                             t.RethrowWhenFaulted();
+                        Messenger.Default.Send(new PoliciesUpdatedMessage());
+                    }
+
+
+    );
         }
 
         public Task<PolicyResult> UpdatePolicy
@@ -68,7 +79,15 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task SetRemovePolicy(PolicyResult result)
         {
-            return RemovePolicy.ContinueWith(t => ModifyPolicy(t, result, PolicyType.RemovePackage));
+            return RemovePolicy.ContinueWith(t => ModifyPolicy(t, result, PolicyType.RemovePackage)).ContinueWith(
+                    t =>
+                    {
+                        t.RethrowWhenFaulted();
+                        Messenger.Default.Send(new PoliciesUpdatedMessage());
+                    }
+
+
+    ); ;
         }
 
         public Task<PolicyResult> BlockPolicy
@@ -78,7 +97,16 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task SetBlockPolicy(PolicyResult result)
         {
-            return BlockPolicy.ContinueWith(t => ModifyPolicy(t, result, PolicyType.ChangeBlockedState));
+            return BlockPolicy.ContinueWith(t => ModifyPolicy(t, result, PolicyType.ChangeBlockedState))
+                .ContinueWith(
+                    t =>
+                    {
+                        t.RethrowWhenFaulted();
+                        Messenger.Default.Send(new PoliciesUpdatedMessage());
+                    }
+
+
+    ); ;
         }
 
         public Task<PolicyResult> FreezePolicy

@@ -73,8 +73,10 @@
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\updater\lib\MahApps.Metro.dll</HintPath>
+    <Reference Include="MahApps.Metro, Version=0.7.1.0, Culture=neutral, PublicKeyToken=e4472823608665b4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\MahApps.Metro.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions">
       <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\Microsoft.Expression.Interactions.dll</HintPath>
@@ -151,6 +153,10 @@
     <Compile Include="SampleData\FilterSource\FilterSource.xaml.cs">
       <DependentUpon>FilterSource.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Support\Converters\CommaDelimitedBasicListConverter.cs" />
+    <Compile Include="Support\Converters\CommaDelimitedPackageListConverter.cs" />
+    <Compile Include="Support\Converters\CommaDelimitedTagListConverter.cs" />
+    <Compile Include="Support\Converters\CommaDelimitedLicenseListConverter.cs" />
     <Compile Include="Support\Converters\HorizontalAlignmentToPlacementConverter.cs" />
     <Compile Include="Support\Converters\PrettyPackageNameConverter.cs" />
     <Compile Include="Support\FilterTemplateSelector.cs" />
@@ -244,6 +250,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Properties\DesignTimeResources.xaml" Condition="'$(DesignTime)'=='true' OR ('$(SolutionPath)'!='' AND Exists('$(SolutionPath)') AND '$(BuildingInsideVisualStudio)'!='true' AND '$(BuildingInsideExpressionBlend)'!='true')">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
     <Page Include="SampleData\FilterSource\FilterSource.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -285,6 +296,7 @@
     <ProjectReference Include="..\Toolkit\CoApp.Gui.Toolkit.csproj">
       <Project>{9B272BA9-4E30-4B81-AA44-41AE82CDB31E}</Project>
       <Name>CoApp.Gui.Toolkit</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

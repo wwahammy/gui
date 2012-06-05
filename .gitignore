@@ -14,3 +14,7 @@ coapp-tools-personal.sln
 *.user
 */obj
 ipch
+
+out
+COPKG/*.msi
+COPKG/*.wixpdb

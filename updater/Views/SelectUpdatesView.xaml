@@ -6,10 +6,10 @@
     xmlns:CoApp_Updater_Controls="clr-namespace:CoApp.Updater.Controls"
      xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=WindowsBase"
     xmlns:Views="clr-namespace:CoApp.Updater.Views" xmlns:Support="clr-namespace:CoApp.Updater.Support"
-    mc:Ignorable="d"
+    xmlns:Support1="clr-namespace:CoApp.Gui.Toolkit.Support;assembly=CoApp.Gui.Toolkit" mc:Ignorable="d"
     x:Class="CoApp.Updater.Views.SelectUpdatesView"
     x:Name="MainSelectUpdateView"
-    d:DesignWidth="1024" d:DesignHeight="768">
+    d:DesignWidth="1024" d:DesignHeight="768" d:DataContext="{d:DesignData /SampleData/SelectUpdatesViewModelSampleData.xaml}">
     <!--DataContext="{Binding SelectUpdateViewModel, Source={StaticResource Locator}}" Title="{Binding Title}"-->
     <UserControl.Resources>
         <ControlTemplate x:Key="ListViewItemTemplateForSelecting" TargetType="{x:Type ListViewItem}">
@@ -98,7 +98,7 @@
         					<Border x:Name="HeaderBorder"
         						Padding="{TemplateBinding Padding}">
         						<ContentPresenter x:Name="HeaderContent"
-        							Content="{TemplateBinding Content, Converter={StaticResource ToUpperConverter}}"
+        							Content="{TemplateBinding Content}"
         							TextBlock.FontWeight="SemiBold"
         							Margin="0,0,0,1"
         							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -149,7 +149,11 @@
         	</Style.Triggers>
         </Style>
 		
+		
+
+		
     </UserControl.Resources>
+	
         <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -187,18 +191,34 @@
                         <StackPanel  Margin="0,0,0,15" Orientation="Horizontal">
                             <TextBlock Text="Published: " FontWeight="Bold"/>
                             <TextBlock Text="{Binding UpdateTime}"/>
-                        </StackPanel>                      
+                        </StackPanel>
+                        
+                        <StackPanel Margin="0,0,0,15" Orientation="Horizontal">
+                            <TextBlock Text="Also requires updates to: " FontWeight="Bold"/>
+                            <TextBlock Support1:TextBlockExtensions.InlinesList="{Binding Path=DependenciesThatNeedToUpdate, Converter={StaticResource CommaConverter1}, PresentationTraceSources.TraceLevel=High}" TextWrapping="Wrap"/>
+                        </StackPanel>
                         
                     </StackPanel>
                 </Border>
-                
-                <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" ItemsSource="{Binding Products}"  SelectedIndex="0"
+
+                <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0"  SelectedIndex="0" ItemsSource="{Binding Products.View, PresentationTraceSources.TraceLevel=High}"
                           x:Name="ProductElement" BorderThickness="0" SelectionMode="Single"> <!--Support:GridViewColumnResize.Enabled="True">-->
+                   
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="Template" Value="{StaticResource ListViewItemTemplateForSelecting}"/>
                         </Style>
                     </ListView.ItemContainerStyle>
+                    <ListView.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontWeight="Bold" FontSize="15"
+                                        Text="{Binding Path=Name}"/>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
                     <ListView.View>
                         <GridView AllowsColumnReorder="False" >
                             

@@ -17,7 +17,7 @@ namespace CoApp.Gui.Toolkit.Support
         /// <returns>The first parent item that matches the submitted type parameter. 
         /// If not matching item can be found, a null reference is being returned.</returns>
         /// <from>http://stackoverflow.com/questions/636383/wpf-ways-to-find-controls</from>
-        public static T FindVisualParent<T>(DependencyObject child)
+        public static T FindVisualParent<T>(this DependencyObject child)
           where T : DependencyObject
         {
             // get parent item
@@ -36,6 +36,43 @@ namespace CoApp.Gui.Toolkit.Support
             {
                 // use recursion to proceed with next level
                 return FindVisualParent<T>(parentObject);
+            }
+        }
+
+        public static IEnumerable<TChildItem> FindVisualChildren<TChildItem>(this DependencyObject obj)
+            where TChildItem : DependencyObject
+        {
+            if (obj == null)
+                yield break;
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is TChildItem)
+                    yield return (TChildItem)child;
+                else
+                {
+                    var childOfChild = FindVisualChildren<TChildItem>(child);
+                    if (childOfChild != null && childOfChild.Any())
+                    {
+                       foreach (var c in childOfChild)
+                       {
+                           yield return c;
+                       }
+                    }
+                }
+            }
+            yield break;
+        }
+
+        public static IEnumerable<Visual> GetDirectVisualChildren(this DependencyObject obj)
+        {
+            if (obj == null)
+                yield break;
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is Visual)
+                    yield return (Visual)child;
             }
         }
     }

@@ -54,6 +54,7 @@
         <Button Style="{StaticResource ButtonStyle1}" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2"
             Command="{Binding TopLeftClickCommand, ElementName=ControlRoot}"
             CommandParameter="{Binding TopLeftClickCommandParameter, ElementName=ControlRoot}" Background="Transparent">
+        
             <Border BorderBrush="{Binding TopLeftBrush, ElementName=ControlRoot}" BorderThickness="1">
                 <Grid Height="384">
                     <Grid.RowDefinitions>
@@ -135,6 +136,7 @@
         <Button Grid.Column="2" Grid.Row="3" Style="{StaticResource ButtonStyle1}"
             Command="{Binding BottomRightClickCommand, ElementName=ControlRoot}"
             CommandParameter="{Binding BottomRightClickCommandParameter, ElementName=ControlRoot}" Margin="8,8,0,0">
+            
             <Border BorderBrush="{Binding BottomRightBrush, ElementName=ControlRoot}" BorderThickness="1">
                 <Grid Height="192">
                     <Grid.RowDefinitions>

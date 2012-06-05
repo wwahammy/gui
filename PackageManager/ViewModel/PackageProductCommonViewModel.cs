@@ -1,8 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.PackageManager.Model;
+using CoApp.Toolkit.Extensions;
 using GalaSoft.MvvmLight;
 
 namespace CoApp.PackageManager.ViewModel
@@ -10,7 +13,7 @@ namespace CoApp.PackageManager.ViewModel
     public abstract class PackageProductCommonViewModel : ScreenViewModel
     {
         public string InitializationName;
-
+        internal IPolicyService Policy;
 
         private double _averageRating;
         private string _bugTrackerUrl;
@@ -29,6 +32,30 @@ namespace CoApp.PackageManager.ViewModel
         private ObservableCollection<TagToCommand> _tags;
         private int _usersDisagree;
         public ICommand ReportNSFW { get; set; }
+
+
+        protected PackageProductCommonViewModel()
+        {
+            Policy = new LocalServiceLocator().PolicyService;
+            Loaded += OnLoaded;
+        }
+
+        private void OnLoaded()
+        {
+            AddPostLoadTask(Policy.CanInstall.ContinueWith(t =>
+                {
+                    t.RethrowWhenFaulted();
+                    UpdateOnUI(() => CanInstall = t.Result);
+                }
+                ));
+            
+            AddPostLoadTask(Policy.CanRemove.ContinueWith(t =>
+            {
+                t.RethrowWhenFaulted();
+                UpdateOnUI(() => CanRemove = t.Result);
+            }
+                ));
+        }
 
         public bool IsInstalled
         {
@@ -61,6 +88,32 @@ namespace CoApp.PackageManager.ViewModel
             }
         }
 
+
+        private bool? _canInstall;
+
+        public bool? CanInstall
+        {
+            get { return _canInstall; }
+            set
+            {
+                _canInstall = value;
+                RaisePropertyChanged("CanInstall");
+            }
+        }
+
+        private bool? _canRemove;
+
+        public bool? CanRemove
+        {
+            get { return _canRemove; }
+            set
+            {
+                _canRemove = value;
+                RaisePropertyChanged("CanRemove");
+            }
+        }
+
+        
 
         public string PublisherName
         {

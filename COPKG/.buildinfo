@@ -36,7 +36,10 @@ debug {
 
 package {
     uses: sign;
-    build-command: @"autopackage.exe COPKG\*.autopkg";
+    build-command: @"
+	cscript //e:jscript scripts\increment-build-version.js
+	autopackage.exe COPKG\*.autopkg
+	";
 }
 
 sign { 

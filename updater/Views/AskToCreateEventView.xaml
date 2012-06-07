@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="CoApp.Updater.Views.AskToCreateEventView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Controls="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit" mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <DockPanel LastChildFill="True">
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <Controls:ElevateButton Content="Schedule a this update task" UnelevatedCommand="{Binding ElevateSetScheduledTask}" MustElevate="True" ElevatedCommand="{Binding SetScheduledTask}"/>
+            <Button Content="Don't schedule an update task" Command="{Binding DontScheduleTask}"/></StackPanel>   
+		<TextBlock TextWrapping="Wrap">CoApp can automatically update packages for you by setting up a update task. Would you like to do that right now?</TextBlock> 
+	</DockPanel>
+</UserControl>

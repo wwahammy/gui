@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CoApp.Packaging.Client;
 using CoApp.Packaging.Common;
 using CoApp.Toolkit.Linq;
+using CollectionFilter = CoApp.Toolkit.Collections.XList<System.Linq.Expressions.Expression<System.Func<System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>, System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>>>>;
 
 namespace CoApp.Gui.Toolkit.Model.Interfaces
 {
@@ -30,13 +31,16 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
 
         Task SetOptedIn(bool optedIn);
 
+
+        Task SetState(CanonicalName packageName, PackageState state);
+
         Task BlockPackage(CanonicalName packageName);
         
         Task UnblockPackage(CanonicalName packageName);
 
-        Task<IEnumerable<Package>> GetPackages(Expression<Func<IPackage, bool>> pkgFilter = null, Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> collectionFilter = null, bool withDetails = false, string locationFeed = null);
+        Task<IEnumerable<Package>> GetPackages(Expression<Func<IPackage, bool>> pkgFilter = null, CollectionFilter collectionFilter = null, bool withDetails = false, string locationFeed = null);
 
-        Task<IEnumerable<Package>> GetPackages(CanonicalName packageName, Expression<Func<IPackage, bool>> pkgFilter = null, Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> collectionFilter = null, bool withDetails = false, string locationFeed = null);
+        Task<IEnumerable<Package>> GetPackages(CanonicalName packageName, Expression<Func<IPackage, bool>> pkgFilter = null, CollectionFilter collectionFilter = null, bool withDetails = false, string locationFeed = null);
 
         Task<Package> GetPackage(CanonicalName packageName);
         
@@ -79,6 +83,12 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
                             Action<string> packageInstalled);
 
         Task RemovePackage(CanonicalName canonicalName, Action<string, int> removeProgress, Action<string> packageRemoved);
+
+        Task Elevate();
+
+        event Action Elevated;
+
+        Task<IEnumerable<ScheduledTask>> ScheduledTasks { get; }
     }
 
     public class PolicyProxy
@@ -87,10 +97,11 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
         public string Name { get; set; }
 
         public IEnumerable<string> Members { get; set; }
+        public bool IsEnabledForUser { get; set; }
 
         internal static PolicyProxy Convert(Policy p)
         {
-            return new PolicyProxy {Description = p.Description, Name = p.Name, Members = p.Members};
+            return new PolicyProxy {Description = p.Description, Name = p.Name, Members = p.Members, IsEnabledForUser = p.IsEnabled};
         }
        
     }

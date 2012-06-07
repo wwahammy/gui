@@ -43,7 +43,7 @@ namespace CoApp.Gui.Toolkit.Controls
     /// Step 2)
     /// Go ahead and use your control in the XAML file.
     ///
-    ///     <MyNamespace:ElevateShield/>
+    ///    
     ///
     /// </summary>
     public class ElevateShield : Control

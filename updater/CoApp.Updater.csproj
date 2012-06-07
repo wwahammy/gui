@@ -157,6 +157,7 @@
     <Compile Include="Support\PrimaryViewTemplateSelector.cs" />
     <Compile Include="Support\QuietSupport.cs" />
     <Compile Include="Support\UpdateFailureException.cs" />
+    <Compile Include="ViewModel\AskToCreateEventViewModel.cs" />
     <Compile Include="ViewModel\Errors\UpdateFailureViewModel.cs" />
     <Compile Include="ViewModel\InstallingViewModel.cs" />
     <Compile Include="ViewModel\SelectUpdatesViewModel.cs" />
@@ -164,6 +165,9 @@
     <Compile Include="ViewModel\PrimaryViewModel.cs" />
     <Compile Include="ViewModel\UpdatingViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Views\AskToCreateEventView.xaml.cs">
+      <DependentUpon>AskToCreateEventView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\InstallingView.xaml.cs">
       <DependentUpon>InstallingView.xaml</DependentUpon>
     </Compile>
@@ -214,6 +218,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AskToCreateEventView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\InstallingView.xaml">
       <SubType>Designer</SubType>

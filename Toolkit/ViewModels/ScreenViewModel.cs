@@ -26,13 +26,15 @@ namespace CoApp.Gui.Toolkit.ViewModels
         private string _subTitle;
         private string _title;
 
+        public bool NotInABlock = true;
+
         protected ScreenViewModel()
         {
             _policyService = new LocalServiceLocator().PolicyService;
             PostLoadTasks = new List<Task>();
 
             Loaded += OnLoaded;
-            Restart = new RelayCommand(RunRestart);
+            //Restart = new RelayCommand(RunRestart);
             DefaultElevate =
                 new RelayCommand(
                     () =>
@@ -98,33 +100,108 @@ namespace CoApp.Gui.Toolkit.ViewModels
             }
         }
 
-        private void RunRestart()
+
+
+   
+        private bool? _canInstall;
+
+        public bool? CanInstall
         {
-            var startInfo = new ProcessStartInfo(Process.GetCurrentProcess().MainModule.FileName) {Verb = "runas"};
-
-
-            Process.Start(startInfo);
-
-            Application.Current.Dispatcher.Invoke(new Action(() => Application.Current.Shutdown()));
+            get { return _canInstall; }
+            set
+            {
+                _canInstall = value;
+                RaisePropertyChanged("CanInstall");
+            }
         }
+
+        private bool? _canRemove;
+
+        public bool? CanRemove
+        {
+            get { return _canRemove; }
+            set
+            {
+                _canRemove = value;
+                RaisePropertyChanged("CanRemove");
+            }
+        }
+
+        private bool? _canBlock;
+
+        public bool? CanBlock
+        {
+            get { return _canBlock; }
+            set
+            {
+                _canBlock = value;
+                RaisePropertyChanged("CanBlock");
+            }
+        }
+
+
+        private bool? _canRequire;
+
+        public bool? CanRequire
+        {
+            get { return _canRequire; }
+            set
+            {
+                _canRequire = value;
+                RaisePropertyChanged("CanRequire");
+            }
+        }
+
+
+        private bool? _canChangeSettings;
+
+        public bool? CanChangeSettings
+        {
+            get { return _canChangeSettings; }
+            set
+            {
+                _canChangeSettings = value;
+                RaisePropertyChanged("CanChangeSettings");
+            }
+        }
+
+        private bool? _canSetSessionFeeds;
+
+        public bool? CanSetSessionFeeds
+        {
+            get { return _canSetSessionFeeds; }
+            set
+            {
+                _canSetSessionFeeds = value;
+                RaisePropertyChanged("CanSetSessionFeeds");
+            }
+        }
+
+        private bool? _canSetSystemFeeds;
+
+        public bool? CanSetSystemFeeds
+        {
+            get { return _canSetSystemFeeds; }
+            set
+            {
+                _canSetSystemFeeds = value;
+                RaisePropertyChanged("CanSetSystemFeeds");
+            }
+        }
+
+        
+
+        
+        protected virtual Task  ReloadPolicies()
+        {
+            return Task.Factory.StartNew(() => { });
+        }
+
 
         private void OnLoaded()
         {
-          /*
-            _policyService.CanBlock.ContinueWith(
-                t => UpdateOnUI(() => CanBlock = t.Result));
-            _policyService.CanRequire.ContinueWith(
-                t => UpdateOnUI(() => CanRequire = t.Result));
-            _policyService.CanSetSystemFeeds.ContinueWith(
-                t => UpdateOnUI(() => CanSetSystemFeeds = t.Result));
-            _policyService.CanSetSessionFeeds.ContinueWith(
-                t => UpdateOnUI(() => CanSetSessionFeeds = t.Result));
-            _policyService.CanRemove.ContinueWith(
-                t => UpdateOnUI(() => CanRemove = t.Result));
-            _policyService.CanInstall.ContinueWith(
-                t => UpdateOnUI(() => CanInstall = t.Result));
-            _policyService.CanChangeSettings.ContinueWith(
-                t => UpdateOnUI(() => CanChangeSettings = t.Result));*/
+          
+      
         }
 
 
@@ -196,6 +273,11 @@ namespace CoApp.Gui.Toolkit.ViewModels
             {
                 PostLoadTasks.Clear();
             }
+        }
+
+        protected ICommand CreateBlockingCommand(Action a)
+        {
+            return null;
         }
     }
 

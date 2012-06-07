@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Model;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Toolkit.Extensions;
 using GalaSoft.MvvmLight.Command;
 
 namespace CoApp.Gui.Toolkit.ViewModels.Settings
@@ -16,6 +17,7 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
         private bool _autoTrim;
         private UpdateDayOfWeek _dayOfWeek;
         private UpdateChoice _updateChoice;
+        internal ICoAppService CoApp;
 
 
         private int _updateTime;
@@ -27,8 +29,20 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
             Save = new RelayCommand(ExecuteSave);
             var loc = new LocalServiceLocator();
             UpdateService = loc.UpdateSettingsService;
-            RunAdmin = new RelayCommand(() => { });
+            CoApp = loc.CoAppService;
+            ElevateSave = new RelayCommand(ExecuteElevateSave);
+            
+
         }
+
+      
+        private void ExecuteElevateSave()
+        {
+            var task = CoApp.Elevate();
+            task.Continue(() => Save.Execute(null));
+            //TODO what happens when fails
+        }
+        
 
         
         public UpdateDayOfWeek DayOfWeek
@@ -75,7 +89,9 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
         public ICommand Save { get; set; }
 
         
-        public ICommand RunAdmin { get; set; }
+        public ICommand ElevateSave { get; set; }
+
+        
 
         private void ExecuteSave()
         {
@@ -92,6 +108,8 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
 
         private void OnLoaded()
         {
+            _policyService.CanChangeSettings.ContinueAlways(t => UpdateOnUI( () => CanChangeSettings = t.Result));
+
             UpdateService.UpdateChoice.ContinueWith(t => UpdateOnUI(() => UpdateChoice = t.Result));
             UpdateService.UpdateTimeAndDay.ContinueWith(t => UpdateOnUI(() =>
                                                                             {

@@ -43,7 +43,7 @@ namespace CoApp.PackageManager.Model
                                               {
                                                   a.State = State.Failed;
                                               }
-                                              task.RethrowWhenFaulted();
+                                              //task.RethrowWhenFaulted();
                                           });
         }
 
@@ -64,9 +64,26 @@ namespace CoApp.PackageManager.Model
                                                      a.State = State.Failed;
                                                  }
 
-                                                 task.RethrowWhenFaulted();
+                                                 //task.RethrowWhenFaulted();
                                              }
                 );
+        }
+
+        public Task SetState(IPackage p, PackageState state)
+        {
+            return Task.Factory.StartNew(() => 
+                {
+                                                 var a = CreateActivity(p, ActivityType.SetState);
+                                                 Activities.Add(a);
+
+                                                 var task = CoApp.SetState(p.CanonicalName, state);
+                                                 task.Wait();
+
+                                                 a.State = task.Exception != null ? State.Failed : State.Finished;
+
+                                                 //task.RethrowWhenFaulted();
+                });
+            
         }
 
         public IList<Activity> Activities { get; private set; }

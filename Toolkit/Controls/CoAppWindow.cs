@@ -5,7 +5,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Support;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace CoApp.Gui.Toolkit.Controls
 {
@@ -35,7 +37,7 @@ namespace CoApp.Gui.Toolkit.Controls
     /// Step 2)
     /// Go ahead and use your control in the XAML file.
     ///
-    ///     <MyNamespace:CoAppWindow/>
+    ///     
     ///
     /// </summary>
     [TemplatePart(Name = MAX_RESTORE_NAME, Type = typeof (Button))]
@@ -73,7 +75,7 @@ namespace CoApp.Gui.Toolkit.Controls
             DependencyProperty.RegisterAttached("MoreHeaderItems", typeof (IEnumerable), typeof (CoAppWindow), new PropertyMetadata(default(IEnumerable)));
 
 
-
+     
         private static void MoreHeaderItemsChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             var win = UIHelper.FindVisualParent<CoAppWindow>(dependencyObject);
@@ -94,6 +96,34 @@ namespace CoApp.Gui.Toolkit.Controls
             return (IEnumerable) element.GetValue(MoreHeaderItemsProperty);
         }
 
+        public CoAppWindow()
+        {
+            Messenger.Default.Register<MetroDialogBoxMessage>(this, OpenTheDialogBox);
+        }
+
+        private void OpenTheDialogBox(MetroDialogBoxMessage metroDialogBoxMessage)
+        {
+            var dialogBox = new DialogBox();
+            dialogBox.Title = metroDialogBoxMessage.Title;
+            dialogBox.ButtonDescriptions = metroDialogBoxMessage.Buttons;
+            dialogBox.Content = metroDialogBoxMessage.Content;
+
+            var popUp = new PopUpControl();
+            var result = popUp.FindName("MainGrid") as Grid;
+            if (result == null)
+            {
+                //uh oh
+            }
+            else
+            {
+                result.Children.Add(dialogBox);
+                popUp.PlacementTarget = this;
+                popUp.Height = this.Height;
+                popUp.Width = this.Width;
+                popUp.IsOpen = true;
+            }
+        }
+
         private Grid _header;
 
         private Button _maxRestore, _minimize;
@@ -105,6 +135,8 @@ namespace CoApp.Gui.Toolkit.Controls
                                                      new FrameworkPropertyMetadata(typeof (CoAppWindow)));
 
             EventManager.RegisterClassHandler(typeof(CoAppWindow), CoAppFrameChild.TemplateLoadedEvent, new RoutedEventHandler(TemplateLoadedHandle));
+
+           
         }
 
         internal static void TemplateLoadedHandle(object sender, RoutedEventArgs a)

@@ -150,6 +150,26 @@ namespace CoApp.Updater.Model
                                              });
         }
 
+        public Task<bool> IsSchedulerSet
+        {
+            get
+            {
+                return CoApp.ScheduledTasks.ContinueAlways(t =>
+                                                               {
+                                                                   t.RethrowWhenFaulted();
+                                                                   return t.Result.Any(s => s.Name == "coapp_update");
+                                                               });
+            }
+        }
+
+
+        public Task SetDefaultScheduledTask()
+        {
+            return CoApp.SetScheduledTask("coapp_update", @"c:\programdata\bin\CoApp.Update.exe", "--quiet", 3, 0, null,
+                                          60);
+                
+        }
+
 
         public void SelectProduct(Product p)
         {
@@ -317,7 +337,7 @@ namespace CoApp.Updater.Model
 
         private void RunCheckForUpdates(CancellationToken? token)
         {
-          /*  
+          /*
             var tasks = new[]
                             {
                                 CoApp.GetUpdatablePackages(),

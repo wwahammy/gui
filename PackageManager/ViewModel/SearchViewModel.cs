@@ -17,6 +17,7 @@ using GalaSoft.MvvmLight.Command;
 using SLE = System.Linq.Expressions;
 using CTL = CoApp.Toolkit.Linq;
 using LocalServiceLocator = CoApp.Gui.Toolkit.Model.LocalServiceLocator;
+using CollectionFilter = CoApp.Toolkit.Collections.XList<System.Linq.Expressions.Expression<System.Func<System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>, System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>>>>;
 
 namespace CoApp.PackageManager.ViewModel
 {
@@ -222,8 +223,9 @@ namespace CoApp.PackageManager.ViewModel
             }
 
             //get only highestpackages
-            Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> collectionFilter =
-                p => p.HighestPackages();
+            CollectionFilter collectionFilter = null;
+            collectionFilter = collectionFilter.Then(p => p.HighestPackages());
+                
 
             //create sort
 
@@ -240,7 +242,7 @@ namespace CoApp.PackageManager.ViewModel
             
         }
 
-        private void GetPackages(Filter<IPackage> packageFilter, Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> collectionFilter, ListSortDirection direction)
+        private void GetPackages(Filter<IPackage> packageFilter,  CollectionFilter collectionFilter, ListSortDirection direction)
         {
             UpdateOnUI(() =>InMiddleOfSearch = true);
             CoApp.GetPackages(packageFilter, collectionFilter).ContinueWith(t =>

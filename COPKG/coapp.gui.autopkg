@@ -7,10 +7,9 @@ package {
 }
 
 requires {
-	package: "microsoft.blend.sdk-4.0.0.0-any-${Package.PublicKeyToken}";
-	package: "MahApps.Metro-0.7.1-any-${Package.PublicKeyToken}";
-	package: "FluentDateTime-1.6-any-${Package.PublicKeyToken}";
-	package: "GalaSoft.MvvmLight-4-any-${Package.PublicKeyToken}";
+	package: "MahApps.Metro-0.7.1-any";
+	package: "FluentDateTime-1.6-any";
+	package: "GalaSoft.MvvmLight-4-any";
 }
 
 metadata {

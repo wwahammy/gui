@@ -33,6 +33,7 @@ namespace CoApp.Updater
             var a = new Accent();
             DispatcherUnhandledException += OnDispatcherUnhandledException;
             
+            
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs dispatcherUnhandledExceptionEventArgs)
@@ -62,9 +63,11 @@ namespace CoApp.Updater
                 switch (arg)
                 {
                     case "quiet":
+                        Logger.Message("We're running quiet");
                         quiet = true;
                         break;
                     case "force":
+                        Logger.Message("We will force this to run quietly.");
                         force = true;
                         break;
                 }
@@ -73,6 +76,7 @@ namespace CoApp.Updater
             if (quiet && !force)
             {
                 var quietSupport = new QuietSupport();
+                
                 if (quietSupport.HandleScheduledTaskCall().Result)
                     return;
             }
@@ -93,8 +97,17 @@ namespace CoApp.Updater
                 mainWindow.Visibility = Visibility.Visible;
             }
 
+            if (!quiet && !loc.UpdateService.IsSchedulerSet.Result)
+            {
+                loc.NavigationService.GoTo(new ViewModelLocator().AskToCreateEventViewModel);
+            }
+            else
+            {
+                loc.NavigationService.GoTo(ViewModelLocator.UpdatingViewModelStatic);
+            }
 
-            loc.NavigationService.GoTo(ViewModelLocator.UpdatingViewModelStatic);
+
+            
 
             Current.MainWindow = mainWindow;
             SetupNotifyIcon();

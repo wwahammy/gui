@@ -14,12 +14,19 @@
              d:DesignHeight="768" d:DesignWidth="1024"  TextBlock.FontSize="14">
     <Controls1:CoAppFrameChild.Resources>
     	
-        <Converters:ValueConverterList x:Key="NotSafeForWorkVisibilityConverter">
-            <Converters:InvertBooleanConverter/>
-            <BooleanToVisibilityConverter/>
-        </Converters:ValueConverterList>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/ProductPackageCommonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Converters:ValueConverterList x:Key="NotSafeForWorkVisibilityConverter">
+                <Converters:InvertBooleanConverter/>
+                <BooleanToVisibilityConverter/>
+            </Converters:ValueConverterList>
+        </ResourceDictionary>
 
 
+
+        
 
     </Controls1:CoAppFrameChild.Resources>
     <Grid>

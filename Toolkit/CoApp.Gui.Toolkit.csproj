@@ -27,6 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\output\any\debug\bin\CoApp.Gui.Toolkit.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -103,6 +104,9 @@
     <Compile Include="Controls\ElevateButton.cs" />
     <Compile Include="Controls\ElevateShield.cs" />
     <Compile Include="Controls\HeaderItem.cs" />
+    <Compile Include="Controls\PopUpControl.xaml.cs">
+      <DependentUpon>PopUpControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\StyleableHeaderControl.cs" />
     <Compile Include="Messages\EndLoadingPageMessage.cs" />
     <Compile Include="Messages\GoToMessage.cs" />
@@ -126,6 +130,7 @@
     <Compile Include="Model\UpdateSettingsService.cs" />
     <Compile Include="Model\UpdateTimeAndDay.cs" />
     <Compile Include="Model\WindowsUserService.cs" />
+    <Compile Include="$(SolutionDir)\Source\CoApp.Gui.AssemblyStrongName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -149,6 +154,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Support\CanDisableCommandAttribute.cs" />
     <Compile Include="Support\Converters\AlternationEqualityConverter.cs" />
     <Compile Include="Support\Converters\BackgroundToForegroundColorConverter.cs" />
     <Compile Include="Support\Converters\BooleanToHiddenVisibilityConverter.cs" />
@@ -226,6 +232,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="CoAppToolkitDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PopUpControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

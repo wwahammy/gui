@@ -89,29 +89,7 @@ namespace CoApp.PackageManager.ViewModel
         }
 
 
-        private bool? _canInstall;
-
-        public bool? CanInstall
-        {
-            get { return _canInstall; }
-            set
-            {
-                _canInstall = value;
-                RaisePropertyChanged("CanInstall");
-            }
-        }
-
-        private bool? _canRemove;
-
-        public bool? CanRemove
-        {
-            get { return _canRemove; }
-            set
-            {
-                _canRemove = value;
-                RaisePropertyChanged("CanRemove");
-            }
-        }
+     
 
         
 

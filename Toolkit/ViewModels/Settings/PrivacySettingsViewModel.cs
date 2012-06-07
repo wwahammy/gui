@@ -2,7 +2,10 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using CoApp.Gui.Toolkit.Model;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Toolkit.Extensions;
+using CoApp.Toolkit.TaskService;
 using GalaSoft.MvvmLight.Command;
+using Task = System.Threading.Tasks.Task;
 
 namespace CoApp.Gui.Toolkit.ViewModels.Settings
 {
@@ -17,12 +20,27 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
 
              Loaded += OnLoaded;
              
-             Save = new RelayCommand(OnSave);
+             Save = new RelayCommand(OnSave );
+             ElevateSave = new RelayCommand(OnElevateSave);
+         }
+
+        private void OnElevateSave()
+        {
+            var t = CoApp.Elevate();
+            t.Continue(() => Save.Execute(null));
+        }
+
+
+        protected override Task ReloadPolicies()
+         {
+             return _policyService.CanChangeSettings.ContinueWith(t => UpdateOnUI(() => CanChangeSettings = t.Result));
          }
 
          private void OnLoaded()
          {
-             CoApp.OptedIn.ContinueWith((t) => UpdateOnUI(() => OptedIn = t.Result));
+             ReloadPolicies().Wait();
+             CoApp.OptedIn.ContinueWith((t) =>
+                 UpdateOnUI(() => OptedIn = t.Result));
          }
 
 
@@ -64,33 +82,11 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
          }
 
          
-
+      
          public ICommand Save { get; set; }
 
-
-         public  XElement Serialize()
-         {
-             var root = new XElement("PrivacySettingsViewModel");
-             root.SetAttributeValue("OptedIn", OptedIn);
-
-             return root;
-         }
-
-         public void Deserialize(XElement element)
-         {
-             if (element.Name == "PrivacySettingsViewModel")
-             {
-                 XAttribute a = null;
-                 if ((a = element.Attribute("OptedIn")) != null)
-                 {
-                     bool test;
-                     if (bool.TryParse(a.Value, out test))
-                     {
-                         OptedIn = test;
-                     }
-
-                 }
-             }
-         }
+         public ICommand ElevateSave { get; set; }
+       
+         
     }
 }

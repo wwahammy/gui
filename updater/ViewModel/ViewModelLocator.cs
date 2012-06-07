@@ -29,6 +29,7 @@ namespace CoApp.Updater.ViewModel
             SimpleIoc.Default.Register<SelectUpdatesViewModel>();
       
             SimpleIoc.Default.Register<UpdatingViewModel>();
+            SimpleIoc.Default.Register<AskToCreateEventViewModel>();
         }
 
         /// <summary>
@@ -92,6 +93,11 @@ namespace CoApp.Updater.ViewModel
         public static InstallingViewModel InstallingViewModelStatic
         {
             get { return ServiceLocator.Current.GetInstance<InstallingViewModel>(); }
+        }
+
+        public AskToCreateEventViewModel AskToCreateEventViewModel
+        {
+            get { return ServiceLocator.Current.GetInstance<AskToCreateEventViewModel>(); }
         }
 
        

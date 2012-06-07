@@ -36,9 +36,20 @@ namespace CoApp.Updater.Support
                                                                                               {
                                                                                                   if (!scheduledTask.IsFaulted && !scheduledTask.IsFaulted)
                                                                                                   {
-                                                                                                    if(!DoWeNeedToRun(taskLastRun.Result, WhenLastRunShouldHaveBeen(scheduledTask.Result, DateTime.Now)))
+                                                                                                      var
+                                                                                                          lastrunShouldHaveBeen
+                                                                                                              =
+                                                                                                              WhenLastRunShouldHaveBeen
+                                                                                                                  (scheduledTask
+                                                                                                                       .
+                                                                                                                       Result,
+                                                                                                                   DateTime
+                                                                                                                       .
+                                                                                                                       Now);
+                                                                                                     
+                                                                                                    if(!DoWeNeedToRun(taskLastRun.Result, lastrunShouldHaveBeen))
                                                                                                     {
-                                                                                                      Logger.Message("Shutting down in quiet mode, it hasn't been long enough");
+                                                                                                      Logger.Message("Shutting down in quiet mode, it hasn't been long enough, Last run: {0}, Should have been {1}", taskLastRun.Result, lastrunShouldHaveBeen);
 
                                                                                                         Shutdown();
                                                                                                         return true;

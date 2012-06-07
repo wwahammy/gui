@@ -48,5 +48,9 @@ namespace CoApp.Updater.Model.Interfaces
        
         Task<DateTime> LastScheduledTaskRealRun { get; }
         Task SetScheduledTaskToRunNow();
+
+        Task<bool> IsSchedulerSet { get;  }
+
+        Task SetDefaultScheduledTask();
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;
+using CoApp.Gui.Toolkit.Messages;
+using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using CoApp.Toolkit.Extensions;
 using CoApp.Gui.Toolkit.Support;
@@ -35,8 +37,8 @@ namespace CoApp.Gui.Toolkit
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             var assmName = new AssemblyName(args.Name);
 
-            //var r = GetBestAssemblyLoaded(args);
-            return null;
+            var r = GetBestAssemblyLoaded(args);
+            return r;
         }
 
         private static Assembly GetBestAssemblyLoaded(ResolveEventArgs args)

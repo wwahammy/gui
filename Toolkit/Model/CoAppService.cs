@@ -10,6 +10,7 @@ using CoApp.Toolkit.Configuration;
 using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Logging;
 using CoApp.Toolkit.Tasks;
+using CollectionFilter = CoApp.Toolkit.Collections.XList<System.Linq.Expressions.Expression<System.Func<System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>, System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>>>>;
 
 namespace CoApp.Gui.Toolkit.Model
 {
@@ -82,6 +83,13 @@ namespace CoApp.Gui.Toolkit.Model
             return EPM.SetTelemetry(optedIn);
         }
 
+        public Task SetState(CanonicalName packageName, PackageState state)
+        {
+            return EPM.SetGeneralPackageInformation(50, packageName, "state", state.ToString());
+        }
+
+       
+
 
         public Task BlockPackage(CanonicalName packageName)
         {
@@ -95,7 +103,7 @@ namespace CoApp.Gui.Toolkit.Model
 
 
         public Task<IEnumerable<Package>> GetPackages(Expression<Func<IPackage, bool>> pkgFilter = null,
-                                                      Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>>
+                                                     CollectionFilter 
                                                           collectionFilter = null, bool withDetails = false,
                                                       string locationFeed = null)
         {
@@ -104,8 +112,8 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<IEnumerable<Package>> GetPackages(CanonicalName packageName,
                                                       Expression<Func<IPackage, bool>> pkgFilter = null,
-                                                      Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>>
-                                                          collectionFilter = null, bool withDetails = false,
+                                                      
+                                                       CollectionFilter   collectionFilter = null, bool withDetails = false,
                                                       string locationFeed = null)
         {
             return EPM.FindPackages(packageName, pkgFilter, collectionFilter, locationFeed)
@@ -294,6 +302,8 @@ namespace CoApp.Gui.Toolkit.Model
         }
 
 
+        
+
         public Task SetAllFeedsStale()
         {
             return EPM.SetAllFeedsStale();
@@ -361,6 +371,20 @@ namespace CoApp.Gui.Toolkit.Model
                                               CurrentTask.Events += new PackageRemoved(name => packageRemoved(name));
                                               return EPM.RemovePackage(canonicalName, false);
                                           });
+        }
+
+        public Task Elevate()
+        {
+            var elev = EPM.Elevate();
+            elev.Continue(() => Elevated());
+            return elev;
+        }
+
+        public event Action Elevated = delegate { }; 
+
+        public Task<IEnumerable<ScheduledTask>> ScheduledTasks
+        {
+            get { return EPM.ScheduledTasks; }
         }
 
         #endregion

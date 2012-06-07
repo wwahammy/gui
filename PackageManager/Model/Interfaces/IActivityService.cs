@@ -15,6 +15,8 @@ namespace CoApp.PackageManager.Model.Interfaces
         Task InstallPackage(IPackage p);
         Task RemovePackage(IPackage p);
 
+        Task SetState(IPackage p, PackageState state); 
+
         IList<Activity> Activities { get; }
     }
 
@@ -78,9 +80,7 @@ namespace CoApp.PackageManager.Model.Interfaces
     {
         Install,
         Remove,
-        Block,
-        Unblock,
-        Activate
+        SetState
 
     }
 

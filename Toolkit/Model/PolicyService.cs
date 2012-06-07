@@ -5,8 +5,8 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Model.Interfaces;
-using GalaSoft.MvvmLight.Messaging;
 using CoApp.Toolkit.Extensions;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace CoApp.Gui.Toolkit.Model
 {
@@ -14,55 +14,77 @@ namespace CoApp.Gui.Toolkit.Model
     {
 // ReSharper disable InconsistentNaming
         private static readonly SecurityIdentifier WORLDSID = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+        private readonly object _policyTaskLock = new object();
 // ReSharper restore InconsistentNaming
         internal ICoAppService CoApp;
         internal IWindowsUserService UserService;
 
-        private readonly Task<IEnumerable<PolicyProxy>> _policyTask;
+        private Task<IEnumerable<PolicyProxy>> _policyTask;
 
         public PolicyService()
         {
             var loc = new LocalServiceLocator();
             CoApp = loc.CoAppService;
+            CoApp.Elevated += CoAppOnElevated;
+
             UserService = loc.WindowsUserService;
             _policyTask = CoApp.Policies;
         }
 
-        
-
         #region IPolicyService Members
+
+        public void ReloadPolicies()
+        {
+            lock (_policyTaskLock)
+            {
+                _policyTask = CoApp.Policies;
+            }
+        }
+
 
         public Task<PolicyResult> InstallPolicy
         {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.InstallPackage)).ContinueWith(t => CreatePolicyResultTask(t)); }
-        }
-
-        private PolicyProxy GetPolicyFromTask(IEnumerable<PolicyProxy> policies , PolicyType type)
-        {
-            return policies.Single(p => p.Name == type.ToString());
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.InstallPackage)).ContinueWith(
+                        t => CreatePolicyResultTask(t));
+            }
         }
 
         public Task<bool> CanChangeSettings
         {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ModifyPolicy)).ContinueWith(t => VerifyActionPermission(t)); }
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ModifyPolicy)).ContinueWith(
+                        t => t.Result.IsEnabledForUser);
+            }
         }
 
         public Task SetInstallPolicy(PolicyResult policyToSet)
         {
             return
                 InstallPolicy.ContinueWith(t => ModifyPolicy(t, policyToSet, PolicyType.InstallPackage)).ContinueWith(
-                    t => {
-                             t.RethrowWhenFaulted();
-                        Messenger.Default.Send(new PoliciesUpdatedMessage());
-                    }
-
-
-    );
+                    t =>
+                        {
+                            t.RethrowWhenFaulted();
+                            Messenger.Default.Send(new PoliciesUpdatedMessage());
+                        }
+                    );
         }
 
         public Task<PolicyResult> UpdatePolicy
         {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.UpdatePackage)).ContinueWith(t => CreatePolicyResultTask(t)); }
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.UpdatePackage)).ContinueWith(
+                        t => CreatePolicyResultTask(t));
+            }
         }
 
         public Task SetUpdatePolicy(PolicyResult result)
@@ -72,76 +94,36 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<PolicyResult> RemovePolicy
         {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.RemovePackage)).
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.RemovePackage)).
                     ContinueWith(t =>
-                                 CreatePolicyResultTask(t)); }
+                                 CreatePolicyResultTask(t));
+            }
         }
 
         public Task SetRemovePolicy(PolicyResult result)
         {
             return RemovePolicy.ContinueWith(t => ModifyPolicy(t, result, PolicyType.RemovePackage)).ContinueWith(
-                    t =>
+                t =>
                     {
                         t.RethrowWhenFaulted();
                         Messenger.Default.Send(new PoliciesUpdatedMessage());
                     }
-
-
-    ); ;
+                );
         }
 
-        public Task<PolicyResult> BlockPolicy
-        {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ChangeBlockedState)).ContinueWith(t => CreatePolicyResultTask(t)); }
-        }
-
-        public Task SetBlockPolicy(PolicyResult result)
-        {
-            return BlockPolicy.ContinueWith(t => ModifyPolicy(t, result, PolicyType.ChangeBlockedState))
-                .ContinueWith(
-                    t =>
-                    {
-                        t.RethrowWhenFaulted();
-                        Messenger.Default.Send(new PoliciesUpdatedMessage());
-                    }
-
-
-    ); ;
-        }
-
-        public Task<PolicyResult> FreezePolicy
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Task SetFreezePolicy(PolicyResult result)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PolicyResult> ActivePolicy
-        {
-            get { return  _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ChangeActivePackage)).ContinueWith(t => CreatePolicyResultTask(t)); }
-        }
-
-        public Task SetActivePolicy(PolicyResult result)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<PolicyResult> RequirePolicy
-        {
-            get { return  _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ChangeRequiredState)).ContinueWith(t => CreatePolicyResultTask(t)); }
-        }
-
-        public Task SetRequirePolicy(PolicyResult result)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<PolicyResult> SystemFeedsPolicy
         {
-            get { return  _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSystemFeeds)).ContinueWith(t => CreatePolicyResultTask(t)); }
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSystemFeeds)).ContinueWith(
+                        t => CreatePolicyResultTask(t));
+            }
         }
 
         public Task SetSystemFeedsPolicy(PolicyResult result)
@@ -151,7 +133,13 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<PolicyResult> SessionFeedsPolicy
         {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSessionFeeds)).ContinueWith(t => CreatePolicyResultTask(t)); }
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSessionFeeds)).ContinueWith(
+                        t => CreatePolicyResultTask(t));
+            }
         }
 
         public Task SetSessionFeedsPolicy(PolicyResult result)
@@ -161,7 +149,67 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<bool> CanInstall
         {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.InstallPackage)).ContinueWith(t => VerifyActionPermission(t)); }
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.InstallPackage)).ContinueWith(
+                        t => t.Result.IsEnabledForUser);
+            }
+        }
+
+
+        public Task<bool> CanUpdate
+        {
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.UpdatePackage)).ContinueWith(
+                        t => t.Result.IsEnabledForUser);
+            }
+        }
+
+        public Task<bool> CanRemove
+        {
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.RemovePackage)).ContinueWith(
+                        t => t.Result.IsEnabledForUser);
+            }
+        }
+
+
+        public Task<bool> CanSetSessionFeeds
+        {
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSessionFeeds)).ContinueWith(
+                        t => t.Result.IsEnabledForUser);
+            }
+        }
+
+        public Task<bool> CanSetSystemFeeds
+        {
+            get
+            {
+                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSystemFeeds)).ContinueWith(
+                        t => t.Result.IsEnabledForUser);
+            }
+        }
+
+        public Task<bool> CanSetState
+        {
+            get { Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+                return
+                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ChangeState)).ContinueWith(t => t.Result.IsEnabledForUser);
+            }
         }
 
         public string UserName
@@ -169,49 +217,48 @@ namespace CoApp.Gui.Toolkit.Model
             get { return Environment.UserName; }
         }
 
-
-        public Task<bool> CanUpdate
+        public Task<PolicyResult> SetStatePolicy
         {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.UpdatePackage)).ContinueWith(t => VerifyActionPermission(t)); }
+            get { Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+            return policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ChangeState)).ContinueWith(
+                        t => CreatePolicyResultTask(t));
+            }
+
         }
 
-        public Task<bool> CanRemove
-        {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.RemovePackage)).ContinueWith(t => VerifyActionPermission(t)); }
-        }
+     
 
-        public Task<bool> CanRequire
+        public Task SetSetStatePolicy(PolicyResult result)
         {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ChangeRequiredState)).ContinueWith(t => VerifyActionPermission(t)); }
-        }
 
-        public Task<bool> CanSetActive
-        {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ChangeActivePackage)).ContinueWith(t => VerifyActionPermission(t)); }
-        }
-
-        public Task<bool> CanFreeze
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Task<bool> CanBlock
-        {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ChangeBlockedState)).ContinueWith(t => VerifyActionPermission(t)); }
-        }
-
-        public Task<bool> CanSetSessionFeeds
-        {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSessionFeeds)).ContinueWith(t => VerifyActionPermission(t)); }
-        }
-
-        public Task<bool> CanSetSystemFeeds
-        {
-            get { return _policyTask.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSystemFeeds)).ContinueWith(t => VerifyActionPermission(t)); }
+            return SetStatePolicy.ContinueWith(t => ModifyPolicy(t, result, PolicyType.ChangeState)).ContinueWith(
+                t =>
+                {
+                    t.RethrowWhenFaulted();
+                    Messenger.Default.Send(new PoliciesUpdatedMessage());
+                });
         }
 
         #endregion
 
+        private void CoAppOnElevated()
+        {
+            ReloadPolicies();
+        }
+
+        private Task<IEnumerable<PolicyProxy>> GetPolicyTask()
+        {
+            lock (_policyTaskLock)
+            {
+                return _policyTask;
+            }
+        }
+
+        private PolicyProxy GetPolicyFromTask(IEnumerable<PolicyProxy> policies, PolicyType type)
+        {
+            return policies.Single(p => p.Name == type.ToString());
+        }
+        /*
         private bool VerifyActionPermission(Task<PolicyProxy> taskResult)
         {
             if (taskResult.IsFaulted)
@@ -223,7 +270,8 @@ namespace CoApp.Gui.Toolkit.Model
                 CanCurrentUserPerformAction(
                     taskResult.Result.Members);
         }
-
+        */
+        /*
         private bool CanCurrentUserPerformAction(IEnumerable<string> accounts)
         {
             IIdentity current = UserService.GetCurrentUser();
@@ -253,7 +301,7 @@ namespace CoApp.Gui.Toolkit.Model
             }
 
             return false;
-        }
+        }*/
 
 
         private PolicyResult CreatePolicyResult(IEnumerable<string> accounts)
@@ -290,8 +338,8 @@ namespace CoApp.Gui.Toolkit.Model
                 throw new Exception();
 
 
-            var currentPolicy = currentPolicyTask.Result;
-            var currentUser = UserService.GetCurrentUser();
+            PolicyResult currentPolicy = currentPolicyTask.Result;
+            IIdentity currentUser = UserService.GetCurrentUser();
             //get the current install policy
             if (currentPolicy == PolicyResult.Everyone)
             {

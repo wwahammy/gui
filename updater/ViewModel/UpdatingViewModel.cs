@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Xml.Linq;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.Toolkit.Logging;
@@ -13,13 +11,14 @@ namespace CoApp.Updater.ViewModel
 {
     public class UpdatingViewModel : ScreenViewModel
     {
+        internal IAutomationService AutomationService;
         internal INavigationService NavigationService;
         internal IUpdateService UpdateService;
-        internal IAutomationService AutomationService;
- 
+
         private DateTime? _lastTimeInstalled;
         private bool _showDates;
         private CancellationTokenSource _src = new CancellationTokenSource();
+
 
         public UpdatingViewModel()
         {
@@ -29,6 +28,8 @@ namespace CoApp.Updater.ViewModel
             UpdateService = loc.UpdateService;
             NavigationService = loc.NavigationService;
             AutomationService = loc.AutomationService;
+
+
             Loaded += HandleLoaded;
             Unloaded += OnUnloaded;
         }
@@ -89,11 +90,13 @@ namespace CoApp.Updater.ViewModel
                             }
                             else
                             {
-                                Logger.Message("We Will Navigate to Primary" + Environment.NewLine);
-                                NavigationService.GoTo(ViewModelLocator.PrimaryViewModelStatic);
+                                if (!_src.Token.IsCancellationRequested)
+                                {
+                                    Logger.Message("We Will Navigate to Primary" + Environment.NewLine);
+                                    NavigationService.GoTo(ViewModelLocator.PrimaryViewModelStatic);
+                                }
                             }
                         }
-
                     });
         }
     }

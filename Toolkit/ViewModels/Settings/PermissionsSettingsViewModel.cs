@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Model;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Toolkit.Extensions;
 using GalaSoft.MvvmLight.Command;
 
 namespace CoApp.Gui.Toolkit.ViewModels.Settings
@@ -14,13 +15,13 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
     public class PermissionsSettingsViewModel : ScreenViewModel
     {
         internal IPolicyService Policy;
-        private PermissionViewModel _block;
-        private PermissionViewModel _changeSessionFeed;
+        internal ICoAppService CoApp;
+
+   
         private PermissionViewModel _changeSystemFeed;
         private PermissionViewModel _installing;
         private PermissionViewModel _remove;
-        private PermissionViewModel _require;
-        private PermissionViewModel _active;
+
         private PermissionViewModel _updating;
 
         private string _userName;
@@ -32,14 +33,16 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
             Updating = new PermissionViewModel();
             Installing = new PermissionViewModel();
             Remove = new PermissionViewModel();
-            Active = new PermissionViewModel();
-            Block = new PermissionViewModel();
-            Require = new PermissionViewModel();
-            ChangeSessionFeed = new PermissionViewModel();
+            //Active = new PermissionViewModel();
+            //Block = new PermissionViewModel();
+            //Require = new PermissionViewModel();
+            SetState = new PermissionViewModel();
+            
             ChangeSystemFeed = new PermissionViewModel();
             Policy = new LocalServiceLocator().PolicyService;
+            CoApp = new LocalServiceLocator().CoAppService;
             Save = new RelayCommand(ExecuteSave);
-
+            ElevateSave = new RelayCommand(ExecuteElevateSave);
 
             Loaded += OnLoaded;
 
@@ -47,8 +50,22 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
             UserName = Policy.UserName;
         }
 
+        private void ExecuteElevateSave()
+        {
+            CoApp.Elevate().Continue(() => Save.Execute(null));
+        }
+
+        protected override Task ReloadPolicies()
+        {
+          
+            return _policyService.CanChangeSettings.ContinueWith(
+                t => UpdateOnUI(() => CanChangeSettings = t.Result));
+        }
+
+
         private void GetPoliciesAgain(PoliciesUpdatedMessage policiesUpdatedMessage = null)
         {
+            ReloadPolicies();
             Policy.InstallPolicy.ContinueWith((t) =>
                                               UpdateOnUI(() => Installing.Result = t.Result));
             Policy.UpdatePolicy.ContinueWith((t) =>
@@ -56,14 +73,13 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
 
             Policy.RemovePolicy.ContinueWith((t) =>
                                              UpdateOnUI(() => Remove.Result = t.Result));
-            Policy.ActivePolicy.ContinueWith(t => UpdateOnUI(() => Active.Result = t.Result));
+            Policy.SetStatePolicy.ContinueWith(t => 
+                UpdateOnUI(() => SetState.Result = t.Result));
+            
 
-            Policy.BlockPolicy.ContinueWith(t => UpdateOnUI(() => Block.Result = t.Result));
-
-            Policy.RequirePolicy.ContinueWith(t => UpdateOnUI(() => Require.Result = t.Result));
             Policy.SystemFeedsPolicy.ContinueWith(t => UpdateOnUI(() => ChangeSystemFeed.Result = t.Result));
 
-            Policy.SessionFeedsPolicy.ContinueWith(t => UpdateOnUI(() => ChangeSessionFeed.Result = t.Result));
+          //  Policy.SessionFeedsPolicy.ContinueWith(t => UpdateOnUI(() => ChangeSessionFeed.Result = t.Result));
         }
 
         private void ExecuteSave()
@@ -73,10 +89,8 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
                                     Policy.SetUpdatePolicy(Updating.Result),
                                     Policy.SetInstallPolicy(Installing.Result),
                                     Policy.SetRemovePolicy(Remove.Result),
-                                    Policy.SetBlockPolicy(Block.Result),
-                                    Policy.SetRequirePolicy(Require.Result),
-                                    Policy.SetActivePolicy(Active.Result),
-                                    Policy.SetSessionFeedsPolicy(ChangeSessionFeed.Result),
+                                    Policy.SetSetStatePolicy(SetState.Result),
+                                    //Policy.SetSessionFeedsPolicy(ChangeSessionFeed.Result),
                                     Policy.SetSystemFeedsPolicy(ChangeSystemFeed.Result)
                                 };
             //TODO: This should update the UI and mention it's been saved
@@ -115,36 +129,20 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
                 RaisePropertyChanged("Remove");
             }
         }
-        
-        public PermissionViewModel Active
+
+        private PermissionViewModel _setState;
+
+        public PermissionViewModel SetState
         {
-            get { return _active; }
+            get { return _setState; }
             set
             {
-                _active = value;
-                RaisePropertyChanged("Active");
+                _setState = value;
+                RaisePropertyChanged("SetState");
             }
         }
+
         
-        public PermissionViewModel Require
-        {
-            get { return _require; }
-            set
-            {
-                _require = value;
-                RaisePropertyChanged("Require");
-            }
-        }
-        
-        public PermissionViewModel Block
-        {
-            get { return _block; }
-            set
-            {
-                _block = value;
-                RaisePropertyChanged("Block");
-            }
-        }
         
         public PermissionViewModel ChangeSystemFeed
         {
@@ -156,15 +154,7 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
             }
         }
         
-        public PermissionViewModel ChangeSessionFeed
-        {
-            get { return _changeSessionFeed; }
-            set
-            {
-                _changeSessionFeed = value;
-                RaisePropertyChanged("ChangeSessionFeed");
-            }
-        }
+    
 
         
         public string UserName
@@ -184,8 +174,8 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
 
         
         
-        public  ICommand Save { get; set; }
+        public ICommand Save { get; set; }
 
-       
+        public ICommand ElevateSave { get; set; }
     }
 }

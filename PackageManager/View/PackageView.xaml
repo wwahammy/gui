@@ -14,12 +14,15 @@
                           mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="1024"  TextBlock.FontSize="14">
     <Controls:CoAppFrameChild.Resources>
-
-        <Converters:ValueConverterList x:Key="NotSafeForWorkVisibilityConverter">
-            <Converters:InvertBooleanConverter/>
-            <BooleanToVisibilityConverter/>
-        </Converters:ValueConverterList>
-
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/ProductPackageCommonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Converters:ValueConverterList x:Key="InvertAndThenBoolToVisibility">
+                <Converters:InvertBooleanConverter/>
+                <BooleanToVisibilityConverter/>
+            </Converters:ValueConverterList>
+        </ResourceDictionary>
 
 
     </Controls:CoAppFrameChild.Resources>
@@ -59,7 +62,7 @@
                         <Button Style="{DynamicResource MetroLinkButtonStyle}" Command="{Binding ReportNSFW}"></Button>
                     </StackPanel>
 
-                    <TextBlock  Visibility="{Binding IsSafeForWork, Converter={StaticResource NotSafeForWorkVisibilityConverter}}" Margin="0,0,0,10" Text="Not safe for work"/>
+                    <TextBlock  Visibility="{Binding IsSafeForWork, Converter={StaticResource InvertAndThenBoolToVisibility}}" Margin="0,0,0,10" Text="Not safe for work"/>
 
 
                     <TextBlock Margin="0,0,0,10">
@@ -86,12 +89,9 @@
 
                 <!-- middle area-->
                 <StackPanel>
-                    <Controls1:ElevateButton Content="Install" HorizontalAlignment="Left" MustElevate="{Binding CanInstall, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install}"  Visibility="{Binding IsInstalled, Converter={StaticResource NotSafeForWorkVisibilityConverter}}"/>
-                    <Controls1:ElevateButton Content="Remove" HorizontalAlignment="Left" MustElevate="{Binding CanRemove, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Remove}" Visibility="{Binding IsInstalled, Converter={StaticResource boolToVisConverter}}"/>
-                    <StackPanel Visibility="{Binding Show32Bit, Converter={StaticResource boolToVisConverter}}">
-                        <Controls1:ElevateButton Content="Install 32 bit" HorizontalAlignment="Left" MustElevate="{Binding CanInstall, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install32Bit}" Visibility="{Binding Is32BitInstalled, Converter={StaticResource NotSafeForWorkVisibilityConverter}}"/>
-                        <Controls1:ElevateButton Content="Remove 32 bit" HorizontalAlignment="Left"  MustElevate="{Binding CanRemove, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Remove32Bit}" Visibility="{Binding Is32BitInstalled, Converter={StaticResource boolToVisConverter}}"/>
-                    </StackPanel>
+                    <Controls1:ElevateButton Content="Install" HorizontalAlignment="Left" MustElevate="{Binding CanInstall, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding ElevateInstall}" ElevatedCommand="{Binding Install}"  Visibility="{Binding IsInstalled, Converter={StaticResource InvertAndThenBoolToVisibility}}"/>
+                    <Controls1:ElevateButton Content="Remove" HorizontalAlignment="Left" MustElevate="{Binding CanRemove, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding ElevateRemove}" ElevatedCommand="{Binding Remove}" Visibility="{Binding IsInstalled, Converter={StaticResource boolToVisConverter}}"/>
+                    
                 </StackPanel>
 
             </DockPanel>
@@ -110,30 +110,15 @@
 
                     <Controls1:StyleableHeaderControl Header="Tags" Style="{DynamicResource PackageSectionStyle}" Visibility="{Binding Tags, Converter={StaticResource EnumerableCountToVisibilityConverter}}">
                         <TextBlock Support1:TextBlockExtensions.InlinesList="{Binding Path=Tags, Converter={StaticResource CommaDelimitedTagListConverter1}}" TextWrapping="Wrap" />
-                        <!--<Controls1:CommaItemsControl ItemsSource="{Binding Tags}">
-                            <Controls1:CommaItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
-                                        <Run Text="{Binding Tag}"/>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </Controls1:CommaItemsControl.ItemTemplate>
-                        </Controls1:CommaItemsControl>
                         
-                        <Controls:DelimitedControl >
-
-                            <Controls:DelimitedControl.ValueTemplate>
-                                <DataTemplate>
-                                    <Button Content="{Binding Tag}" Style="{StaticResource MetroLinkButtonStyle}" Command="{Binding Navigate}"/>
-                                </DataTemplate>
-                            </Controls:DelimitedControl.ValueTemplate>
-                        </Controls:DelimitedControl>-->
                     </Controls1:StyleableHeaderControl>
+					
+					
                 </StackPanel>
             </TabItem>
             <TabItem Header="Details" Style="{DynamicResource ProductPackageTabStyle}">
                 <StackPanel>
-                    <Controls1:StyleableHeaderControl Header="Dependencies" Style="{DynamicResource PackageSectionStyle}">
+                    <Controls1:StyleableHeaderControl Header="Dependencies" Style="{DynamicResource PackageSectionStyle}" Visibility="{Binding Dependencies, Converter={StaticResource EnumerableCountToVisibilityConverter}}" >
 
                         <TextBlock Support1:TextBlockExtensions.InlinesList="{Binding Path=Dependencies, Converter={StaticResource CommaDelimitedConverter1}}" TextWrapping="Wrap" />
 
@@ -145,8 +130,23 @@
 
                     </Controls1:StyleableHeaderControl>
 
-                    <Controls1:StyleableHeaderControl Header="Replaces" Style="{DynamicResource PackageSectionStyle}">
+                    <Controls1:StyleableHeaderControl Header="Replaces" Style="{DynamicResource PackageSectionStyle}" Visibility="{Binding Path=BindingPolicyRange, 
+                        Converter={DynamicResource NullEmptyStringToVisibilityConverter1}}">
                         <TextBlock Text="{Binding BindingPolicyRange}"/>
+                    </Controls1:StyleableHeaderControl>
+
+                    <Controls1:StyleableHeaderControl Header="Advanced Options"  Style="{DynamicResource PackageSectionStyle}">
+                    
+					<StackPanel Orientation="Horizontal">
+                        <Controls1:ElevateButton Content="Block" UnelevatedCommand="{Binding ElevateBlockPackage}" ElevatedCommand="{Binding BlockPackage}" MustElevate="{Binding CanBlock, Converter={StaticResource invertConverter}}" Visibility="{Binding IsBlocked, Converter={StaticResource InvertAndThenBoolToVisibility }}"/>
+                        <Controls1:ElevateButton Content="Unblock" UnelevatedCommand="{Binding ElevateUnblockPackage}" ElevatedCommand="{Binding UnblockPackage}" MustElevate="{Binding CanBlock, Converter={StaticResource invertConverter}}" Visibility="{Binding IsBlocked, Converter={StaticResource boolToVisConverter}}"/>
+                        
+                        <Controls1:ElevateButton Content="Lock" UnelevatedCommand="{Binding ElevateLockPackage}" ElevatedCommand="{Binding LockPackage}" MustElevate="{Binding CanLock, Converter={StaticResource invertConverter}}" Visibility="{Binding IsLocked, Converter={StaticResource InvertAndThenBoolToVisibility }}"/>
+                        <Controls1:ElevateButton Content="Unlock" UnelevatedCommand="{Binding ElevateUnlockPackage}" ElevatedCommand="{Binding UnlockPackage}" MustElevate="{Binding CanLock, Converter={StaticResource invertConverter}}" Visibility="{Binding IsLocked, Converter={StaticResource boolToVisConverter}}"/>
+
+                            <Controls1:ElevateButton Content="Activate" UnelevatedCommand="{Binding ElevateActivatePackage}" ElevatedCommand="{Binding ActivatePackage}" MustElevate="{Binding CanActivate, Converter={StaticResource invertConverter}}" Visibility="{Binding IsActive, Converter={StaticResource InvertAndThenBoolToVisibility }}"/>
+                            <Controls1:ElevateButton Content="Deactivate" UnelevatedCommand="{Binding ElevateDeactivatePackage}" ElevatedCommand="{Binding DeactivatePackage}" MustElevate="{Binding CanActivate, Converter={StaticResource invertConverter}}" Visibility="{Binding IsActive, Converter={StaticResource boolToVisConverter}}"/>
+                    </StackPanel>
                     </Controls1:StyleableHeaderControl>
                 </StackPanel>
             </TabItem>

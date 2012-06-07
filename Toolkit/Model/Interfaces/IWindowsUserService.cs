@@ -27,12 +27,14 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
         /// 
         /// </summary>
         /// <param name="user">If this isn't really a Windows Principal, and you're not mocking this out, it won't work</param>
+        /// <param name="sidToCheck"></param>
         bool IsSIDInUsersGroup(IIdentity user, SidWrapper sidToCheck);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="user">If this isn't really a Windows Principal, and you're not mocking this out, it won't work</param>
+        /// <param name="sidToCheck"></param>
         bool IsSIDInUsersGroup(IIdentity user, string sidToCheck);
 
         

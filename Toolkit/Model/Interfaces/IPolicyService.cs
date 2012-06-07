@@ -10,13 +10,7 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
 
         Task<PolicyResult> RemovePolicy { get; }
 
-        Task<PolicyResult> BlockPolicy { get; }
-
-        Task<PolicyResult> FreezePolicy { get; }
-
-        Task<PolicyResult> ActivePolicy { get; }
-
-        Task<PolicyResult> RequirePolicy { get; }
+        Task<PolicyResult> SetStatePolicy { get; }
 
         Task<PolicyResult> SystemFeedsPolicy { get; }
 
@@ -25,10 +19,8 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
         Task<bool> CanInstall { get; }
         Task<bool> CanUpdate { get; }
         Task<bool> CanRemove { get; }
-        Task<bool> CanRequire { get; }
-        Task<bool> CanSetActive { get; }
-        Task<bool> CanFreeze { get; }
-        Task<bool> CanBlock { get; }
+
+        Task<bool> CanSetState { get; }
 
         Task<bool> CanSetSessionFeeds { get; }
         Task<bool> CanSetSystemFeeds { get; }
@@ -38,13 +30,13 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
         Task SetInstallPolicy(PolicyResult result);
         Task SetUpdatePolicy(PolicyResult result);
         Task SetRemovePolicy(PolicyResult result);
-        Task SetBlockPolicy(PolicyResult result);
-        Task SetFreezePolicy(PolicyResult result);
-        Task SetActivePolicy(PolicyResult result);
-        Task SetRequirePolicy(PolicyResult result);
+
+        Task SetSetStatePolicy(PolicyResult result);
         Task SetSystemFeedsPolicy(PolicyResult result);
         Task SetSessionFeedsPolicy(PolicyResult result);
 
+
+        void ReloadPolicies();
         string UserName { get; }
 
     }
@@ -63,10 +55,7 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
         InstallPackage,
         UpdatePackage,
         RemovePackage,
-        FreezePackage,
-        ChangeActivePackage,
-        ChangeRequiredState,
-        ChangeBlockedState,
+        ChangeState,
         EditSystemFeeds,
         EditSessionFeeds,
         ModifyPolicy

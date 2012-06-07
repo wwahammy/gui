@@ -21,4 +21,8 @@
     <DataTemplate DataType="{x:Type ViewModel:InstallingViewModel}">
         <Views:InstallingView DataContext="{Binding}"/>
     </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type ViewModel:AskToCreateEventViewModel}">
+        <Views:AskToCreateEventView DataContext="{Binding}"/>
+    </DataTemplate>
 </ResourceDictionary>

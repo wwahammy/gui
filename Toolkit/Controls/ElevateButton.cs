@@ -30,7 +30,7 @@ namespace CoApp.Gui.Toolkit.Controls
     /// Step 2)
     /// Go ahead and use your control in the XAML file.
     ///
-    ///     <MyNamespace:ElevateButton/>
+    ///
     ///
     /// </summary>
     public class ElevateButton : Button

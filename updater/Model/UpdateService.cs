@@ -165,7 +165,7 @@ namespace CoApp.Updater.Model
 
         public Task SetDefaultScheduledTask()
         {
-            return CoApp.SetScheduledTask("coapp_update", @"c:\programdata\bin\CoApp.Update.exe", "--quiet", 3, 0, null,
+            return CoApp.SetScheduledTask("coapp_update", @"c:\programdata\bin\CoApp.Updater.exe", "--quiet", 3, 0, null,
                                           60);
                 
         }

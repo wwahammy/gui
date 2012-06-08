@@ -32,8 +32,10 @@ namespace CoApp.Gui.Toolkit.ViewModels
         {
             _policyService = new LocalServiceLocator().PolicyService;
             PostLoadTasks = new List<Task>();
+            
 
             Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
             //Restart = new RelayCommand(RunRestart);
             DefaultElevate =
                 new RelayCommand(
@@ -51,6 +53,16 @@ namespace CoApp.Gui.Toolkit.ViewModels
                                                                          {Title = "Cancel", IsCancel = true}
                                                                  }
                                                }));
+        }
+
+        private void OnUnloaded()
+        {
+            MessengerInstance.Unregister<PoliciesUpdatedMessage>(this);
+        }
+
+        private void PoliciesUpdated(PoliciesUpdatedMessage policiesUpdatedMessage)
+        {
+            ReloadPolicies();
         }
 
         protected List<Task> PostLoadTasks { get; private set; }
@@ -101,8 +113,18 @@ namespace CoApp.Gui.Toolkit.ViewModels
         }
 
 
+        private bool? _canUpdate;
 
-   
+        public bool? CanUpdate
+        {
+            get { return _canUpdate; }
+            set
+            {
+                _canUpdate = value;
+                RaisePropertyChanged("CanUpdate");
+            }
+        }
+
         private bool? _canInstall;
 
         public bool? CanInstall
@@ -124,31 +146,6 @@ namespace CoApp.Gui.Toolkit.ViewModels
             {
                 _canRemove = value;
                 RaisePropertyChanged("CanRemove");
-            }
-        }
-
-        private bool? _canBlock;
-
-        public bool? CanBlock
-        {
-            get { return _canBlock; }
-            set
-            {
-                _canBlock = value;
-                RaisePropertyChanged("CanBlock");
-            }
-        }
-
-
-        private bool? _canRequire;
-
-        public bool? CanRequire
-        {
-            get { return _canRequire; }
-            set
-            {
-                _canRequire = value;
-                RaisePropertyChanged("CanRequire");
             }
         }
 
@@ -189,18 +186,42 @@ namespace CoApp.Gui.Toolkit.ViewModels
             }
         }
 
-        
+        private bool? _canSetState;
 
-        
-        protected virtual Task  ReloadPolicies()
+        public bool? CanSetState
         {
-            return Task.Factory.StartNew(() => { });
+            get { return _canSetState; }
+            set
+            {
+                _canSetState = value;
+                RaisePropertyChanged("CanSetState");
+            }
+        }
+
+        protected void  ReloadPolicies()
+        {
+            _policyService.CanUpdate.ContinueWith(
+                 t => UpdateOnUI(() => CanUpdate = t.Result));
+
+            _policyService.CanSetSystemFeeds.ContinueWith(
+                t => UpdateOnUI(() => CanSetSystemFeeds = t.Result));
+            _policyService.CanSetSessionFeeds.ContinueWith(
+                t => UpdateOnUI(() => CanSetSessionFeeds = t.Result));
+            _policyService.CanRemove.ContinueWith(
+                t => UpdateOnUI(() => CanRemove = t.Result));
+            _policyService.CanInstall.ContinueWith(
+                t => UpdateOnUI(() => CanInstall = t.Result));
+            _policyService.CanChangeSettings.ContinueWith(
+                t => UpdateOnUI(() => CanChangeSettings = t.Result));
+            _policyService.CanSetState.ContinueWith(
+                t => UpdateOnUI(() => CanSetState = t.Result));
         }
 
 
         private void OnLoaded()
         {
-          
+            ReloadPolicies();
+            MessengerInstance.Register<PoliciesUpdatedMessage>(this, PoliciesUpdated);
       
         }
 

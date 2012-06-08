@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Model;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Toolkit.Extensions;
 using GalaSoft.MvvmLight.Command;
 
 namespace CoApp.Gui.Toolkit.ViewModels.Settings
@@ -17,7 +18,7 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
         private ObservableCollection<string> _feeds;
         private string _selectedItem;
 
-        private bool NotInABlockingCommand = true;
+     
 
         public FeedSettingsViewModel()
         {
@@ -43,16 +44,17 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
 
                         });
 
-            ElevateAdd = new RelayCommand<string>((s) => CoAppService.Elevate().ContinueWith(t => ReloadPolicies()).ContinueWith((t) => Add.Execute(s)));
-            ElevateRemove = new RelayCommand<string>((s) => CoAppService.Elevate().ContinueWith((t) => Remove.Execute(s)));
+            //if can't elevate, do something
+            ElevateAdd = new RelayCommand<string>((s) => CoAppService.Elevate().ContinueAlways(t => ReloadPolicies()).ContinueWith((t) => Add.Execute(s)));
+            ElevateRemove = new RelayCommand<string>((s) => CoAppService.Elevate().ContinueWith(t => ReloadPolicies()).ContinueWith((t) => Remove.Execute(s)));
             Loaded += ReloadFeeds;
         }
 
         private void RaiseAllCanExecutesChanged(bool notInABlockingCommand)
         {
-            NotInABlockingCommand = notInABlockingCommand;
-           UpdateOnUI(() =>  Add.RaiseCanExecuteChanged());
-            UpdateOnUI(() =>  Remove.RaiseCanExecuteChanged());
+          //  NotInABlockingCommand = notInABlockingCommand;
+          // UpdateOnUI(() =>  Add.RaiseCanExecuteChanged());
+            //UpdateOnUI(() =>  Remove.RaiseCanExecuteChanged());
         }
 
 
@@ -66,19 +68,7 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
             }
         }
 
-        protected override Task ReloadPolicies()
-        {
-            return
-                _policyService.CanChangeSettings.ContinueWith(t => 
-                    UpdateOnUI(() => 
-                        CanChangeSettings = t.Result)).
-                    ContinueWith(
-                        t1 =>
-                        _policyService.CanSetSystemFeeds.ContinueWith(
-                            t => UpdateOnUI(() => 
-                                CanSetSystemFeeds = t.Result)))
-                ;
-        }
+ 
 
 
         public RelayCommand<string> Add { get; set; }
@@ -113,7 +103,7 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
 
         private void ReloadFeeds()
         {
-            ReloadPolicies().Wait();
+            
             SysFeed = CoAppService.SystemFeeds;
             SysFeed.ContinueWith((t) =>
                                  UpdateOnUI(() =>

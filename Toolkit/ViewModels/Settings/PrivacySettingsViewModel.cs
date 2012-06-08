@@ -31,14 +31,10 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
         }
 
 
-        protected override Task ReloadPolicies()
-         {
-             return _policyService.CanChangeSettings.ContinueWith(t => UpdateOnUI(() => CanChangeSettings = t.Result));
-         }
-
+      
          private void OnLoaded()
          {
-             ReloadPolicies().Wait();
+             
              CoApp.OptedIn.ContinueWith((t) =>
                  UpdateOnUI(() => OptedIn = t.Result));
          }

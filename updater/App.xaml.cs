@@ -12,6 +12,7 @@ using CoApp.Toolkit.Logging;
 using CoApp.Updater.Model;
 using CoApp.Updater.Support;
 using CoApp.Updater.ViewModel;
+using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using MahApps.Metro;
 
@@ -27,13 +28,19 @@ namespace CoApp.Updater
 
         public App() : base()
         {
-
+            Messenger.Default.Register<BalloonToolTipMessage>(this, HandleToolTipMessage);
             //load possible assemblies
             var n = new GoToMessage();
             var a = new Accent();
             DispatcherUnhandledException += OnDispatcherUnhandledException;
             
             
+        }
+
+        private void HandleToolTipMessage(BalloonToolTipMessage balloonToolTipMessage)
+        {
+            var realIcon = (ToolTipIcon)Enum.Parse(typeof(ToolTipIcon), balloonToolTipMessage.Icon.ToString());
+            _notifyIcon.ShowBalloonTip(balloonToolTipMessage.TimeToDisplay, balloonToolTipMessage.Title, balloonToolTipMessage.Message, realIcon);
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs dispatcherUnhandledExceptionEventArgs)

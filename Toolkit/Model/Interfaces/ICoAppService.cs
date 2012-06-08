@@ -73,8 +73,9 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
         Task<ScheduledTask> GetScheduledTask(string name);
 
         Task SetScheduledTask(string name, string executable, string commandline, int hour, int minutes, DayOfWeek? dayOfWeek, int intervalInMinutes);
-
-
+        /*
+        Task GetCoAppUpdaterTask();
+        Task SetCoAppUpdaterTask(int hour, int minutes, DayOfWeek? dayOfWeek )*/
         Task RemoveScheduledTask(string name);
 
         Task<int> TrimAll();

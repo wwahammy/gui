@@ -244,6 +244,7 @@ namespace CoApp.Gui.Toolkit.Model
         private void CoAppOnElevated()
         {
             ReloadPolicies();
+            Messenger.Default.Send(new PoliciesUpdatedMessage());
         }
 
         private Task<IEnumerable<PolicyProxy>> GetPolicyTask()

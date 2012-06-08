@@ -108,6 +108,7 @@
       <DependentUpon>PopUpControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\StyleableHeaderControl.cs" />
+    <Compile Include="Messages\BalloonToolTipMessage.cs" />
     <Compile Include="Messages\EndLoadingPageMessage.cs" />
     <Compile Include="Messages\GoToMessage.cs" />
     <Compile Include="Messages\PoliciesUpdatedMessage.cs" />

@@ -55,17 +55,11 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
             CoApp.Elevate().Continue(() => Save.Execute(null));
         }
 
-        protected override Task ReloadPolicies()
-        {
-          
-            return _policyService.CanChangeSettings.ContinueWith(
-                t => UpdateOnUI(() => CanChangeSettings = t.Result));
-        }
 
 
         private void GetPoliciesAgain(PoliciesUpdatedMessage policiesUpdatedMessage = null)
         {
-            ReloadPolicies();
+         
             Policy.InstallPolicy.ContinueWith((t) =>
                                               UpdateOnUI(() => Installing.Result = t.Result));
             Policy.UpdatePolicy.ContinueWith((t) =>
@@ -79,7 +73,6 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
 
             Policy.SystemFeedsPolicy.ContinueWith(t => UpdateOnUI(() => ChangeSystemFeed.Result = t.Result));
 
-          //  Policy.SessionFeedsPolicy.ContinueWith(t => UpdateOnUI(() => ChangeSessionFeed.Result = t.Result));
         }
 
         private void ExecuteSave()

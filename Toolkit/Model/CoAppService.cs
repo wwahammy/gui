@@ -27,7 +27,7 @@ namespace CoApp.Gui.Toolkit.Model
 
 
         internal readonly PackageManager EPM;
-        private readonly RegistryView _coAppSystem = RegistryView.CoAppSystem;
+        private readonly RegistryView _coAppSystem = RegistryView.CoAppUser;
 
 
         public CoAppService()

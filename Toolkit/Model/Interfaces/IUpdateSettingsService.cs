@@ -4,16 +4,22 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
 {
     public interface IUpdateSettingsService
     {
-        Task<UpdateChoice> UpdateChoice { get; }
 
-        Task SetUpdateChoice(UpdateChoice choice);
+        Task SetTask(int hour, UpdateDayOfWeek day, bool autoTrim, UpdateChoice choice);
 
-        Task<UpdateTimeAndDay> UpdateTimeAndDay { get; }
+        Task SetTaskToDefault();
 
-        Task SetUpdateTimeAndDay(int hour, UpdateDayOfWeek day);
+        Task<UpdateTaskDTO> GetTask();
 
-        Task<bool> AutoTrim { get; }
-        Task SetAutoTrim(bool autotrim);
- 
+        Task<bool> IsTaskSet();
+
+    }
+
+    public class UpdateTaskDTO
+    {
+        public int Hour { get; set; }
+        public UpdateDayOfWeek DayOfWeek { get; set; }
+        public bool AutoTrim { get; set; }
+        public UpdateChoice UpdateChoice { get; set; }
     }
 }

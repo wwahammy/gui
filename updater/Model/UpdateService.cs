@@ -92,7 +92,9 @@ namespace CoApp.Updater.Model
                                                                              if (!t.IsFaulted)
                                                                              {
                                                                                  var trim =
-                                                                                     UpdateSettings.AutoTrim.Result;
+                                                                                     UpdateSettings.GetTask().
+                                                                                         ContinueWith(
+                                                                                             t1 => t1.Result.AutoTrim).Result;
                                                                                  if (trim)
                                                                                  {
                                                                                      var task = CoApp.TrimAll();
@@ -152,14 +154,7 @@ namespace CoApp.Updater.Model
 
         public Task<bool> IsSchedulerSet
         {
-            get
-            {
-                return CoApp.ScheduledTasks.ContinueAlways(t =>
-                                                               {
-                                                                   t.RethrowWhenFaulted();
-                                                                   return t.Result.Any(s => s.Name == "coapp_update");
-                                                               });
-            }
+            get { return UpdateSettings.IsTaskSet(); }
         }
 
 

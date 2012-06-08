@@ -4,15 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CoApp.Toolkit.Extensions;
 
 namespace CoApp.Gui.Toolkit.Support
 {
     public static class TaskExtensions
     {
+
+
         public static int WaitAny(this IEnumerable<Task> tasks)
         {
             return Task.WaitAny(tasks.ToArray());
         }
+
 
         public static int WaitAny (this IEnumerable<Task> tasks, CancellationToken cancellationToken)
         {

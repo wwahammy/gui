@@ -29,7 +29,7 @@ namespace CoApp.Updater.Support
 
         public Task<bool> HandleScheduledTaskCall()
         {
-            var scheduledTask = UpdateSettings.UpdateTimeAndDay;
+            var scheduledTask = UpdateSettings.GetTask();
             var taskLastRun = Update.LastScheduledTaskRealRun;
 
             return Task.Factory.ContinueWhenAll(new Task[] {scheduledTask, taskLastRun}, (tasks) =>
@@ -40,9 +40,9 @@ namespace CoApp.Updater.Support
                                                                                                           lastrunShouldHaveBeen
                                                                                                               =
                                                                                                               WhenLastRunShouldHaveBeen
-                                                                                                                  (scheduledTask
-                                                                                                                       .
-                                                                                                                       Result,
+                                                                                                                  ( new UpdateTimeAndDay { 
+                                                                                                                      DayOfWeek = scheduledTask.Result.DayOfWeek, Time = scheduledTask.Result.Hour},
+                                                                                                                       
                                                                                                                    DateTime
                                                                                                                        .
                                                                                                                        Now);

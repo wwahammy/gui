@@ -95,30 +95,32 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
 
         private void ExecuteSave()
         {
-            var tasks = new []
-                           {
-                               UpdateService.SetUpdateChoice(UpdateChoice),
-                               UpdateService.SetUpdateTimeAndDay(UpdateTime, DayOfWeek),
-                               UpdateService.SetAutoTrim(AutoTrim),
-
-                           };
-            Task.Factory.ContinueWhenAll(tasks, t => UpdateOnUI(OnLoaded));
+            var task = UpdateService.SetTask(UpdateTime, DayOfWeek, AutoTrim, UpdateChoice);
+            task.Continue(() => ReloadInfo());
+                            
+           
 
         }
 
+        private void ReloadInfo()
+        {
+            var task = UpdateService.GetTask();
+            task.Continue(t =>
+                              {
+                                  UpdateOnUI(() => DayOfWeek = t.DayOfWeek);
+
+                                  UpdateOnUI(() => UpdateTime = t.Hour);
+                                  UpdateOnUI(() => AutoTrim = t.AutoTrim);
+                                  UpdateOnUI(() => UpdateOnUI(() => UpdateChoice = t.UpdateChoice));
+                              });
+        }
+
+
         private void OnLoaded()
         {
-            _policyService.CanChangeSettings.ContinueAlways(t => UpdateOnUI( () => CanChangeSettings = t.Result));
+            
 
-            UpdateService.UpdateChoice.ContinueWith(t => UpdateOnUI(() => UpdateChoice = t.Result));
-            UpdateService.UpdateTimeAndDay.ContinueWith(t => UpdateOnUI(() =>
-                                                                            {
-                                                                                DayOfWeek = t.Result.DayOfWeek;
-                                                                                UpdateTime = t.Result.Time;
-                                                                            }));
-
- 
-            UpdateService.AutoTrim.ContinueWith(t => UpdateOnUI(() => AutoTrim = t.Result));
+           ReloadInfo();
         }
 
         #region Choices for comboboxes

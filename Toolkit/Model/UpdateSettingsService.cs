@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.Support.Converters;
 using CoApp.Packaging.Client;
+using CoApp.Toolkit.Extensions;
+using CoApp.Toolkit.Logging;
 
 namespace CoApp.Gui.Toolkit.Model
 {
@@ -23,10 +25,6 @@ namespace CoApp.Gui.Toolkit.Model
             get { return Task.Factory.StartNew(() => CoApp.UpdateChoice, TaskCreationOptions.AttachedToParent); }
         }
 
-        public Task SetUpdateChoice(UpdateChoice choice)
-        {
-            return Task.Factory.StartNew(() => CoApp.UpdateChoice = choice, TaskCreationOptions.AttachedToParent);
-        }
 
         public Task<UpdateTimeAndDay> UpdateTimeAndDay
         {
@@ -47,7 +45,7 @@ namespace CoApp.Gui.Toolkit.Model
         public Task SetUpdateTimeAndDay(int hour, UpdateDayOfWeek day)
         {
             return
-                CoApp.SetScheduledTask("coapp_update", "", "--quiet", hour, 0, UpdateDayOfWeekConverter.Convert(day), 60);
+                CoApp.SetScheduledTask("coapp_update", @"c:\programdata\bin\CoApp.Updater.exe", "--quiet", hour, 0, UpdateDayOfWeekConverter.Convert(day), 60);
         }
 
         public Task<bool> AutoTrim
@@ -60,10 +58,114 @@ namespace CoApp.Gui.Toolkit.Model
             return Task.Factory.StartNew(() => CoApp.TrimOnUpdate = autotrim);
         }
         
+        public Task SetDefaultScheduledTask()
+        {
+            return CoApp.SetScheduledTask("coapp_update", @"c:\programdata\bin\CoApp.Updater.exe", "--quiet", 3, 0, null,
+                                          60);
+
+        }
         
         private static ScheduledTask DefaultTask()
         {
-            return new ScheduledTask { CommandLine = "--quiet", DayOfWeek = null, Executable = "Coapp.Update", Hour = 3, IntervalInMinutes = 60, Minutes = 0, Name = "coapp_update" };
+            return new ScheduledTask { Name="coapp_update", CommandLine = "--quiet", 
+                DayOfWeek = null, Executable = @"c:\programdata\bin\CoApp.Updater.exe", Hour = 3, IntervalInMinutes = 60, Minutes = 0, };
+        }
+
+
+        public Task SetTask(int hour, UpdateDayOfWeek day, bool autoTrim, UpdateChoice choice)
+        {
+            return Task.Factory.StartNew(() =>
+                                             {
+                                                 CoApp.SetScheduledTask("coapp_update",
+                                                                        @"c:\programdata\bin\CoApp.Updater.exe",
+                                                                        "--quiet", 3, 0, null, 60);
+                                                 CoApp.TrimOnUpdate = autoTrim;
+                                                 CoApp.UpdateChoice = choice;
+                                             }
+                );
+
+        }
+
+        public Task SetTaskToDefault()
+        {
+            return SetTask(3, UpdateDayOfWeek.Everyday, CoAppService.DEFAULT_TRIM_ON_UPDATE,
+                           CoAppService.DEFAULT_UPDATE_CHOICE);
+        }
+
+        public Task<UpdateTaskDTO> GetTask()
+        {
+            return Task.Factory.StartNew(() => GetTaskDTO(), TaskCreationOptions.AttachedToParent);
+        }
+
+        public Task<bool> IsTaskSet()
+        {
+            return CoApp.ScheduledTasks.ContinueAlways(t =>
+            {
+                t.RethrowWhenFaulted();
+                return t.Result.Any(s => s.Name == "coapp_update");
+            });
+        }
+
+        private Task<ScheduledTask> GetCoAppUpdateTask()
+        {
+            return CoApp.GetScheduledTask("coapp_update");
+        }
+
+        private UpdateTaskDTO GetTaskDTO()
+        {
+            var dto = new UpdateTaskDTO();
+            try
+            {
+                dto.AutoTrim = CoApp.TrimOnUpdate;
+                
+            }
+            catch (Exception e )
+            {
+                Logger.Warning("Couldn't get TrimOnUpdate, {0}, {1}", e.Message, e.StackTrace);
+                dto.AutoTrim = CoAppService.DEFAULT_TRIM_ON_UPDATE;
+            }
+
+            try
+            {
+                dto.UpdateChoice = CoApp.UpdateChoice;
+            }
+            catch (Exception e )
+            {
+               
+                Logger.Warning("Couldn't get UpdateChoice, {0}, {1}", e.Message, e.StackTrace);
+                dto.UpdateChoice = CoAppService.DEFAULT_UPDATE_CHOICE;
+            }
+
+
+            var task = GetCoAppUpdateTask();
+            var cont = task.ContinueAlways((task1) =>
+                                               {
+                                                   if (task1.IsFaulted)
+                                                   {
+                                                       var t = DefaultTask();
+
+                                                       dto.Hour = t.Hour;
+                                                       dto.DayOfWeek = UpdateDayOfWeekConverter.ConvertBack(t.DayOfWeek);
+                                                   }
+                                                   else
+                                                   {
+                                                       dto.Hour = task.Result.Hour;
+                                                       dto.DayOfWeek =
+                                                           UpdateDayOfWeekConverter.ConvertBack(task.Result.DayOfWeek);
+                                                   }
+                                               });
+
+            cont.Wait();
+
+  
+
+            
+
+
+            return dto;
+
         }
     }
+
+  
 }

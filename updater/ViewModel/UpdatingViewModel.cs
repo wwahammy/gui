@@ -79,7 +79,8 @@ namespace CoApp.Updater.ViewModel
                             {
                                 if (UpdateService.NumberOfProductsSelected > 0)
                                 {
-                                    NavigationService.GoTo(ViewModelLocator.InstallingViewModelStatic);
+                                    NavigationService.GoTo(ViewModelLocator.PrimaryViewModelStatic);
+                                    
                                 }
                                 else
                                 {

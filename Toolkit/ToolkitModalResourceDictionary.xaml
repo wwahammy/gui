@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Toolkit="clr-namespace:CoApp.Gui.Toolkit"
+                    xmlns:Modal="clr-namespace:CoApp.Gui.Toolkit.Views.Modal"
+                    xmlns:Modal1="clr-namespace:CoApp.Gui.Toolkit.ViewModels.Modal">
+    <DataTemplate DataType="{x:Type Modal1:BasicModalViewModel}">
+        <Modal:BasicModalView/>
+    </DataTemplate>
+</ResourceDictionary>

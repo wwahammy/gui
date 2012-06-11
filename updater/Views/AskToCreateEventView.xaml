@@ -7,9 +7,10 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel LastChildFill="True">
 
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <Controls:ElevateButton Content="Schedule a this update task" UnelevatedCommand="{Binding ElevateSetScheduledTask}" MustElevate="True" ElevatedCommand="{Binding SetScheduledTask}"/>
-            <Button Content="Don't schedule an update task" Command="{Binding DontScheduleTask}"/></StackPanel>   
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" >
+            <Controls:ElevateButton Content="Schedule an update task" UnelevatedCommand="{Binding ElevateSetScheduledTask}" MustElevate="{Binding CanSetState, Converter={StaticResource invertConverter}}" ElevatedCommand="{Binding SetScheduledTask}" Margin="0,0,5,0"/>
+            <Button Content="Don't schedule an update task" Command="{Binding DontScheduleTask}"/>
+        </StackPanel>   
 		<TextBlock TextWrapping="Wrap">CoApp can automatically update packages for you by setting up a update task. Would you like to do that right now?</TextBlock> 
 	</DockPanel>
 </UserControl>

@@ -35,7 +35,7 @@ namespace CoApp.Updater.ViewModel
         {
 
             Messenger.Default.Register<GoToMessage>(this, ActOnNavigate);
-            Messenger.Default.Register<MetroDialogBoxMessage>(this, HandleDialogBoxMessage);
+           // Messenger.Default.Register<MetroDialogBoxMessage>(this, HandleDialogBoxMessage);
 
             nav = new LocalServiceLocator().NavigationService;
             Back = new RelayCommand(() => nav.Back());
@@ -73,7 +73,7 @@ namespace CoApp.Updater.ViewModel
 
         private void HandleDialogBoxMessage(MetroDialogBoxMessage metroDialogBoxMessage)
         {
-            if (metroDialogBoxMessage.Buttons != null)
+           /* if (metroDialogBoxMessage.Buttons != null)
             {
                 foreach(var button in metroDialogBoxMessage.Buttons)
                 {
@@ -87,7 +87,7 @@ namespace CoApp.Updater.ViewModel
 
             UpdateOnUI(() => DialogBoxInfo = metroDialogBoxMessage);
  
-            UpdateOnUI(() => DialogBoxVisualState = "Showing");
+            UpdateOnUI(() => DialogBoxVisualState = "Showing");*/
             
         }
 

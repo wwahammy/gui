@@ -23,20 +23,11 @@ namespace CoApp.Gui.Toolkit.Controls
         public PopUpControl()
         {
             InitializeComponent();
-            EventManager.RegisterClassHandler(typeof(PopUpControl), ButtonBase.ClickEvent, new RoutedEventHandler(OnClick));
+           // EventManager.RegisterClassHandler(typeof(PopUpControl), ButtonBase.ClickEvent, new RoutedEventHandler(OnClick));
             
         }
 
-        private void OnClick(object sender, RoutedEventArgs routedEventArgs)
-        {
-            this.IsOpen = false;
-        }
-
-
-        private void OnClosePopup(object sender, RoutedEventArgs routedEventArgs)
-        {
-            this.IsOpen = false;
-        }
+      
 /*
         public static readonly RoutedEvent ClosePopupEvent = EventManager.RegisterRoutedEvent(
             "ClosePopup", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(PopUpControl));

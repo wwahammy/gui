@@ -37,6 +37,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
             //Restart = new RelayCommand(RunRestart);
+            /*
             DefaultElevate =
                 new RelayCommand(
                     () =>
@@ -52,7 +53,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
                                                                      new ButtonDescription
                                                                          {Title = "Cancel", IsCancel = true}
                                                                  }
-                                               }));
+                                               }));*/
         }
 
         private void OnUnloaded()
@@ -243,22 +244,28 @@ namespace CoApp.Gui.Toolkit.ViewModels
 
         public virtual void FireLoad()
         {
-            MessengerInstance.Send(new StartLoadingPageMessage());
+            FireLoad(true);
+        }
+
+        public virtual void FireLoad(bool showLoadingPage)
+        {
+            //sed 
+            if (showLoadingPage)
+                MessengerInstance.Send(new StartLoadingPageMessage());
             if (Loaded != null)
                 Loaded();
 
             //after loading is finished
-            Task task = Task.Factory.StartNew(() =>
-                                                  {
-                                                      PostLoadTasks.ContinueAlways(
-                                                          (tasks) =>
-                                                              {
-                                                                  ClearPostLoadTasks();
-                                                                  MessengerInstance.Send(new EndLoadingPageMessage());
-                                                                  FirePostLoadFinished();
-                                                              }
-                                                          );
-                                                  });
+            Task task = PostLoadTasks.ContinueAlways(
+                                                    (tasks) =>
+                                                        {
+                                                            ClearPostLoadTasks();
+                                                            if (showLoadingPage)
+                                                                MessengerInstance.Send(new EndLoadingPageMessage());
+                                                            FirePostLoadFinished();
+                                                        }
+                                                    );
+                                                
         }
 
         private void FirePostLoadFinished()

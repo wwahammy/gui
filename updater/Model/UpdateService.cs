@@ -379,7 +379,7 @@ namespace CoApp.Updater.Model
                 lock (AllPossibleProducts)
                 {
                     AllPossibleProducts.Clear();
-                    UpdateChoice choice = CoApp.UpdateChoice;
+                    UpdateChoice choice = CoApp.UpdateChoice.Result;
                     foreach (Product product in updatableResults.Concat(upgradableResults))
                     {
                         AllPossibleProducts[product] = (choice == UpdateChoice.AutoInstallAll) ||

@@ -171,13 +171,13 @@ namespace CoApp.Updater.Support.Errors
 
 
         private void RunSendErrorMessage()
-        {
+        {/*
             Messenger.Default.Send(new MetroDialogBoxMessage
             {
                 Buttons = new ObservableCollection<ButtonDescription>{ new ButtonDescription { IsCancel = true, Title = "Close" } },
                 Content = ErrorMessage,
                 Title = "Unblock Failed"
-            });
+            });*/
         }
     }
 }

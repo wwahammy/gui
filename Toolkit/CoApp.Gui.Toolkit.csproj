@@ -100,10 +100,14 @@
     <Compile Include="Controls\CoAppFrame.cs" />
     <Compile Include="Controls\CoAppFrameChild.cs" />
     <Compile Include="Controls\CoAppWindow.cs" />
-    <Compile Include="Controls\DialogBox.cs" />
+    <Compile Include="Controls\DialogBox.xaml.cs">
+      <DependentUpon>DialogBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DialogBox2.cs" />
     <Compile Include="Controls\ElevateButton.cs" />
     <Compile Include="Controls\ElevateShield.cs" />
     <Compile Include="Controls\HeaderItem.cs" />
+    <Compile Include="Controls\ModalManager.cs" />
     <Compile Include="Controls\PopUpControl.xaml.cs">
       <DependentUpon>PopUpControl.xaml</DependentUpon>
     </Compile>
@@ -155,6 +159,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Support\BindableResources.cs" />
     <Compile Include="Support\CanDisableCommandAttribute.cs" />
     <Compile Include="Support\Converters\AlternationEqualityConverter.cs" />
     <Compile Include="Support\Converters\BackgroundToForegroundColorConverter.cs" />
@@ -185,6 +190,7 @@
     <Compile Include="Support\TextBlockExtensions.cs" />
     <Compile Include="Support\UIHelper.cs" />
     <Compile Include="ViewModels\CoAppWindowViewModel.cs" />
+    <Compile Include="ViewModels\ModalViewModel.cs" />
     <Compile Include="ViewModels\ScreenViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\FeedSettingsViewModel.cs" />
@@ -193,6 +199,10 @@
     <Compile Include="ViewModels\Settings\PrivacySettingsViewModel.cs" />
     <Compile Include="ViewModels\Settings\UpdateSettingsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="ViewModels\Modal\BasicModalViewModel.cs" />
+    <Compile Include="Views\Modal\BasicModalView.xaml.cs">
+      <DependentUpon>BasicModalView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
@@ -236,6 +246,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\DialogBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\PopUpControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -251,6 +265,14 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ToolkitModalResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modal\BasicModalView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -279,6 +301,7 @@
   <ItemGroup>
     <Resource Include="Resources\UAC-Win7-Disabled.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

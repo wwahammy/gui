@@ -29,7 +29,7 @@
 
                 <Border Grid.Column="0" Margin="0" Grid.Row="0" Height="30" BorderBrush="#FFB2B2B2" BorderThickness="0,0,1,0">
                     <Grid>
-                        <Button Style="{DynamicResource ChromelessLinkButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" Content="{Binding NumberOfProducts, PresentationTraceSources.TraceLevel=High}" Command="{Binding SelectUpdates, PresentationTraceSources.TraceLevel=High}" ContentStringFormat="{}{0} updates available"/>
+                        <Button Style="{DynamicResource ChromelessLinkButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0" Content="{Binding NumberOfProducts}" Command="{Binding SelectUpdates}" ContentStringFormat="{}{0} updates available"/>
 
                     </Grid>
                 </Border>

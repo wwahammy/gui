@@ -165,11 +165,11 @@
 
     </Style>
 
-
-    <Style TargetType="{x:Type Controls:DialogBox}">
+<!--
+    <Style TargetType="{x:Type Controls:DialogBox2}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Controls:DialogBox}">
+                <ControlTemplate TargetType="{x:Type Controls:DialogBox2}">
                     <Grid Background="#B15A5A5A">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -189,7 +189,9 @@
                                     <ColumnDefinition Width="680"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
+                                
                                 <Grid Grid.Column="1">
+                                  
                                     <Grid.Resources>
                                         <DataTemplate DataType="{x:Type Controls:ElevateButtonDescription}">
                                             <Controls:ElevateButton UnelevatedCommand="{Binding Command}" CommandParameter="{Binding CommandParameter}" CommandTarget="{Binding CommandTarget}" Content="{Binding Title}" Margin="20,0,0,0" MustElevate="True" HorizontalAlignment="Right" Style="{StaticResource Windows8DialogElevateButtonStyle}" VerticalAlignment="Bottom"/>
@@ -231,7 +233,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
     <Style TargetType="{x:Type Controls:CoAppWindow}">
         <Setter Property="MinHeight" Value="800"/>

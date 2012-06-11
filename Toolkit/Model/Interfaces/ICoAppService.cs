@@ -60,9 +60,13 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
         Task UpgradeExistingPackage(CanonicalName canonicalName, bool? autoUpgrade, Action<string, int, int> installProgress,
                                    Action<string> packageInstalled, CanonicalName packageToUpdateFrom);
 
-        UpdateChoice UpdateChoice { get; set; }
+        Task<UpdateChoice> UpdateChoice { get;}
 
-        bool TrimOnUpdate { get; set; }
+        Task SetUpdateChoice(UpdateChoice choice);
+
+        Task<bool> TrimOnUpdate { get;}
+
+        Task SetTrimOnUpdate(bool trim);
 
         DateTime? LastTimeInstalled { get; }
 

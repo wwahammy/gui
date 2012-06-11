@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace CoApp.Gui.Toolkit.Model
         public const string LASTTIMECHECKED_KEYNAME = "preferences#last_time_checked_for_updates";
         public const string LASTTIMEINSTALLED_KEYNAME = "preferences#last_time_installed_updates";
 
-        public const UpdateChoice DEFAULT_UPDATE_CHOICE = UpdateChoice.AutoInstallAll;
+        public const UpdateChoice DEFAULT_UPDATE_CHOICE = Interfaces.UpdateChoice.AutoInstallAll;
         public const bool DEFAULT_TRIM_ON_UPDATE = false;
 
 
@@ -53,7 +54,7 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                return EPM.Feeds.ContinueWith((a) =>
+                return EPM.Feeds.ContinueWith(a =>
                                               a.Result.Where(f => !f.IsSession).Select(f => f.Location));
             }
         }
@@ -220,31 +221,61 @@ namespace CoApp.Gui.Toolkit.Model
                                              });
         }
 
-        public UpdateChoice UpdateChoice
+        public Task<UpdateChoice> UpdateChoice
         {
             get
             {
-                if (!_coAppSystem[UPDATECHOICE_KEYNAME].HasValue)
-                {
-                    return DEFAULT_UPDATE_CHOICE;
-                }
-                return (UpdateChoice) Enum.Parse(typeof (UpdateChoice), _coAppSystem[UPDATECHOICE_KEYNAME].StringValue);
+                return EPM.GetConfigurationValue("preferences", "updatechoice").ContinueWith(t =>
+                                                                                          {
+                                                                                              if (t.IsFaulted || t.IsCanceled)
+                                                                                              {
+                                                                                                  return
+                                                                                                      DEFAULT_UPDATE_CHOICE;
+                                                                                              }
+                                                                                             
+                                                                                              return
+                                                                                                  (UpdateChoice)
+                                                                                                  Enum.Parse(
+                                                                                                      typeof (
+                                                                                                          UpdateChoice),
+                                                                                                      t.Result);
+                                                                                          });
+                    
+             
             }
-            set { _coAppSystem[UPDATECHOICE_KEYNAME].StringValue = value.ToString(); }
         }
 
 
-        public bool TrimOnUpdate
+        public Task SetUpdateChoice(UpdateChoice choice)
+        {
+            return EPM.SetConfigurationValue("preferences", "updatechoice", choice.ToString());
+        }
+
+        public Task<bool> TrimOnUpdate
         {
             get
             {
-                if (!_coAppSystem[TRIM_ON_UPDATE_KEYNAME].HasValue)
-                {
-                    return DEFAULT_TRIM_ON_UPDATE;
-                }
-                return _coAppSystem[UPDATECHOICE_KEYNAME].BoolValue;
+                return EPM.GetConfigurationValue("preferences", "trim_on_update").ContinueWith(t =>
+                                                                                                   {
+                                                                                                       if (
+                                                                                                           t.IsFaulted ||
+                                                                                                           t.IsCanceled)
+                                                                                                       {
+                                                                                                           return
+                                                                                                               DEFAULT_TRIM_ON_UPDATE;
+                                                                                                       }
+
+                                                                                                       return
+                                                                                                           bool.Parse(
+                                                                                                               t.Result);
+                                                                                                   });
+
             }
-            set { _coAppSystem[UPDATECHOICE_KEYNAME].BoolValue = value; }
+        }
+
+        public Task SetTrimOnUpdate(bool trim)
+        {
+            return EPM.SetConfigurationValue("preferences", "trim_on_update", trim.ToString(CultureInfo.InvariantCulture));
         }
 
         public DateTime? LastTimeInstalled
@@ -273,7 +304,7 @@ namespace CoApp.Gui.Toolkit.Model
                 }
             }
         }
-
+        
         public DateTime? LastTimeChecked
         {
             get

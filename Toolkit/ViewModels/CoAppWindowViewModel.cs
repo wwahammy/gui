@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Controls;
 using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Model;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Toolkit.Collections;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -14,9 +16,10 @@ namespace CoApp.Gui.Toolkit.ViewModels
     {
         private readonly INavigationService _nav;
         private bool _canGoBack;
-        private MetroDialogBoxMessage _dialogBoxInfo;
+        
         private string _dialogBoxVisualState;
         private ScreenViewModel _mainScreenViewModel;
+        
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -24,7 +27,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
         public CoAppWindowViewModel()
         {
             Messenger.Default.Register<GoToMessage>(this, ActOnNavigate);
-            Messenger.Default.Register<MetroDialogBoxMessage>(this, HandleDialogBoxMessage);
+           // Messenger.Default.Register<MetroDialogBoxMessage>(this, HandleDialogBoxMessage);
             Messenger.Default.Register<StartLoadingPageMessage>(this, StartLoadingPage);
             Messenger.Default.Register<EndLoadingPageMessage>(this, EndLoadingPage);
 
@@ -37,7 +40,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
             //temporary
             Shutdown = new RelayCommand(() => Application.Current.Shutdown());
 
-            CancelDialog = new RelayCommand(() => UpdateOnUI(() =>  DialogBoxVisualState = "Base"));
+          //  CancelDialog = new RelayCommand(() => UpdateOnUI(() =>  DialogBoxVisualState = "Base"));
         }
 
         private void EndLoadingPage(EndLoadingPageMessage endLoadingPageMessage)
@@ -53,15 +56,8 @@ namespace CoApp.Gui.Toolkit.ViewModels
 
 
 
-        public MetroDialogBoxMessage DialogBoxInfo
-        {
-            get { return _dialogBoxInfo; }
-            set
-            {
-                _dialogBoxInfo = value;
-                RaisePropertyChanged("DialogBoxInfo");
-            }
-        }
+
+        
 
 
         public ICommand CancelDialog { get; set; }
@@ -109,23 +105,14 @@ namespace CoApp.Gui.Toolkit.ViewModels
 
         public ICommand Shutdown { get; set; }
 
-        private void HandleDialogBoxMessage(MetroDialogBoxMessage metroDialogBoxMessage)
-        {
-            if (metroDialogBoxMessage.Buttons != null)
-            {
-                foreach (ButtonDescription button in metroDialogBoxMessage.Buttons)
-                {
-                    if (button.IsCancel)
-                    {
-                        button.Command = CancelDialog;
-                    }
-                }
-            }
+       
 
-            UpdateOnUI(() => DialogBoxInfo = metroDialogBoxMessage);
+        
 
-            UpdateOnUI(() => DialogBoxVisualState = "Showing");
-        }
+
+       
+        
+     
 
 
         private void ActOnNavigate(GoToMessage msg)

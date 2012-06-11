@@ -22,7 +22,7 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<UpdateChoice> UpdateChoice
         {
-            get { return Task.Factory.StartNew(() => CoApp.UpdateChoice, TaskCreationOptions.AttachedToParent); }
+            get { return CoApp.UpdateChoice; }
         }
 
 
@@ -50,12 +50,12 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<bool> AutoTrim
         {
-            get { return Task.Factory.StartNew(() => CoApp.TrimOnUpdate); }
+            get { return CoApp.TrimOnUpdate; }
         }
 
         public Task SetAutoTrim(bool autotrim)
         {
-            return Task.Factory.StartNew(() => CoApp.TrimOnUpdate = autotrim);
+            return CoApp.SetTrimOnUpdate(autotrim);
         }
         
         public Task SetDefaultScheduledTask()
@@ -79,8 +79,8 @@ namespace CoApp.Gui.Toolkit.Model
                                                  CoApp.SetScheduledTask("coapp_update",
                                                                         @"c:\programdata\bin\CoApp.Updater.exe",
                                                                         "--quiet", 3, 0, null, 60);
-                                                 CoApp.TrimOnUpdate = autoTrim;
-                                                 CoApp.UpdateChoice = choice;
+                                                 CoApp.SetTrimOnUpdate(autoTrim);
+                                                 CoApp.SetUpdateChoice(choice);
                                              }
                 );
 
@@ -116,7 +116,7 @@ namespace CoApp.Gui.Toolkit.Model
             var dto = new UpdateTaskDTO();
             try
             {
-                dto.AutoTrim = CoApp.TrimOnUpdate;
+                dto.AutoTrim = CoApp.TrimOnUpdate.Result;
                 
             }
             catch (Exception e )
@@ -127,7 +127,7 @@ namespace CoApp.Gui.Toolkit.Model
 
             try
             {
-                dto.UpdateChoice = CoApp.UpdateChoice;
+                dto.UpdateChoice = CoApp.UpdateChoice.Result;
             }
             catch (Exception e )
             {

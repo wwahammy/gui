@@ -1,12 +1,13 @@
 using System.Collections.ObjectModel;
 using CoApp.Gui.Toolkit.Controls;
+using CoApp.Gui.Toolkit.ViewModels;
 
 namespace CoApp.Gui.Toolkit.Messages
 {
     public class MetroDialogBoxMessage
     {
-        public string Title { get; set; }
-        public object Content { get; set; }
-        public ObservableCollection<ButtonDescription> Buttons { get; set; } 
+       
+
+        public ModalViewModel ModalViewModel { get; set; }
     }
 }

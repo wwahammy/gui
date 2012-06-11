@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
-using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Support;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace CoApp.Gui.Toolkit.Controls
 {
@@ -53,10 +49,7 @@ namespace CoApp.Gui.Toolkit.Controls
         private const string MAX_RESTORE_NAME = "MaxRestore";
         private const string MINIMIZE_NAME = "Minimize";
         private const string HEADER_NAME = "Header";
-        
 
-        
-    
 
         public static readonly DependencyProperty FrameResourcesProperty =
             DependencyProperty.Register("FrameResources", typeof (ResourceDictionary), typeof (CoAppWindow),
@@ -72,61 +65,19 @@ namespace CoApp.Gui.Toolkit.Controls
 
 
         public static readonly DependencyProperty MoreHeaderItemsProperty =
-            DependencyProperty.RegisterAttached("MoreHeaderItems", typeof (IEnumerable), typeof (CoAppWindow), new PropertyMetadata(default(IEnumerable)));
+            DependencyProperty.RegisterAttached("MoreHeaderItems", typeof (IEnumerable), typeof (CoAppWindow),
+                                                new PropertyMetadata(default(IEnumerable)));
 
+        public static readonly DependencyProperty ModalResourceDictionaryProperty =
+            DependencyProperty.Register("ModalResourceDictionary", typeof (ResourceDictionary), typeof (CoAppWindow),
+                                        new PropertyMetadata(default(ResourceDictionary)));
 
-     
-        private static void MoreHeaderItemsChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            var win = UIHelper.FindVisualParent<CoAppWindow>(dependencyObject);
-
-            if (win != null)
-            {
-                win.AdditionalHeaderItems = (IEnumerable) dependencyObject.GetValue(MoreHeaderItemsProperty);
-            }
-        }
-
-        public static void SetMoreHeaderItems(UIElement element, IEnumerable value)
-        {
-            element.SetValue(MoreHeaderItemsProperty, value);
-        }
-
-        public static IEnumerable GetMoreHeaderItems(UIElement element)
-        {
-            return (IEnumerable) element.GetValue(MoreHeaderItemsProperty);
-        }
-
-        public CoAppWindow()
-        {
-            Messenger.Default.Register<MetroDialogBoxMessage>(this, OpenTheDialogBox);
-        }
-
-        private void OpenTheDialogBox(MetroDialogBoxMessage metroDialogBoxMessage)
-        {
-            var dialogBox = new DialogBox();
-            dialogBox.Title = metroDialogBoxMessage.Title;
-            dialogBox.ButtonDescriptions = metroDialogBoxMessage.Buttons;
-            dialogBox.Content = metroDialogBoxMessage.Content;
-
-            var popUp = new PopUpControl();
-            var result = popUp.FindName("MainGrid") as Grid;
-            if (result == null)
-            {
-                //uh oh
-            }
-            else
-            {
-                result.Children.Add(dialogBox);
-                popUp.PlacementTarget = this;
-                popUp.Height = this.Height;
-                popUp.Width = this.Width;
-                popUp.IsOpen = true;
-            }
-        }
 
         private Grid _header;
 
         private Button _maxRestore, _minimize;
+
+        private ModalManager _modalManager;
         private CoAppFrame _navFrame;
 
         static CoAppWindow()
@@ -134,21 +85,21 @@ namespace CoApp.Gui.Toolkit.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof (CoAppWindow),
                                                      new FrameworkPropertyMetadata(typeof (CoAppWindow)));
 
-            EventManager.RegisterClassHandler(typeof(CoAppWindow), CoAppFrameChild.TemplateLoadedEvent, new RoutedEventHandler(TemplateLoadedHandle));
-
-           
+            EventManager.RegisterClassHandler(typeof (CoAppWindow), CoAppFrameChild.TemplateLoadedEvent,
+                                              new RoutedEventHandler(TemplateLoadedHandle));
         }
 
-        internal static void TemplateLoadedHandle(object sender, RoutedEventArgs a)
+        public CoAppWindow()
         {
-            var original = (CoAppFrameChild) a.OriginalSource;
-            var win = (CoAppWindow) sender;
-
-            BindingOperations.SetBinding(win, AdditionalHeaderItemsProperty,
-                                         new Binding
-                                             {Source = original, Path = new PropertyPath(MoreHeaderItemsProperty)});
-
+            _modalManager = new ModalManager(this);
         }
+
+        public ResourceDictionary ModalResourceDictionary
+        {
+            get { return (ResourceDictionary) GetValue(ModalResourceDictionaryProperty); }
+            set { SetValue(ModalResourceDictionaryProperty, value); }
+        }
+
 
         public IEnumerable AdditionalHeaderItems
         {
@@ -166,6 +117,42 @@ namespace CoApp.Gui.Toolkit.Controls
         {
             get { return (ResourceDictionary) GetValue(CoAppFrameResourcesProperty); }
             set { SetValue(CoAppFrameResourcesProperty, value); }
+        }
+
+        internal new DependencyObject GetTemplateChild(string childName)
+        {
+            return base.GetTemplateChild(childName);
+        }
+
+        private static void MoreHeaderItemsChanged(DependencyObject dependencyObject,
+                                                   DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var win = dependencyObject.FindVisualParent<CoAppWindow>();
+
+            if (win != null)
+            {
+                win.AdditionalHeaderItems = (IEnumerable) dependencyObject.GetValue(MoreHeaderItemsProperty);
+            }
+        }
+
+        public static void SetMoreHeaderItems(UIElement element, IEnumerable value)
+        {
+            element.SetValue(MoreHeaderItemsProperty, value);
+        }
+
+        public static IEnumerable GetMoreHeaderItems(UIElement element)
+        {
+            return (IEnumerable) element.GetValue(MoreHeaderItemsProperty);
+        }
+
+        internal static void TemplateLoadedHandle(object sender, RoutedEventArgs a)
+        {
+            var original = (CoAppFrameChild) a.OriginalSource;
+            var win = (CoAppWindow) sender;
+
+            BindingOperations.SetBinding(win, AdditionalHeaderItemsProperty,
+                                         new Binding
+                                             {Source = original, Path = new PropertyPath(MoreHeaderItemsProperty)});
         }
 
         private void HeaderDragWindow(object sender, MouseButtonEventArgs e)

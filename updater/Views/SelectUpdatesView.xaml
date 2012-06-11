@@ -66,7 +66,7 @@
                         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                             <Border.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Block" Command="{Binding RelativeSource={RelativeSource TemplatedParent,  diagnostics:PresentationTraceSources.TraceLevel=High},  diagnostics:PresentationTraceSources.TraceLevel=High}" CommandParameter="{Binding}"/>
+                                    <MenuItem Header="Block" Command="{Binding RelativeSource={RelativeSource TemplatedParent}}" CommandParameter="{Binding}"/>
                                 </ContextMenu>
                             </Border.ContextMenu>
                             <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>

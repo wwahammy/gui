@@ -58,6 +58,7 @@ namespace CoApp.Updater.ViewModel
             Install = new RelayCommand(() => NavigationService.GoTo(ViewModelLocator.InstallingViewModelStatic, false));
             CheckForUpdates = new RelayCommand(() => NavigationService.GoTo(ViewModelLocator.UpdatingViewModelStatic));
 
+            /*
             FeedWarning = new RelayCommand(() => MessengerInstance.Send(new MetroDialogBoxMessage
                                                                             {
                                                                                 Title =
@@ -73,7 +74,7 @@ namespace CoApp.Updater.ViewModel
                                                                                                     IsCancel = true
                                                                                                 }
                                                                                         }
-                                                                            }));
+                                                                            }));*/
         }
 
 

@@ -12,7 +12,51 @@
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Fonts.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Controls.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+    <Style x:Key="ChromelessToggleButtonStyle"
+           TargetType="{x:Type ToggleButton}">
+        <Setter Property="Background" Value="{DynamicResource TransparentWhiteBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid>
+                        <Border Background="{TemplateBinding Background}" BorderThickness="0" x:Name="Border" Grid.Row="0" Grid.Column="0" BorderBrush="Black">
+
+                            <ContentPresenter x:Name="contentPresenter"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              RecognizesAccessKey="True"
+                                              Opacity="0.75" />
+
+                        </Border>
+                        <Border  Grid.Row="0" Grid.Column="0" Background="Transparent" BorderThickness="0" x:Name="Border2"  BorderBrush="White"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="contentPresenter" Property="Opacity" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter TargetName="contentPresenter" Property="Opacity" Value=".5" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="BorderThickness" Value="1,1,1,0" TargetName="Border"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1" TargetName="Border2"/>
+                            <Setter TargetName="contentPresenter" Property="Opacity" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="#ADADAD" />
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Converters1:NullEmptyStringToVisibilityConverter x:Key="NullEmptyStringToVisibilityConverter1"/>
     <BooleanToVisibilityConverter x:Key="boolToVisConverter"/>
 
@@ -160,6 +204,12 @@
         <Setter Property="TextBlock.FontSize" Value="15"/>
         <Setter Property="TextBlock.FontWeight" Value="Bold"/>
      
+    </Style>
+
+    <Style x:Key="WinLayout_HeaderSettingToggleButton" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ChromelessToggleButtonStyle}">
+    <Setter Property="TextBlock.FontSize" Value="15"/>
+    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+
     </Style>
 
     <Style x:Key="WinLayout_HeaderUIButton" TargetType="{x:Type Button}" BasedOn="{StaticResource ChromelessButtonStyle}">
@@ -771,6 +821,9 @@
             </Setter.Value>
         </Setter>
     </Style>
-  <Converters1:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter1" />
+
+
+    
+    <Converters1:BooleanToHiddenVisibilityConverter x:Key="BooleanToHiddenVisibilityConverter1" />
    <Converters1:CommaConverter x:Key="CommaConverter1"/>
 </ResourceDictionary>

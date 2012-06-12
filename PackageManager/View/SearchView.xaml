@@ -25,7 +25,7 @@
         </DataTemplate>
         
         <DataTemplate x:Key="NewFilter">
-            <Controls:ToggleDropDown>
+            <Controls:ToggleDropDown ToggleButtonStyle="{DynamicResource Windows8ToggleButtonStyle}">
                 <Controls:ToggleDropDown.ButtonContent>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Add filter..."/>
@@ -179,7 +179,7 @@
 
 
 
-        <Controls:ToggleDropDown Grid.Row="0" Grid.Column="1" PopupAlignment="Right">
+        <Controls:ToggleDropDown Grid.Row="0" Grid.Column="1" PopupAlignment="Right" ToggleButtonStyle="{DynamicResource Windows8ToggleButtonStyle}">
             <Controls:ToggleDropDown.ButtonContent>
                 <TextBlock>
                     <TextBlock.Text>

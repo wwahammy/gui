@@ -121,12 +121,6 @@ namespace CoApp.Gui.Toolkit.Model
                 .ContinueWith(t =>
                                   {
                                       t.RethrowWhenFaulted();
-                                      if (withDetails)
-                                      {
-                                          return
-                                              GetPackagesWithDetails
-                                                  (t.Result);
-                                      }
 
                                       return t.Result;
                                   }
@@ -140,7 +134,7 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<Package> GetPackage(CanonicalName packageName, bool withDetails)
         {
-            return withDetails ? EPM.GetPackageDetails(packageName) : EPM.GetPackage(packageName);
+            return  EPM.GetPackage(packageName);
         }
 
 
@@ -389,6 +383,41 @@ namespace CoApp.Gui.Toolkit.Model
                                           });
         }
 
+        public Task<IEnumerable<Package>> IdentifyPackageAndDependenciesToInstall(Package package, bool withUpgrade = false, bool ignoreThisPackage = true, bool getDetails = true)
+        {
+            return EPM.IdentifyPackageAndDependenciesToInstall(new[] {package}, withUpgrade).ContinueAlways(t =>
+                                                                                                                {
+                                                                                                                    t.
+                                                                                                                        RethrowWhenFaulted
+                                                                                                                        ();
+                                                                                                                    if (
+                                                                                                                        ignoreThisPackage)
+                                                                                                                    {
+                                                                                                                        return t
+                                                                                                                            .
+                                                                                                                            Result
+                                                                                                                            .
+                                                                                                                            Where
+                                                                                                                            (p
+                                                                                                                             =>
+                                                                                                                             p !=
+                                                                                                                             package);
+                                                                                                                    }
+
+                                                                                                                    return
+                                                                                                                        t
+                                                                                                                            .
+                                                                                                                            Result;
+
+                                                                                                                })
+                .ContinueAlways(t => 
+                    getDetails ? GetPackages(t.Result) : t.Result);
+
+        }
+
+
+        
+
         public Task RemovePackage(CanonicalName canonicalName, Action<string, int> removeProgress,
                                   Action<string> packageRemoved)
         {
@@ -420,10 +449,11 @@ namespace CoApp.Gui.Toolkit.Model
 
         #endregion
 
-        private IList<Package> GetPackagesWithDetails(IEnumerable<Package> packages)
+        private IEnumerable<Package> GetPackages(IEnumerable<Package> packages)
         {
             //doing this so hell doesn't break loose
-            return packages.Select(p => GetPackageDetails(p).Result).ToList();
+            return packages.Select(p => 
+                GetPackage(p, true).Result).ToList();
         }
 
         public Task<Package> GetPackageDetails(Package package)

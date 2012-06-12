@@ -415,13 +415,19 @@ namespace CoApp.Updater.Model
                                                                 var update = ourUpdate;
 
 
+                                                                
+
+
                                                                 ourUpdate =
                                                                    
                                                                         CoApp.GetPackage(update.CanonicalName, true).Result;
 
 
-                                                                var unsatifiedDependencies = ourUpdate.Dependencies.Where(package => 
-                                                                    package.SatisfiedBy == null).Select(pack => pack.AvailableNewestUpdate).ToArray();
+                                                                var unsatisfiedDependencies =
+                                                                    CoApp.IdentifyPackageAndDependenciesToInstall(
+                                                                        (Package) ourUpdate).Result.Where(
+                                                                            p1 => p1.SatisfiedBy == null).ToArray();
+                                                           
                                                                 //name 
                                                                 
 
@@ -435,7 +441,7 @@ namespace CoApp.Updater.Model
                                                                                 Summary = ourUpdate.PackageDetails.SummaryDescription,
                                                                                 UpdateTime =
                                                                                     ourUpdate.PackageDetails.PublishDate,
-                                                                                DependenciesThatNeedToUpdate =  new XList<string>(unsatifiedDependencies.Select(pack => pack.GetNicestPossibleName())),
+                                                                                DependenciesThatNeedToUpdate =  new XList<string>(unsatisfiedDependencies.Select(pack => pack.GetNicestPossibleName())),
                                                                                 
 
                                                                             };

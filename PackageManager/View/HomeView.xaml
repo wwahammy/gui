@@ -16,6 +16,20 @@
     <Controls1:CoAppWindow.MoreHeaderItems>
         <x:Array Type="Panel">
             <Grid>
+                <Controls:ToggleDropDown ToggleButtonStyle="{DynamicResource WinLayout_HeaderSettingToggleButton}">
+                    <Controls:ToggleDropDown.ButtonContent>
+                        <TextBlock>Add a feed</TextBlock>
+                    </Controls:ToggleDropDown.ButtonContent>
+                    <Controls:ToggleDropDown.PopupContent>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox/>
+                            <Button>Add</Button>
+                        </StackPanel>
+                    </Controls:ToggleDropDown.PopupContent>
+                </Controls:ToggleDropDown>
+                
+            </Grid>
+            <Grid>
                 <Button Content="Search" Style="{DynamicResource WinLayout_HeaderSettingButton}" Command="{Binding GoToSearch}" Margin="0,0,20,0"/>
             </Grid>
             <Grid>

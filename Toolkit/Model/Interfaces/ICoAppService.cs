@@ -87,6 +87,9 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
         Task InstallPackage(CanonicalName canonicalName, Action<string, int, int> installProgress,
                             Action<string> packageInstalled);
 
+        Task<IEnumerable<Package>> IdentifyPackageAndDependenciesToInstall(Package package, bool withUpgrade = false, bool ignoreThisPackage = true, bool getDetails = true);
+        
+
         Task RemovePackage(CanonicalName canonicalName, Action<string, int> removeProgress, Action<string> packageRemoved);
 
         Task Elevate();

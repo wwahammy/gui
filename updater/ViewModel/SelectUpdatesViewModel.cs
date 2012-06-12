@@ -98,7 +98,7 @@ namespace CoApp.Updater.ViewModel
         {
             IEnumerable<SelectableProduct> products = //new ObservableCollection<SelectableProduct>(
                 _updateService.AllPossibleProducts.Select(
-                    kp => new SelectableProduct {Product = kp.Key, IsSelected = kp.Value, ViewModel = this});
+                    kp => new SelectableProduct {Product = kp.Key, IsSelected = kp.Value, ViewModel = this, DependenciesNeededToUpdate = new ObservableCollection<string>(kp.Key.DependenciesThatNeedToUpdate)});
 
             var test = new ObservableCollection<SelectableProduct>();
             foreach (SelectableProduct p in products)

@@ -118,6 +118,14 @@ namespace CoApp.PackageManager.Controls
             set { SetValue(ButtonContentProperty, value); }
         }
 
+        public static readonly DependencyProperty ToggleButtonStyleProperty =
+            DependencyProperty.Register("ToggleButtonStyle", typeof (Style), typeof (ToggleDropDown), new PropertyMetadata(default(Style)));
+
+        public Style ToggleButtonStyle
+        {
+            get { return (Style) GetValue(ToggleButtonStyleProperty); }
+            set { SetValue(ToggleButtonStyleProperty, value); }
+        }
   
     }
 }

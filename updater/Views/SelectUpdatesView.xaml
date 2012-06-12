@@ -186,22 +186,27 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Style>
-                        <TextBlock  Text="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,12"/>
+                        <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,12"/>
                         <TextBlock Margin="0,0,0,15"  TextWrapping="Wrap" Text="{Binding Summary}"/>
                         <StackPanel  Margin="0,0,0,15" Orientation="Horizontal">
                             <TextBlock Text="Published: " FontWeight="Bold"/>
                             <TextBlock Text="{Binding UpdateTime}"/>
                         </StackPanel>
-                        
-                        <StackPanel Margin="0,0,0,15" Orientation="Horizontal">
-                            <TextBlock Text="Also requires updates to: " FontWeight="Bold"/>
-                            <TextBlock Support1:TextBlockExtensions.InlinesList="{Binding Path=DependenciesThatNeedToUpdate, Converter={StaticResource CommaConverter1}, PresentationTraceSources.TraceLevel=High}" TextWrapping="Wrap"/>
-                        </StackPanel>
+
+                       
+                            <TextBlock Margin="0,0,0,15" Support1:TextBlockExtensions.InlinesList="{Binding Path=DependenciesThatNeedToUpdate, Converter={StaticResource CommaConverter1}}"
+                                       Visibility="{Binding Path=DependenciesThatNeedToUpdate, Converter={StaticResource EnumerableCountToVisibilityConverter}}"
+                                         TextWrapping="WrapWithOverflow">
+                                <Support1:TextBlockExtensions.PrefixInlineList>
+                                    <Run FontWeight="Bold" Text="Also requires installing: "/>
+                                </Support1:TextBlockExtensions.PrefixInlineList>
+                            </TextBlock>
+                       
                         
                     </StackPanel>
                 </Border>
 
-                <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0"  SelectedIndex="0" ItemsSource="{Binding Products.View, PresentationTraceSources.TraceLevel=High}"
+                <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0"  SelectedIndex="0" ItemsSource="{Binding Products.View}"
                           x:Name="ProductElement" BorderThickness="0" SelectionMode="Single"> <!--Support:GridViewColumnResize.Enabled="True">-->
                    
                     <ListView.ItemContainerStyle>

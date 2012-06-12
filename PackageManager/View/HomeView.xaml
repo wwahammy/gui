@@ -64,27 +64,27 @@
                         
                         <Controls:TileGridSection SectionTitle="{Binding Name}" SectionTitleCommand="{Binding GoToSource}"
                         
-                        TopLeftBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=TopLeftIcon, Converter={StaticResource ImageToColorConverter}}"
+                        TopLeftBrush="{Binding TopLeft.PrimaryColor}"
                         TopLeftIcon="{Binding TopLeft.Icon}" TopLeftTitle="{Binding TopLeft.Name}" TopLeftSummary="{Binding TopLeft.Summary}"
-                        TopLeftForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=TopLeftBrush, Converter={StaticResource BgToFgConverter}}"
+                        TopLeftForeground="{Binding TopLeft.TextColor}"
                         TopLeftClickCommand="{Binding GoToProductPage}" TopLeftClickCommandParameter="{Binding TopLeft.CanonicalName}"
                         
                         
-                        BottomLeftBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomLeftIcon, Converter={StaticResource ImageToColorConverter}}"
+                        BottomLeftBrush="{Binding BottomLeft.PrimaryColor}"
                         BottomLeftIcon="{Binding BottomLeft.Icon}" BottomLeftTitle="{Binding BottomLeft.Name}" BottomLeftSummary="{Binding ButtomLeft.Summary}"
-                        BottomLeftForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomLeftBrush, Converter={StaticResource BgToFgConverter}}"
+                        BottomLeftForeground="{Binding BottomLeft.TextColor}"
                         BottomLeftClickCommand="{Binding GoToProductPage}" BottomLeftClickCommandParameter="{Binding BottomLeft.CanonicalName}"
                         
                         
-                        BottomCenterBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomCenterIcon, Converter={StaticResource ImageToColorConverter}}"
+                        BottomCenterBrush="{Binding BottomCenter.PrimaryColor}"
                         BottomCenterIcon="{Binding BottomCenter.Icon}" BottomCenterTitle="{Binding BottomCenter.Name}" BottomCenterSummary="{Binding BottomCenter.Summary}"
-                        BottomCenterForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomCenterBrush, Converter={StaticResource BgToFgConverter}}"
+                        BottomCenterForeground="{Binding BottomCenter.TextColor}"
                         BottomCenterClickCommand="{Binding GoToProductPage}" BottomCenterClickCommandParameter="{Binding BottomCenter.CanonicalName}"
                         
                         
-                        BottomRightBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomRightIcon, Converter={StaticResource ImageToColorConverter}}"
+                        BottomRightBrush="{Binding BottomRight.PrimaryColor}"
                         BottomRightIcon="{Binding BottomRight.Icon}" BottomRightTitle="{Binding BottomCenter.Name}" BottomRightSummary="{Binding BottomRight.Summary}"
-                        BottomRightForeground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=BottomRightBrush, Converter={StaticResource BgToFgConverter}}"
+                        BottomRightForeground="{Binding BottomRight.TextColor}"
                         BottomRightClickCommand="{Binding GoToProductPage}" BottomRightClickCommandParameter="{Binding BottomRight.CanonicalName}"
                         
                                                   Margin="0,0,90,0"

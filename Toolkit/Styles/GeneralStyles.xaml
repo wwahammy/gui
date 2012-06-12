@@ -12,7 +12,8 @@
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Fonts.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Controls.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    <Style x:Key="ChromelessToggleButtonStyle"
+    
+	<Style x:Key="ChromelessToggleButtonStyle"
            TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="{DynamicResource TransparentWhiteBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
@@ -23,7 +24,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Grid>
-                        <Border Background="{TemplateBinding Background}" BorderThickness="0" x:Name="Border" Grid.Row="0" Grid.Column="0" BorderBrush="Black">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="1,1,1,0" x:Name="Border" Grid.Row="0" Grid.Column="0" BorderBrush="Transparent">
 
                             <ContentPresenter x:Name="contentPresenter"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -34,7 +35,7 @@
                                               Opacity="0.75" />
 
                         </Border>
-                        <Border  Grid.Row="0" Grid.Column="0" Background="Transparent" BorderThickness="0" x:Name="Border2"  BorderBrush="White"/>
+                        <Border  Grid.Row="0" Grid.Column="0" Background="Transparent" BorderThickness="0,0,0,1" x:Name="Border2"  BorderBrush="Transparent"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -44,8 +45,8 @@
                             <Setter TargetName="contentPresenter" Property="Opacity" Value=".5" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="BorderThickness" Value="1,1,1,0" TargetName="Border"/>
-                            <Setter Property="BorderThickness" Value="0,0,0,1" TargetName="Border2"/>
+                            <Setter Property="BorderBrush" Value="Black" TargetName="Border"/>
+                            <Setter Property="BorderBrush" Value="White" TargetName="Border2"/>
                             <Setter TargetName="contentPresenter" Property="Opacity" Value="1" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">

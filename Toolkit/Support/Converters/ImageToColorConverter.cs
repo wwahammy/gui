@@ -17,15 +17,25 @@ namespace CoApp.Gui.Toolkit.Support.Converters
     [ValueConversion(typeof(BitmapSource), typeof(Color))]
     public class ImageToColorConverter : IValueConverter
     {
+        public static Dictionary<BitmapImage, SolidColorBrush> BiToScb = new Dictionary<BitmapImage, SolidColorBrush>(); 
         #region IValueConverter Members
 
         public SolidColorBrush DefaultBackgroundColor = new SolidColorBrush( new Color {A = 255, B = 236, G = 114, R = 38});
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            
+            
             var source = value as BitmapImage;
+
             if (source != null)
-            {/*
+            {
+                if (BiToScb.ContainsKey(source))
+                {
+                    return DefaultBackgroundColor;
+                }
+                
+                /*
                 if (source.Format.BitsPerPixel != 32 || source.Format != PixelFormats.Bgra32)
                 {
                     var formatted = new FormatConvertedBitmap();
@@ -151,7 +161,8 @@ namespace CoApp.Gui.Toolkit.Support.Converters
                     byte g = (byte) Math.Floor((double) (tg/(bitmap.Height*bitmap.Width)));
                     byte b = (byte) Math.Floor((double) (tb/(bitmap.Height*bitmap.Width)));
 
-                    return new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, r, g, b));
+                    BiToScb[source] = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0xFF, r, g, b));
+                    return BiToScb[source];
                 }
 
 

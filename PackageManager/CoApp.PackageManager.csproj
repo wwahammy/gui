@@ -140,8 +140,10 @@
     <Compile Include="Messages\InstallationProgressMessage.cs" />
     <Compile Include="Messages\RemoveFinishedMessage.cs" />
     <Compile Include="Model\ActivityService.cs" />
+    <Compile Include="Model\ColorManager.cs" />
     <Compile Include="Model\FeaturedService.cs" />
     <Compile Include="Model\Interfaces\IActivityService.cs" />
+    <Compile Include="Model\Interfaces\IColorManager.cs" />
     <Compile Include="Model\Interfaces\IFeaturedService.cs" />
     <Compile Include="Model\Interfaces\IProductService.cs" />
     <Compile Include="Model\Interfaces\IRatingCommentService.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Support\FilterTemplateSelector.cs" />
     <Compile Include="Support\Filters\EasyCollectionViewSource.cs" />
     <Compile Include="Support\HorizontalScrollBehavior.cs" />
+    <Compile Include="Support\ImagePixelRetrival.cs" />
     <Compile Include="Support\StringExtensions.cs" />
     <Compile Include="Support\TaskExtensions.cs" />
     <Compile Include="ViewModel\ActivityViewModel.cs" />

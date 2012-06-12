@@ -17,9 +17,9 @@ metadata {
         "Apache"
     };
     
-	description: "A UI kit for creating Metro-style WPF applications";
-    summary: "A UI kit for creating Metro-style WPF applications";
-	author-version : "pre-0.8";
+	description: "Graphical user interface for managing CoApp packages. Currently it consists solely of an updater client.";
+    summary: "Graphical user interface for managing CoApp packages. Currently it consists solely of an updater client.";
+	author-version : "1.0 Beta";
 	stability : "-10";
 }
 

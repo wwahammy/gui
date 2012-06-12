@@ -95,9 +95,9 @@
                     <ControlTemplate.Resources>
                         <DataTemplate DataType="{x:Type Model:ProductInfo}">
                             
-                            <Controls:CustomTile PrimaryColorBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=IconSource, Converter={StaticResource ImageToColorConverter}}" 
+                            <Controls:CustomTile PrimaryColorBrush="{Binding PrimaryColor}" 
                                                         
-                                                 TextBlock.Foreground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=PrimaryColorBrush, Converter={StaticResource BgToFgConverter}}"
+                                                 TextBlock.Foreground="{Binding TextColor}"
                                                          Title="{Binding Name}" Summary="{Binding Summary}"  IconSource="{Binding Icon}" />
 
              
@@ -122,8 +122,8 @@
                             <ContentPresenter.Resources>
                                 <DataTemplate DataType="{x:Type Model:ProductInfo}">
                                    
-                                    <Controls:CustomTile PrimaryColorBrush="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=IconSource, Converter={StaticResource ImageToColorConverter}}" 
-                                                         IconSource="{Binding Icon}" TextBlock.Foreground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=PrimaryColorBrush, Converter={StaticResource BgToFgConverter}}"
+                                    <Controls:CustomTile PrimaryColorBrush="{Binding PrimaryColor}" 
+                                                         IconSource="{Binding Icon}" TextBlock.Foreground="{Binding TextColor}"
                                                          Title="{Binding Name}" Summary="{Binding Summary}" Style="{StaticResource CustomTile2x2}">
                                        
 

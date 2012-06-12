@@ -10,13 +10,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoApp.Gui.Test", "test\CoApp.Gui.Test.csproj", "{690973E5-BB64-498A-AD63-27754E9709E0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoApp.Gui.Toolkit", "Toolkit\CoApp.Gui.Toolkit.csproj", "{9B272BA9-4E30-4B81-AA44-41AE82CDB31E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoApp.PackageManager", "PackageManager\CoApp.PackageManager.csproj", "{20C5F32D-4542-465C-B949-C7D4265CB5F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoApp.PackageManager.Test", "packagemanagertest\CoApp.PackageManager.Test\CoApp.PackageManager.Test.csproj", "{8BB7C118-26AA-4679-BAB8-6A9D046F93BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoApp.Updater.Tests", "test\CoApp.Updater.Tests\CoApp.Updater.Tests.csproj", "{C5887950-5343-4F22-982E-D0EFC102A956}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -34,12 +34,6 @@ Global
 		{55D4D63D-C1BF-4675-8DEF-6B4F7DDC4C18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{55D4D63D-C1BF-4675-8DEF-6B4F7DDC4C18}.SampleData|Any CPU.ActiveCfg = SampleData|Any CPU
 		{55D4D63D-C1BF-4675-8DEF-6B4F7DDC4C18}.SampleData|Any CPU.Build.0 = SampleData|Any CPU
-		{690973E5-BB64-498A-AD63-27754E9709E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{690973E5-BB64-498A-AD63-27754E9709E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{690973E5-BB64-498A-AD63-27754E9709E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{690973E5-BB64-498A-AD63-27754E9709E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{690973E5-BB64-498A-AD63-27754E9709E0}.SampleData|Any CPU.ActiveCfg = Release|Any CPU
-		{690973E5-BB64-498A-AD63-27754E9709E0}.SampleData|Any CPU.Build.0 = Release|Any CPU
 		{9B272BA9-4E30-4B81-AA44-41AE82CDB31E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B272BA9-4E30-4B81-AA44-41AE82CDB31E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B272BA9-4E30-4B81-AA44-41AE82CDB31E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,6 +52,12 @@ Global
 		{8BB7C118-26AA-4679-BAB8-6A9D046F93BC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8BB7C118-26AA-4679-BAB8-6A9D046F93BC}.SampleData|Any CPU.ActiveCfg = Release|Any CPU
 		{8BB7C118-26AA-4679-BAB8-6A9D046F93BC}.SampleData|Any CPU.Build.0 = Release|Any CPU
+		{C5887950-5343-4F22-982E-D0EFC102A956}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5887950-5343-4F22-982E-D0EFC102A956}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5887950-5343-4F22-982E-D0EFC102A956}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5887950-5343-4F22-982E-D0EFC102A956}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5887950-5343-4F22-982E-D0EFC102A956}.SampleData|Any CPU.ActiveCfg = Release|Any CPU
+		{C5887950-5343-4F22-982E-D0EFC102A956}.SampleData|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

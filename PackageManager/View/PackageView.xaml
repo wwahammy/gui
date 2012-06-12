@@ -39,7 +39,7 @@
             <!--<TextBlock VerticalAlignment="Center">Set Of Categories</TextBlock>-->
         </Grid>
 
-        <Border Grid.Column="0" Grid.Row="1" x:Name="Box" Padding="18" Background="{Binding Icon, Converter={StaticResource ImageToColorConverter}}" TextBlock.Foreground="{Binding ElementName=Box, Path=Background, Converter={StaticResource BgToFgConverter}}" Margin="0,0,40,0" Height="690" VerticalAlignment="Top">
+        <Border Grid.Column="0" Grid.Row="1" x:Name="Box" Padding="18" Background="{Binding PrimaryColor}" TextBlock.Foreground="{Binding TextColor}" Margin="0,0,40,0" Height="690" VerticalAlignment="Top">
             <DockPanel LastChildFill="True">
                 <StackPanel  VerticalAlignment="Bottom" d:LayoutOverrides="Height, VerticalMargin" DockPanel.Dock="Bottom">
                     <Button Margin="0,0,0, 10" Content="Report Bugs" Visibility="{Binding Path=BugTrackerUrl, 

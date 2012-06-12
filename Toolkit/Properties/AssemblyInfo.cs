@@ -53,4 +53,7 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 //[assembly: AssemblyVersion("1.0.0.0")]
 //[assembly: AssemblyFileVersion("1.0.0.0")]
-//[assembly: InternalsVisibleTo("CoApp.Gui.Test")]
+#if DEBUG
+[assembly: InternalsVisibleTo("CoApp.Updater.Tests")]
+#endif
+

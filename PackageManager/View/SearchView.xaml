@@ -219,7 +219,7 @@
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type Model:ProductInfo}">
                    
-                    <Button Style="{DynamicResource ButtonStyle1}" Background="{Binding Icon, Converter={StaticResource ImageToColorConverter}, FallbackValue=AliceBlue}" TextBlock.Foreground="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Background, Converter={StaticResource BgToFgConverter}}"  Height="150"
+                    <Button Style="{DynamicResource ButtonStyle1}" Background="{Binding PrimaryColor}" TextBlock.Foreground="{Binding TextColor}"  Height="150"
                             Command="{Binding ElementName=Root, Path=DataContext.GoToProduct}" CommandParameter="{Binding}">
                         
                            <Grid>

@@ -4,8 +4,8 @@
                     xmlns:Converters="clr-namespace:CoApp.Gui.Toolkit.Support.Converters;assembly=CoApp.Gui.Toolkit"
                     xmlns:Converters1="clr-namespace:CoApp.PackageManager.Support.Converters">
    
-    <Converters:BackgroundToForegroundColorConverter x:Key="BgToFgConverter"/>
-    <Converters:ImageToColorConverter x:Key="ImageToColorConverter"/>
+    <!--<Converters:BackgroundToForegroundColorConverter x:Key="BgToFgConverter"/>-->
+    <!--<Converters:ImageToColorConverter x:Key="ImageToColorConverter"/>-->
     <Converters:AlternationEqualityConverter x:Key="AlternationEqualityConverter"/>
     <Converters1:PrettyPackageNameConverter x:Key="PrettyPackageNameConverter"/>
   <Converters1:CommaDelimitedPackageListConverter x:Key="CommaDelimitedConverter1" />

@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="Controls\DialogBox2.cs" />
     <Compile Include="Controls\ElevateButton.cs" />
+    <Compile Include="Controls\ElevateMenuItem.cs" />
     <Compile Include="Controls\ElevateShield.cs" />
     <Compile Include="Controls\HeaderItem.cs" />
     <Compile Include="Controls\ModalManager.cs" />

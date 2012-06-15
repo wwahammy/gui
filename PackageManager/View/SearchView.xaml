@@ -8,10 +8,12 @@
              xmlns:Controls="clr-namespace:CoApp.PackageManager.Controls"
              xmlns:Controls2="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:Filter="clr-namespace:CoApp.PackageManager.ViewModel.Filter"
-             xmlns:Model="clr-namespace:CoApp.PackageManager.Model" x:Class="CoApp.PackageManager.View.SearchView" 
+             xmlns:Model="clr-namespace:CoApp.PackageManager.Model"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             x:Class="CoApp.PackageManager.View.SearchView" 
             x:Name="Root"
              mc:Ignorable="d" 
-             d:DesignHeight="439" d:DesignWidth="765">
+             d:DesignHeight="439" d:DesignWidth="765" d:DataContext="{d:DesignData /SampleData/SearchViewModelSampleData.xaml}">
 
     <Controls1:CoAppFrameChild.Resources>
         
@@ -34,14 +36,25 @@
                 </Controls:ToggleDropDown.ButtonContent>
                 <Controls:ToggleDropDown.PopupContent>
                     <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                        <TabControl TabStripPlacement="Left" ItemsSource="{Binding DataContext.FiltersToShow, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}">
+                        <TabControl TabStripPlacement="Left" ItemsSource="{Binding DataContext.FiltersToShow, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" MinHeight="400" MinWidth="400">
                             <TabControl.Resources>
                                 <DataTemplate DataType="{x:Type Filter:FilterOnText}">
-                                    <StackPanel>
-                                        <TextBox Text="{Binding Input}"/>
-                                        <Button Command="{Binding DataContext.AddFilter, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" CommandParameter="{Binding}" Controls:ToggleDropDown.CloseContainingDropDown="True"/>
-                                    </StackPanel>
+                                	<DockPanel LastChildFill="True">
+                                		   
+										   <Button 
+										   Command="{Binding DataContext.AddFilter, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" 
+										   CommandParameter="{Binding}" Controls:ToggleDropDown.CloseContainingDropDown="True"
+										    Content="Apply Filter" DockPanel.Dock="Bottom" HorizontalAlignment="Right"/>
+											<StackPanel Orientation="Horizontal">
+                                        		<Label Content="{Binding NiceName}" ContentStringFormat="{}{0} starts with: " />
+												<TextBox Text="{Binding Input}" MinWidth="200" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        	</StackPanel>                   	
+									</DockPanel>
+                                    
                                 </DataTemplate>
+								<DataTemplate DataType="{x:Type Filter:FilterOnBoolean}">
+									
+								</DataTemplate>
                             </TabControl.Resources>
                             <TabControl.ItemTemplate>
                                 <DataTemplate>
@@ -214,7 +227,11 @@
         </Controls:ToggleDropDown>
            
         <Controls2:MetroProgressBar Visibility="{Binding Path=InMiddleOfSearch, Converter={StaticResource BooleanToHiddenVisibilityConverter1}}" IsIndeterminate="True" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="0, 10"/>
-        <ItemsControl  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Packages}">
+		 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="8,0,-8,0" RenderTransformOrigin="6,0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <i:Interaction.Behaviors>
+                <Support:HorizontalScrollBehavior/>
+            </i:Interaction.Behaviors>
+        <ItemsControl ItemsSource="{Binding Packages}">
 
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type Model:ProductInfo}">
@@ -266,5 +283,6 @@
                 </Button>
             </ItemsControl.Items>-->
         </ItemsControl>
+		</ScrollViewer>
     </Grid>
 </Controls1:CoAppFrameChild>

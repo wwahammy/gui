@@ -11,7 +11,201 @@
          
              xmlns:Support="clr-namespace:CoApp.PackageManager.Support"
              xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
-             xmlns:sys="clr-namespace:System.Collections.Generic;assembly=mscorlib" x:Name="Root">
+             xmlns:sys="clr-namespace:System.Collections.Generic;assembly=mscorlib" x:Name="Root"
+			 xmlns:ViewModel="clr-namespace:CoApp.PackageManager.ViewModel" d:DataContext="{d:DesignData /SampleData/HomeViewModelSampleData.xaml}">
+	<Controls1:CoAppFrameChild.Resources>
+
+   
+
+    
+
+    
+
+		<Style x:Key="TileGridItemStyle1" TargetType="{x:Type Controls:TileGridItem}">
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Controls:TileGridItem}">
+						<ControlTemplate.Resources>
+							<Style x:Key="ButtonFocusVisual">
+								<Setter Property="Control.Template">
+									<Setter.Value>
+										<ControlTemplate>
+											<Rectangle Margin="2" SnapsToDevicePixels="true"
+												Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2" />
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+							</Style>
+
+
+							<Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+								<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
+
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate TargetType="{x:Type Button}">
+
+											<ContentPresenter RecognizesAccessKey="True"
+												SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+
+
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</ControlTemplate.Resources>
+						<Grid x:Name="LayoutRoot">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto" />
+								<RowDefinition Height="*" />
+								<RowDefinition Height="*" />
+								<RowDefinition Height="*" />
+							</Grid.RowDefinitions>
+
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="230" />
+								<ColumnDefinition Width="230" />
+								<ColumnDefinition Width="230" />
+							</Grid.ColumnDefinitions>
+
+							<TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"
+								Text="{TemplateBinding SectionTitle}" />
+
+							<Button Style="{StaticResource ButtonStyle1}" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2"
+								Command="{TemplateBinding TopLeftClickCommand}"
+								CommandParameter="{TemplateBinding TopLeftClickCommandParameter}" Background="Transparent" x:Name="TopLeftButton" SnapsToDevicePixels="True">
+
+								<Border BorderBrush="{TemplateBinding TopLeftBrush}" BorderThickness="1" SnapsToDevicePixels="True">
+									<Grid>
+										<Grid.RowDefinitions>
+											<RowDefinition Height="2*" />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										<Grid Grid.Row="0" Background="Transparent">
+											<Image MaxHeight="256" MaxWidth="256" HorizontalAlignment="Center" Source="{TemplateBinding TopLeftIcon}"/>
+										</Grid>
+
+										<StackPanel Grid.Row="1" Background="{TemplateBinding TopLeftBrush}" SnapsToDevicePixels="True">
+											<TextBlock Text="{TemplateBinding TopLeftTitle}" Foreground="{TemplateBinding TopLeftForeground}" TextWrapping="Wrap"/>
+											<TextBlock Text="{TemplateBinding TopLeftSummary}" TextWrapping="Wrap" Foreground="{TemplateBinding TopLeftForeground}"/>
+											<!--Rating-->
+										</StackPanel>
+									</Grid>
+								</Border>
+							</Button>
+
+
+							<Button Grid.Column="0" Grid.Row="3" Command="{TemplateBinding BottomLeftClickCommand}"
+								CommandParameter="{TemplateBinding BottomLeftClickCommandParameter}"
+								Style="{StaticResource ButtonStyle1}" Margin="0,8,0,0" x:Name="BottomLeftButton">
+								<Border BorderBrush="{TemplateBinding BottomLeftBrush}" BorderThickness="1">
+									<Grid>
+										<Grid.RowDefinitions>
+											<RowDefinition Height="2*" />
+											<RowDefinition  />
+										</Grid.RowDefinitions>
+										<Grid Grid.Row="0" Background="Transparent">
+											<Image MaxHeight="128" MaxWidth="128" HorizontalAlignment="Center" Source="{TemplateBinding BottomLeftIcon}"/>
+										</Grid>
+										<StackPanel Grid.Row="1" Background="{TemplateBinding BottomLeftBrush}">
+
+											<TextBlock Text="{TemplateBinding BottomLeftTitle}" Foreground="{TemplateBinding BottomLeftForeground}" TextWrapping="Wrap"/>
+											<TextBlock Text="{TemplateBinding BottomLeftSummary}" TextWrapping="Wrap" Foreground="{TemplateBinding BottomLeftForeground}"/>
+											<!--Rating-->
+										</StackPanel>
+									</Grid>
+
+								</Border>
+							</Button>
+
+							<Button Grid.Column="1" Grid.Row="3" Style="{StaticResource ButtonStyle1}"
+								Command="{TemplateBinding BottomCenterClickCommand}"
+								CommandParameter="{TemplateBinding BottomCenterClickCommandParameter}" Margin="8,8,0,0" x:Name="BottomCenterButton">
+								<Border BorderBrush="{TemplateBinding BottomCenterBrush}" BorderThickness="1">
+									<Grid >
+										<Grid.RowDefinitions>
+											<RowDefinition Height="2*" />
+											<RowDefinition Height="*" />
+										</Grid.RowDefinitions>
+										<Grid Grid.Row="0" Background="Transparent">
+											<Image MaxHeight="128" MaxWidth="128" HorizontalAlignment="Center" Source="{TemplateBinding BottomCenterIcon}"/>
+										</Grid>
+										<StackPanel Grid.Row="1" Background="{TemplateBinding BottomCenterBrush}">
+											<TextBlock Text="{TemplateBinding BottomCenterTitle}" Foreground="{TemplateBinding BottomCenterForeground}" TextWrapping="Wrap"/>
+											<TextBlock Text="{TemplateBinding BottomCenterSummary}" TextWrapping="Wrap" Foreground="{TemplateBinding BottomCenterForeground}"/>
+											<!--Rating-->
+										</StackPanel>
+									</Grid>
+
+								</Border>
+							</Button>
+							<Button Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ButtonStyle1}"
+								Command="{TemplateBinding TopRightClickCommand}"
+								CommandParameter="{TemplateBinding TopRightClickCommandParameter}" Margin="8,0,0,0" x:Name="TopRightButton" SnapsToDevicePixels="True">
+								<Border BorderBrush="{TemplateBinding TopRightBrush}" BorderThickness="1" Background="{TemplateBinding TopRightBrush}" SnapsToDevicePixels="True">
+									<Grid SnapsToDevicePixels="True">
+
+										<StackPanel SnapsToDevicePixels="True">
+											<TextBlock Text="{TemplateBinding TopRightTitle}" Foreground="{TemplateBinding TopRightForeground}" TextWrapping="Wrap"/>
+										</StackPanel>
+									</Grid>
+
+								</Border>
+							</Button>
+
+							<Button Grid.Column="2" Grid.Row="3" Style="{StaticResource ButtonStyle1}"
+								Command="{TemplateBinding BottomRightClickCommand}"
+								CommandParameter="{TemplateBinding BottomRightClickCommandParameter}" Margin="8,8,0,0" x:Name="BottomRightButton">
+
+								<Border BorderBrush="{TemplateBinding BottomRightBrush}" BorderThickness="1">
+									<Grid >
+										<Grid.RowDefinitions>
+											<RowDefinition Height="2*" />
+											<RowDefinition  />
+
+										</Grid.RowDefinitions>
+										<Grid Grid.Row="0" Background="Transparent">
+											<Image MaxHeight="128" MaxWidth="128" HorizontalAlignment="Center" Source="{TemplateBinding BottomRightIcon}"/>
+										</Grid>
+										<StackPanel Grid.Row="1" Background="{TemplateBinding BottomRightBrush}">
+											<TextBlock Text="{TemplateBinding BottomRightTitle}" Foreground="{TemplateBinding BottomRightForeground}" TextWrapping="Wrap"/>
+											<TextBlock Text="{TemplateBinding BottomRightSummary}" TextWrapping="Wrap" Foreground="{TemplateBinding BottomRightForeground}"/>
+											<!--Rating-->
+										</StackPanel>
+									</Grid>
+								</Border>
+							</Button>
+
+						</Grid>
+						<ControlTemplate.Triggers>
+							<DataTrigger Binding="{Binding NumberOfItems, RelativeSource={RelativeSource Mode=Self}}" Value="1">
+								<Setter Property="Visibility" Value="Collapsed" TargetName="BottomLeftButton"/>
+								<Setter Property="Visibility" Value="Collapsed" TargetName="BottomCenterButton"/>
+								<Setter Property="Visibility" Value="Collapsed" TargetName="BottomRightButton"/>
+								<Setter Property="Grid.RowSpan" Value="3" TargetName="TopRightButton"/>
+								<Setter Property="Grid.RowSpan" Value="3" TargetName="TopLeftButton"/>
+								
+							</DataTrigger>
+							<DataTrigger Binding="{Binding NumberOfItems, RelativeSource={RelativeSource Mode=Self}}" Value="2">
+								<Setter Property="Visibility" Value="Collapsed" TargetName="BottomCenterButton"/>
+								<Setter Property="Visibility" Value="Collapsed" TargetName="BottomRightButton"/>
+								<Setter Property="Grid.ColumnSpan" Value="2" TargetName="BottomLeftButton"/>
+								<Setter Property="Grid.RowSpan" Value="3" TargetName="TopRightButton"/>
+						    </DataTrigger>
+
+							<DataTrigger Binding="{Binding NumberOfItems, RelativeSource={RelativeSource Mode=Self}}" Value="3">
+								
+								<Setter Property="Visibility" Value="Collapsed" TargetName="BottomRightButton"/>
+								<Setter Property="Grid.ColumnSpan" Value="2" TargetName="BottomCenterButton"/>
+								
+							</DataTrigger>
+
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Controls1:CoAppFrameChild.Resources>
     
     <Controls1:CoAppWindow.MoreHeaderItems>
         <x:Array Type="Panel">
@@ -32,20 +226,18 @@
             <Grid>
                 <Button Content="Search" Style="{DynamicResource WinLayout_HeaderSettingButton}" Command="{Binding GoToSearch}" Margin="0,0,20,0"/>
             </Grid>
-            <Grid>
-                
-                <Button Content="I'm new!" Style="{DynamicResource WinLayout_HeaderSettingButton}"/>
-            </Grid>
+            
         </x:Array>
     </Controls1:CoAppWindow.MoreHeaderItems>
     
     
     <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="8,0,-8,0" RenderTransformOrigin="6,0">
             <i:Interaction.Behaviors>
                 <Support:HorizontalScrollBehavior/>
             </i:Interaction.Behaviors>
-        <ItemsControl HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="120,0,0,0" Height="600" ItemsSource="{Binding Mode=TwoWay, Path=PanoramaItems}">
+        <ItemsControl HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="120,0,0,0" Height="600" 
+		ItemsSource="{Binding Mode=TwoWay, Path=PanoramaItems}" DataContext="{Binding}">
                 <ItemsControl.Template>
                     <ControlTemplate TargetType="ItemsControl">
                         <ItemsPresenter/>
@@ -60,9 +252,9 @@
 
                 <ItemsControl.ItemTemplate>
                     
-                    <DataTemplate>
-                        
-                        <Controls:TileGridSection SectionTitle="{Binding Name}" SectionTitleCommand="{Binding GoToSource}"
+                    <DataTemplate DataType="{x:Type ViewModel:PanoramaItemSource}">
+						
+                        <Controls:TileGridItem SectionTitle="{Binding Name}" SectionTitleCommand="{Binding GoToSource}"
                         
                         TopLeftBrush="{Binding TopLeft.PrimaryColor}"
                         TopLeftIcon="{Binding TopLeft.Icon}" TopLeftTitle="{Binding TopLeft.Name}" TopLeftSummary="{Binding TopLeft.Summary}"
@@ -87,7 +279,9 @@
                         BottomRightForeground="{Binding BottomRight.TextColor}"
                         BottomRightClickCommand="{Binding GoToProductPage}" BottomRightClickCommandParameter="{Binding BottomRight.CanonicalName}"
                         
-                                                  Margin="0,0,90,0"
+                                                  TopRightBrush="{Binding TopRightColorBrush}" TopRightTitle="{Binding TopRightTitle}" TopRightClickCommand="{Binding GoToSource}" TopRightForeground="{Binding TopRightForegroundBrush}" 
+												  NumberOfItems="{Binding NumberOfItems}"
+                                                  Margin="0,0,90,0" Style="{DynamicResource TileGridItemStyle1}"
                         />
                         
                     </DataTemplate>

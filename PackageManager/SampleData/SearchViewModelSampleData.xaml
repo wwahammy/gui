@@ -1,0 +1,66 @@
+<CoApp_PackageManager_ViewModel:SearchViewModel xmlns:CoApp_PackageManager_ViewModel="clr-namespace:CoApp.PackageManager.ViewModel" xmlns:CoApp_PackageManager_ViewModel_Filter="clr-namespace:CoApp.PackageManager.ViewModel.Filter" xmlns:CoApp_PackageManager_Model="clr-namespace:CoApp.PackageManager.Model" xmlns:CoApp_Gui_Toolkit_ViewModels="clr-namespace:CoApp.Gui.Toolkit.ViewModels;assembly=CoApp.Gui.Toolkit" xmlns:CoApp_Toolkit_Win32="clr-namespace:CoApp.Toolkit.Win32;assembly=CoApp.Toolkit" InMiddleOfSearch="True" ScreenWidth="Standard" SubTitle="Risus parturient imperdiet velit hac" Title="Facilisi vestibulum vitae leo ligula">
+	<CoApp_PackageManager_ViewModel:SearchViewModel.AppliedFilters>
+		<CoApp_PackageManager_ViewModel_Filter:FrictionlessFilter Category="DisplayName" FilterDisplay="Cras aliquam"/>
+		<CoApp_PackageManager_ViewModel_Filter:FrictionlessFilter Category="Version" FilterDisplay="Integer duis nam aenean"/>
+		<CoApp_PackageManager_ViewModel_Filter:FrictionlessFilter Category="Version" FilterDisplay="Quisque vivamus vestibulum curabitur"/>
+		<CoApp_PackageManager_ViewModel_Filter:FrictionlessFilter Category="Version" FilterDisplay="Mauris nullam"/>
+		<CoApp_PackageManager_ViewModel_Filter:FrictionlessFilter Category="DisplayName" FilterDisplay="Maecenas phasellus"/>
+		<CoApp_PackageManager_ViewModel_Filter:FrictionlessFilter Category="Version" FilterDisplay="Consequat adipiscing convallis"/>
+		<CoApp_PackageManager_ViewModel_Filter:FrictionlessFilter Category="DisplayName" FilterDisplay="Praesent aptent sed class"/>
+		<CoApp_PackageManager_ViewModel_Filter:FrictionlessFilter Category="DisplayName" FilterDisplay="Aliquam dignissim auctor parturient"/>
+		<CoApp_PackageManager_ViewModel_Filter:FrictionlessFilter Category="DisplayName" FilterDisplay="Accumsan vestibulum curae nunc aliquet"/>
+		<CoApp_PackageManager_ViewModel_Filter:FrictionlessFilter Category="Version" FilterDisplay="Elementum donec dis blandit vestibulum"/>
+	</CoApp_PackageManager_ViewModel:SearchViewModel.AppliedFilters>
+	<CoApp_PackageManager_ViewModel:SearchViewModel.Packages>
+		<CoApp_PackageManager_Model:ProductInfo CoApp_PackageManager_Model:ProductInfo.CanonicalName="Commodo est adipiscing" CoApp_PackageManager_Model:ProductInfo.Description="Etiam fusce bibendum" CoApp_PackageManager_Model:ProductInfo.Name="Congue dictumst conubia eleifend" CoApp_PackageManager_Model:ProductInfo.PrimaryColor="#FFB27ACB" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.ScreenWidth="FullWidth" CoApp_PackageManager_Model:ProductInfo.Summary="Amet hac cursus dictum facilisi" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.SubTitle="Facilisis cubilia ante dapibus leo" CoApp_PackageManager_Model:ProductInfo.TextColor="#FF0AB0E9" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.Title="Egestas fermentum mus arcu lectus">
+			<CoApp_PackageManager_Model:ProductInfo.Version>
+				<CoApp_Toolkit_Win32:FourPartVersion/>
+			</CoApp_PackageManager_Model:ProductInfo.Version>
+		</CoApp_PackageManager_Model:ProductInfo>
+		<CoApp_PackageManager_Model:ProductInfo CoApp_PackageManager_Model:ProductInfo.CanonicalName="Euismod diam lorem morbi nec" CoApp_PackageManager_Model:ProductInfo.Description="Eget libero non fringilla" CoApp_PackageManager_Model:ProductInfo.Name="Elit parturient habitasse" CoApp_PackageManager_Model:ProductInfo.PrimaryColor="#FFDD5157" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.ScreenWidth="Standard" CoApp_PackageManager_Model:ProductInfo.Summary="Nulla per" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.SubTitle="Ligula hendrerit himenaeos" CoApp_PackageManager_Model:ProductInfo.TextColor="#FFBA3E69" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.Title="Proin faucibus imperdiet feugiat">
+			<CoApp_PackageManager_Model:ProductInfo.Version>
+				<CoApp_Toolkit_Win32:FourPartVersion/>
+			</CoApp_PackageManager_Model:ProductInfo.Version>
+		</CoApp_PackageManager_Model:ProductInfo>
+		<CoApp_PackageManager_Model:ProductInfo CoApp_PackageManager_Model:ProductInfo.CanonicalName="Litora vestibulum gravida malesuada augue" CoApp_PackageManager_Model:ProductInfo.Description="Enim iaculis lacinia" CoApp_PackageManager_Model:ProductInfo.Name="Luctus habitant vestibulum penatibus adipiscing" CoApp_PackageManager_Model:ProductInfo.PrimaryColor="#FFD5513C" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.ScreenWidth="FullWidth" CoApp_PackageManager_Model:ProductInfo.Summary="Porttitor magnis erat mattis" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.SubTitle="Mauris laoreet tincidunt sed inceptos" CoApp_PackageManager_Model:ProductInfo.TextColor="#FF6A7342" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.Title="Eros interdum sem">
+			<CoApp_PackageManager_Model:ProductInfo.Version>
+				<CoApp_Toolkit_Win32:FourPartVersion/>
+			</CoApp_PackageManager_Model:ProductInfo.Version>
+		</CoApp_PackageManager_Model:ProductInfo>
+		<CoApp_PackageManager_Model:ProductInfo CoApp_PackageManager_Model:ProductInfo.CanonicalName="Nibh sit" CoApp_PackageManager_Model:ProductInfo.Description="Vel nisi tristique mollis" CoApp_PackageManager_Model:ProductInfo.Name="Dolor montes ultricies nam fames" CoApp_PackageManager_Model:ProductInfo.PrimaryColor="#FF99747E" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.ScreenWidth="FullWidth" CoApp_PackageManager_Model:ProductInfo.Summary="Venenatis nostra vulputate" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.SubTitle="Parturient vestibulum" CoApp_PackageManager_Model:ProductInfo.TextColor="#FFDB0B1A" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.Title="Ornare platea primis sed">
+			<CoApp_PackageManager_Model:ProductInfo.Version>
+				<CoApp_Toolkit_Win32:FourPartVersion/>
+			</CoApp_PackageManager_Model:ProductInfo.Version>
+		</CoApp_PackageManager_Model:ProductInfo>
+		<CoApp_PackageManager_Model:ProductInfo CoApp_PackageManager_Model:ProductInfo.CanonicalName="Dis rutrum felis est lobortis" CoApp_PackageManager_Model:ProductInfo.Description="Ipsum curabitur nisl hac" CoApp_PackageManager_Model:ProductInfo.Name="Natoque phasellus" CoApp_PackageManager_Model:ProductInfo.PrimaryColor="#FFDC3741" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.ScreenWidth="FullWidth" CoApp_PackageManager_Model:ProductInfo.Summary="Consequat convallis nascetur leo nunc" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.SubTitle="Sapien semper posuere" CoApp_PackageManager_Model:ProductInfo.TextColor="#FF06DB59" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.Title="Justo potenti lacus">
+			<CoApp_PackageManager_Model:ProductInfo.Version>
+				<CoApp_Toolkit_Win32:FourPartVersion/>
+			</CoApp_PackageManager_Model:ProductInfo.Version>
+		</CoApp_PackageManager_Model:ProductInfo>
+		<CoApp_PackageManager_Model:ProductInfo CoApp_PackageManager_Model:ProductInfo.CanonicalName="Mus pharetra nec sociis" CoApp_PackageManager_Model:ProductInfo.Description="Vestibulum placerat pretium" CoApp_PackageManager_Model:ProductInfo.Name="Dignissim rhoncus lorem pulvinar" CoApp_PackageManager_Model:ProductInfo.PrimaryColor="#FF234690" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.ScreenWidth="Standard" CoApp_PackageManager_Model:ProductInfo.Summary="Sagittis non senectus sociosqu" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.SubTitle="Per sodales taciti suscipit" CoApp_PackageManager_Model:ProductInfo.TextColor="#FFE8D22F" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.Title="Odio magna">
+			<CoApp_PackageManager_Model:ProductInfo.Version>
+				<CoApp_Toolkit_Win32:FourPartVersion/>
+			</CoApp_PackageManager_Model:ProductInfo.Version>
+		</CoApp_PackageManager_Model:ProductInfo>
+		<CoApp_PackageManager_Model:ProductInfo CoApp_PackageManager_Model:ProductInfo.CanonicalName="Massa orci" CoApp_PackageManager_Model:ProductInfo.Description="Viverra adipiscing elementum" CoApp_PackageManager_Model:ProductInfo.Name="Torquent facilisis tellus" CoApp_PackageManager_Model:ProductInfo.PrimaryColor="#FF7C9D93" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.ScreenWidth="FullWidth" CoApp_PackageManager_Model:ProductInfo.Summary="Sed fermentum pede tempor" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.SubTitle="Ultrices tempus aliquam parturient metus" CoApp_PackageManager_Model:ProductInfo.TextColor="#FF74EA7F" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.Title="Tortor quam vehicula quis">
+			<CoApp_PackageManager_Model:ProductInfo.Version>
+				<CoApp_Toolkit_Win32:FourPartVersion/>
+			</CoApp_PackageManager_Model:ProductInfo.Version>
+		</CoApp_PackageManager_Model:ProductInfo>
+		<CoApp_PackageManager_Model:ProductInfo CoApp_PackageManager_Model:ProductInfo.CanonicalName="Vestibulum integer" CoApp_PackageManager_Model:ProductInfo.Description="Urna sem volutpat morbi" CoApp_PackageManager_Model:ProductInfo.Name="Turpis varius" CoApp_PackageManager_Model:ProductInfo.PrimaryColor="#FF326CD2" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.ScreenWidth="Standard" CoApp_PackageManager_Model:ProductInfo.Summary="Fringilla cras quisque aenean" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.SubTitle="Vestibulum maecenas vivamus aliquam mauris" CoApp_PackageManager_Model:ProductInfo.TextColor="#FFB9BA7A" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.Title="Duis adipiscing">
+			<CoApp_PackageManager_Model:ProductInfo.Version>
+				<CoApp_Toolkit_Win32:FourPartVersion/>
+			</CoApp_PackageManager_Model:ProductInfo.Version>
+		</CoApp_PackageManager_Model:ProductInfo>
+		<CoApp_PackageManager_Model:ProductInfo CoApp_PackageManager_Model:ProductInfo.CanonicalName="Habitasse nullam" CoApp_PackageManager_Model:ProductInfo.Description="Aliquet aptent auctor" CoApp_PackageManager_Model:ProductInfo.Name="Nunc neque netus sit" CoApp_PackageManager_Model:ProductInfo.PrimaryColor="#FF0C6090" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.ScreenWidth="Standard" CoApp_PackageManager_Model:ProductInfo.Summary="Vel nulla" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.SubTitle="Nam congue cursus" CoApp_PackageManager_Model:ProductInfo.TextColor="#FF8C94C0" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.Title="Amet dictum praesent">
+			<CoApp_PackageManager_Model:ProductInfo.Version>
+				<CoApp_Toolkit_Win32:FourPartVersion/>
+			</CoApp_PackageManager_Model:ProductInfo.Version>
+		</CoApp_PackageManager_Model:ProductInfo>
+		<CoApp_PackageManager_Model:ProductInfo CoApp_PackageManager_Model:ProductInfo.CanonicalName="Lectus hendrerit" CoApp_PackageManager_Model:ProductInfo.Description="Ante libero" CoApp_PackageManager_Model:ProductInfo.Name="Porta sed arcu" CoApp_PackageManager_Model:ProductInfo.PrimaryColor="#FF12938C" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.ScreenWidth="Standard" CoApp_PackageManager_Model:ProductInfo.Summary="Accumsan bibendum" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.SubTitle="Dis dictumst eleifend est purus" CoApp_PackageManager_Model:ProductInfo.TextColor="#FF6BDC11" CoApp_Gui_Toolkit_ViewModels:ScreenViewModel.Title="Himenaeos diam">
+			<CoApp_PackageManager_Model:ProductInfo.Version>
+				<CoApp_Toolkit_Win32:FourPartVersion/>
+			</CoApp_PackageManager_Model:ProductInfo.Version>
+		</CoApp_PackageManager_Model:ProductInfo>
+	</CoApp_PackageManager_ViewModel:SearchViewModel.Packages>
+</CoApp_PackageManager_ViewModel:SearchViewModel>

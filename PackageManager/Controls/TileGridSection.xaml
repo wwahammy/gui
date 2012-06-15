@@ -48,6 +48,7 @@
             <ColumnDefinition Width="230" />
             <ColumnDefinition Width="230" />
         </Grid.ColumnDefinitions>
+       
         <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"
                Text="{Binding SectionTitle, ElementName=ControlRoot}" />
         
@@ -126,7 +127,7 @@
                 <Grid Height="384">
 
                     <StackPanel Background="{Binding TopRightBrush, ElementName=ControlRoot}">
-                        <TextBlock Text="{Binding TopRightTitle, ElementName=ControlRoot}" Foreground="{Binding BottomCenterForeground, ElementName=ControlRoot}" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding TopRightTitle, ElementName=ControlRoot}" Foreground="{Binding TopRightForeground, ElementName=ControlRoot}" TextWrapping="Wrap"/>
                     </StackPanel>
                 </Grid>
 

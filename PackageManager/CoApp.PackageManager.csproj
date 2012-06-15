@@ -120,11 +120,10 @@
       <DependentUpon>CloseIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CommandBorder.cs" />
-    <Compile Include="Controls\CustomPanoramaItem.cs" />
     <Compile Include="Controls\CustomTile.cs" />
-    <Compile Include="Controls\DelimitedControl.cs" />
     <Compile Include="Controls\OtherHeaderItems.cs" />
     <Compile Include="Controls\TileGridControl.cs" />
+    <Compile Include="Controls\TileGridItem.cs" />
     <Compile Include="Controls\TileGridSection.xaml.cs">
       <DependentUpon>TileGridSection.xaml</DependentUpon>
     </Compile>
@@ -170,6 +169,7 @@
     <Compile Include="ViewModel\ActivityViewModel.cs" />
     <Compile Include="ViewModel\Filter\BinaryFilter.cs" />
     <Compile Include="ViewModel\Filter\DisplayNameFilter.cs" />
+    <Compile Include="ViewModel\Filter\FilterOnBoolean.cs" />
     <Compile Include="ViewModel\Filter\FilterOnText.cs" />
     <Compile Include="ViewModel\Filter\FrictionlessFilter.cs" />
     <Compile Include="ViewModel\Filter\FrictionlessSort.cs" />
@@ -305,6 +305,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\software.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <DesignData Include="SampleData\HomeViewModelSampleData.xaml" />
+    <DesignData Include="SampleData\SearchViewModelSampleData.xaml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

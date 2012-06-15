@@ -6,7 +6,8 @@
     xmlns:CoApp_Updater_Controls="clr-namespace:CoApp.Updater.Controls"
      xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=WindowsBase"
     xmlns:Views="clr-namespace:CoApp.Updater.Views" xmlns:Support="clr-namespace:CoApp.Updater.Support"
-    xmlns:Support1="clr-namespace:CoApp.Gui.Toolkit.Support;assembly=CoApp.Gui.Toolkit" mc:Ignorable="d"
+    xmlns:Support1="clr-namespace:CoApp.Gui.Toolkit.Support;assembly=CoApp.Gui.Toolkit"
+    xmlns:Controls="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit" mc:Ignorable="d"
     x:Class="CoApp.Updater.Views.SelectUpdatesView"
     x:Name="MainSelectUpdateView"
     d:DesignWidth="1024" d:DesignHeight="768" d:DataContext="{d:DesignData /SampleData/SelectUpdatesViewModelSampleData.xaml}">
@@ -18,7 +19,7 @@
                     <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Columns="{TemplateBinding GridView.ColumnCollection}">
                         <GridViewRowPresenter.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Command="{Binding ElementName=MainSelectUpdateView}" CommandParameter="{Binding}" Header="Block"/>
+                                <Controls:ElevateMenuItem ElevatedCommand="{Binding ViewModel.Block,  Mode=TwoWay}" UnelevatedCommand="{Binding ViewModel.ElevateBlock, Mode=TwoWay}"  CommandParameter="{Binding  PresentationTraceSources.TraceLevel=High}" Header="Block" MustElevate="{Binding  ViewModel.CanSetState, Converter={StaticResource invertConverter}, Mode=TwoWay}"/>
                             </ContextMenu>
                         </GridViewRowPresenter.ContextMenu>
                     </GridViewRowPresenter>
@@ -55,37 +56,7 @@
                 </MultiTrigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-        <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
-        <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                            <Border.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Block" Command="{Binding RelativeSource={RelativeSource TemplatedParent}}" CommandParameter="{Binding}"/>
-                                </ContextMenu>
-                            </Border.ContextMenu>
-                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-          
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                    
-                </Trigger>
-                <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static DataGrid.FocusBorderBrushKey}}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+     
         <Style  TargetType="{x:Type GridViewColumnHeader}">
         	<Setter Property="HorizontalContentAlignment" Value="Left" />
         	<Setter Property="VerticalContentAlignment" Value="Center" />
@@ -134,18 +105,7 @@
         				</Setter.Value>
         			</Setter>
         		</Trigger>
-        		<!--<Trigger Property="Role"
-               Value="Padding">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="GridViewColumnHeader">
-                            <Border Name="HeaderBorder"
-                                      BorderThickness="0,0,0,1"
-                                      BorderBrush="{DynamicResource HighlightBrush}"  />
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Trigger>-->
+     
         	</Style.Triggers>
         </Style>
 		
@@ -186,21 +146,19 @@
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Style>
-                        <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,12"/>
-                        <TextBlock Margin="0,0,0,15"  TextWrapping="Wrap" Text="{Binding Summary}"/>
-                        <StackPanel  Margin="0,0,0,15" Orientation="Horizontal">
-                            <TextBlock Text="Published: " FontWeight="Bold"/>
-                            <TextBlock Text="{Binding UpdateTime}"/>
-                        </StackPanel>
+                        <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" Margin="0,0,0,12" />
+                        <TextBlock Margin="0,0,0,15"  TextWrapping="Wrap" Text="{Binding Summary}" Visibility="{Binding DisplayName, Converter={StaticResource NullEmptyStringToVisibilityConverter1}}"/>
+                        <TextBlock Text="{Binding UpdateTime, StringFormat='Published: {0}'}" Margin="0,0,0,15"/>
+                   
 
                        
-                            <TextBlock Margin="0,0,0,15" Support1:TextBlockExtensions.InlinesList="{Binding Path=DependenciesThatNeedToUpdate, Converter={StaticResource CommaConverter1}}"
-                                       Visibility="{Binding Path=DependenciesThatNeedToUpdate, Converter={StaticResource EnumerableCountToVisibilityConverter}}"
-                                         TextWrapping="WrapWithOverflow">
-                                <Support1:TextBlockExtensions.PrefixInlineList>
-                                    <Run FontWeight="Bold" Text="Also requires installing: "/>
-                                </Support1:TextBlockExtensions.PrefixInlineList>
-                            </TextBlock>
+                        <TextBlock Margin="0,0,0,15" Support1:TextBlockExtensions.InlinesList="{Binding Path=DependenciesThatNeedToUpdate, Converter={StaticResource CommaConverter1}}"
+                                    Visibility="{Binding Path=DependenciesThatNeedToUpdate, Converter={StaticResource EnumerableCountToVisibilityConverter}}"
+                                        TextWrapping="WrapWithOverflow">
+                            <Support1:TextBlockExtensions.PrefixInlineList>
+                                <Run FontWeight="Bold" Text="Also requires installing: "/>
+                            </Support1:TextBlockExtensions.PrefixInlineList>
+                        </TextBlock>
                        
                         
                     </StackPanel>
@@ -243,72 +201,7 @@
                     
                 </ListView>
                 
-<!--
-                <DataGrid HeadersVisibility="Column" CanUserResizeRows="False" 
-                          CanUserResizeColumns="False" CanUserReorderColumns="False" GridLinesVisibility="None" Background="Transparent" CanUserSortColumns="True" 
-                          ItemsSource="{Binding Products}"  SelectedIndex="0" CanUserAddRows="False" CanUserDeleteRows="False"
-                          x:Name="ProductElement" RowBackground="Transparent" AutoGenerateColumns="False" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" EnableRowVirtualization="False">
-                   <DataGrid.CellStyle>
-                        <Style TargetType="{x:Type DataGridCell}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="ContextMenu">
-                                <Setter.Value>
-                                    <ContextMenu>
-                                        <MenuItem Header="Block" Command="{Binding Path=ViewModel.BlockProduct}" CommandParameter="{Binding}"/>
-                                    </ContextMenu>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
 
-                                </Trigger>
-                                <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static DataGrid.FocusBorderBrushKey}}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                        
-                    </DataGrid.CellStyle>
-                    <DataGrid.Columns>
-                        <DataGridCheckBoxColumn Width="Auto" Binding="{Binding Path=IsSelected}"/>-->
-                       <!--<DataGridTemplateColumn Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <CheckBox IsChecked="{Binding Path=IsSelected, Mode=TwoWay, PresentationTraceSources.TraceLevel=High}"  Margin="0"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                        <DataGridTemplateColumn Header="Name" Width="*" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid HorizontalAlignment="Stretch">
-                                 
-                                    <TextBlock Text="{Binding Path=Product.DisplayName, Mode=OneWay}"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-
-                    </DataGrid.Columns>
-                    
-                </DataGrid>
-            -->
             </Grid>
         </Border>
         <StackPanel Grid.Row="1">

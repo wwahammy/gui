@@ -42,6 +42,18 @@ namespace CoApp.PackageManager.Controls
             set { SetValue(SectionTitleCommandProperty, value); }
         }
 
+        /// <summary>
+        /// this changes the display based on the number of Items
+        /// </summary>
+        public static readonly DependencyProperty NumberOfItemsProperty =
+            DependencyProperty.Register("NumberOfItems", typeof (int), typeof (TileGridSection), new PropertyMetadata(default(int)));
+
+        public int NumberOfItems
+        {
+            get { return (int) GetValue(NumberOfItemsProperty); }
+            set { SetValue(NumberOfItemsProperty, value); }
+        }
+
 
         #region TopLeft
         
@@ -391,7 +403,23 @@ namespace CoApp.PackageManager.Controls
             set { SetValue(TopRightTitleProperty, value); }
         }
 
+        public static readonly DependencyProperty TopRightForegroundProperty =
+            DependencyProperty.Register("TopRightForeground", typeof (Brush), typeof (TileGridSection), new PropertyMetadata(default(Brush)));
+
+        public Brush TopRightForeground
+        {
+            get { return (Brush) GetValue(TopRightForegroundProperty); }
+            set { SetValue(TopRightForegroundProperty, value); }
+        }
+
+
+
+
         #endregion
+
+
+
+
 
       
     }

@@ -44,13 +44,17 @@ namespace CoApp.PackageManager.ViewModel.Filter
 
 
 
-            return new FrictionlessFilter
+            var f = new FrictionlessFilter
                 {
                     Category = Category,
-                    Filter = filter.Is(Input),
+                    Filter = filter.Is(Input + "*"),
                     FilterDisplay = NiceName + " starts with " + Input
                 };
-        
+
+            Input = "";
+
+            return f;
+
         }
     }
 }

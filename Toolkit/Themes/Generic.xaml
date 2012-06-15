@@ -275,7 +275,7 @@
     </Style>-->
 
     <Style TargetType="{x:Type Controls:CoAppWindow}">
-        <Setter Property="MinHeight" Value="800"/>
+        <Setter Property="MinHeight" Value="400"/>
 
         <Setter Property="Behaviours:StylizedBehaviors.Behaviors">
             <Setter.Value>

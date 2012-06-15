@@ -28,6 +28,7 @@ compatability-policy {
     maximum: "${OneLessThanCurrent}"; // this is the default
     versions : {
         "1.0"
+		};
 }
 
 files[dlls] {

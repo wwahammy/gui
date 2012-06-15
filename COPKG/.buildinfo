@@ -59,8 +59,8 @@ sign {
 
 commit-version
 {
-	build-command: @"git add source/CoApp.Gui.AssemblyStrongName.cs
-	git commit -m ""updated version""
+	build-command: @"call git add source/CoApp.Gui.AssemblyStrongName.cs
+	call git commit -m ""updated version""
 	";
 }
 

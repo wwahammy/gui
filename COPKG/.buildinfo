@@ -57,7 +57,12 @@ sign {
     build-command: @"echo built singed binaries. done.";
 }
 
-
+commit-version
+{
+	build-command: @"git add source/CoApp.Gui.AssemblyStrongName.cs
+	git commit -m ""updated version""
+	";
+}
 
 sign-binaries {
     

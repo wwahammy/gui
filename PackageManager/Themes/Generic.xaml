@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:Controls="clr-namespace:CoApp.PackageManager.Controls"
     xmlns:Controls1="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-    xmlns:ViewModel="clr-namespace:CoApp.PackageManager.ViewModel"
+    
     xmlns:Model="clr-namespace:CoApp.PackageManager.Model"
     xmlns:Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
@@ -162,80 +162,184 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type Controls:CustomPanoramaItem}">
-        <Setter Property="HorizontalContentAlignment"
-                Value="Stretch" />
-        <Setter Property="VerticalContentAlignment"
-                Value="Stretch" />
-        <Setter Property="Margin" Value="0,0,20,0"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Controls:CustomPanoramaItem}">
-                    <Grid Background="{TemplateBinding Background}"
-                          Margin="{TemplateBinding Margin}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <ContentControl x:Name="header"
-                                        Content="{TemplateBinding Header}"
-                                        FontSize="36"
-                                        HorizontalAlignment="Left"
-                                        FontFamily="{DynamicResource HeaderFontFamily}"
-                                        Margin="0,0,0,20">
-                        </ContentControl>
-                        <ContentPresenter RecognizesAccessKey="True"
-                                          Content="{TemplateBinding Content}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Margin="{TemplateBinding Padding}"
-                                          Grid.Row="1"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+   
 
     
 
-    <Style TargetType="{x:Type Controls:DelimitedControl}">
-        <Setter Property="ItemDelimiter" Value=", "/>
-        <Setter Property="ValueTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <TextBlock Text="{Binding PresentationTraceSources.TraceLevel=High}"/>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="ItemsPanel">
-            <Setter.Value>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="ItemTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="commaTextBlock" Text="{Binding ItemDelimiter, RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:DelimitedControl, AncestorLevel=1}}"/>
-                        <ContentPresenter Content="{Binding PresentationTraceSources.TraceLevel=High}" ContentTemplate="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Controls:DelimitedControl, AncestorLevel=1}, Path=ValueTemplate}"/>
-                    </StackPanel>
-                    <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
-                            <Setter Property="Visibility" TargetName="commaTextBlock" Value="Collapsed"/>
-                        </DataTrigger>
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
+    
 
+    <Style TargetType="{x:Type Controls:TileGridItem}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Controls:DelimitedControl}">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </Border>
+                <ControlTemplate TargetType="{x:Type Controls:TileGridItem}">
+                    <ControlTemplate.Resources>
+                        <Style x:Key="ButtonFocusVisual">
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Rectangle Margin="2" SnapsToDevicePixels="true"
+                       Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+
+
+                        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
+
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+
+                                        <ContentPresenter RecognizesAccessKey="True"
+                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+
+
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ControlTemplate.Resources>
+                    <Grid x:Name="LayoutRoot">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="230" />
+                            <ColumnDefinition Width="230" />
+                            <ColumnDefinition Width="230" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"
+               Text="{TemplateBinding SectionTitle}" />
+
+                        <Button Style="{StaticResource ButtonStyle1}" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2"
+            Command="{TemplateBinding TopLeftClickCommand}"
+            CommandParameter="{TemplateBinding TopLeftClickCommandParameter}" Background="Transparent" x:Name="TopLeftButton">
+
+                            <Border BorderBrush="{TemplateBinding TopLeftBrush}" BorderThickness="1">
+                                <Grid Height="384">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="256" />
+                                        <RowDefinition Height="128" />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Background="Transparent">
+                                        <Image MaxHeight="256" MaxWidth="256" HorizontalAlignment="Center" Source="{TemplateBinding TopLeftIcon}"/>
+                                    </Grid>
+
+                                    <StackPanel Grid.Row="1" Background="{TemplateBinding TopLeftBrush}">
+                                        <TextBlock Text="{TemplateBinding TopLeftTitle}" Foreground="{TemplateBinding TopLeftForeground}" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{TemplateBinding TopLeftSummary}" TextWrapping="Wrap" Foreground="{TemplateBinding TopLeftForeground}"/>
+                                        <!--Rating-->
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+
+
+                        <Button Grid.Column="0" Grid.Row="3" Command="{TemplateBinding BottomLeftClickCommand}"
+            CommandParameter="{TemplateBinding BottomLeftClickCommandParameter}"
+            Style="{StaticResource ButtonStyle1}" Margin="0,8,0,0" x:Name="BottomLeftButton">
+                            <Border BorderBrush="{TemplateBinding BottomLeftBrush}" BorderThickness="1">
+                                <Grid Height="192">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="128" />
+                                        <RowDefinition Height="64" />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Background="Transparent">
+                                        <Image MaxHeight="128" MaxWidth="128" HorizontalAlignment="Center" Source="{TemplateBinding BottomLeftIcon}"/>
+                                    </Grid>
+                                    <StackPanel Grid.Row="1" Background="{TemplateBinding  BottomLeftBrush}">
+
+                                        <TextBlock Text="{TemplateBinding BottomLeftTitle}" Foreground="{TemplateBinding BottomLeftForeground}" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{TemplateBinding BottomLeftSummary}" TextWrapping="Wrap" Foreground="{TemplateBinding BottomLeftForeground}"/>
+                                        <!--Rating-->
+                                    </StackPanel>
+                                </Grid>
+
+                            </Border>
+                        </Button>
+
+                        <Button Grid.Column="1" Grid.Row="3" Style="{StaticResource ButtonStyle1}"
+            Command="{TemplateBinding BottomCenterClickCommand}"
+            CommandParameter="{TemplateBinding BottomCenterClickCommandParameter}" Margin="8,8,0,0" x:Name="BottomCenterButton">
+                            <Border BorderBrush="{TemplateBinding BottomCenterBrush}" BorderThickness="1">
+                                <Grid Height="192">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="128" />
+                                        <RowDefinition Height="64" />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Background="Transparent">
+                                        <Image MaxHeight="128" MaxWidth="128" HorizontalAlignment="Center" Source="{TemplateBinding BottomCenterIcon}"/>
+                                    </Grid>
+                                    <StackPanel Grid.Row="1" Background="{TemplateBinding  BottomCenterBrush}">
+                                        <TextBlock Text="{TemplateBinding BottomCenterTitle}" Foreground="{TemplateBinding BottomCenterForeground}" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{TemplateBinding BottomCenterSummary}" TextWrapping="Wrap" Foreground="{TemplateBinding BottomCenterForeground}"/>
+                                        <!--Rating-->
+                                    </StackPanel>
+                                </Grid>
+
+                            </Border>
+                        </Button>
+                        <Button Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ButtonStyle1}"
+                                Command="{TemplateBinding TopRightClickCommand}"
+                                CommandParameter="{TemplateBinding TopRightClickCommandParameter}" Margin="8,0,0,0" x:Name="TopRightButton">
+                            <Border BorderBrush="{TemplateBinding TopRightBrush}" BorderThickness="1">
+                                <Grid Height="384">
+
+                                    <StackPanel Background="{TemplateBinding TopRightBrush}">
+                                        <TextBlock Text="{TemplateBinding TopRightTitle}" Foreground="{TemplateBinding TopRightForeground}" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Grid>
+
+                            </Border>
+                        </Button>
+
+                        <Button Grid.Column="2" Grid.Row="3" Style="{StaticResource ButtonStyle1}"
+            Command="{TemplateBinding BottomRightClickCommand}"
+            CommandParameter="{TemplateBinding BottomRightClickCommandParameter}" Margin="8,8,0,0" x:Name="BottomRightButton">
+
+                            <Border BorderBrush="{TemplateBinding BottomRightBrush}" BorderThickness="1">
+                                <Grid Height="192">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="128" />
+                                        <RowDefinition Height="64" />
+
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" Background="Transparent">
+                                        <Image MaxHeight="128" MaxWidth="128" HorizontalAlignment="Center" Source="{TemplateBinding BottomRightIcon}"/>
+                                    </Grid>
+                                    <StackPanel Grid.Row="1" Background="{TemplateBinding BottomRightBrush}">
+                                        <TextBlock Text="{TemplateBinding BottomRightTitle}" Foreground="{TemplateBinding BottomRightForeground}" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{TemplateBinding BottomRightSummary}" TextWrapping="Wrap" Foreground="{TemplateBinding BottomRightForeground}"/>
+                                        <!--Rating-->
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding NumberOfItems, RelativeSource={RelativeSource Mode=Self}}" Value="1">
+                            
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding NumberOfItems, RelativeSource={RelativeSource Mode=Self}}" Value="2">
+
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding NumberOfItems, RelativeSource={RelativeSource Mode=Self}}" Value="3">
+
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding FourOrMore, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -55,7 +55,11 @@ namespace CoApp.PackageManager.ViewModel.Filter
     public enum CAT
     {
         DisplayName,
-        Version
+        Version,
+        IsWanted,
+        IsBlocked,
+        IsInstalled,
+        IsDependency
     }
 
 

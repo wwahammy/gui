@@ -1,0 +1,308 @@
+﻿<CoApp_PackageManager_ViewModel:HomeViewModel xmlns:CoApp_PackageManager_ViewModel="clr-namespace:CoApp.PackageManager.ViewModel" xmlns:CoApp_PackageManager_Model="clr-namespace:CoApp.PackageManager.Model" xmlns:CoApp_Toolkit_Win32="clr-namespace:CoApp.Toolkit.Win32;assembly=CoApp.Toolkit" IsInDesignMode="True" IsInDesignModeStatic="False" ScreenWidth="Standard" SubTitle="Nisi nisl" Title="Justo senectus auctor">
+	<CoApp_PackageManager_ViewModel:HomeViewModel.PanoramaItems>
+		<CoApp_PackageManager_ViewModel:PanoramaItemSource IsInDesignMode="True" IsInDesignModeStatic="False" NumberOfItems="3" Name="Lorem dapibus" TopRightTitle="Non adipiscing" TopRightColorBrush="#FFF521F2" TopRightForegroundBrush="#FF5C3CFB">
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Interdum vivamus" Description="Hac varius duis" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Convallis leo lobortis" PrimaryColor="#FFBFBAAB" ScreenWidth="FullWidth" Summary="Curae aliquam mus nec" SubTitle="Nascetur non aenean per" TextColor="#FFC3D8AD" Title="Sed dignissim elementum">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Nam nullam etiam pulvinar parturient" Description="Vestibulum sed hendrerit aptent" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Himenaeos sagittis" PrimaryColor="#FF80423F" ScreenWidth="Standard" Summary="Fusce vestibulum conubia" SubTitle="Cubilia imperdiet adipiscing dis" TextColor="#FF8B79B5" Title="Parturient vestibulum">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Sem mauris facilisis aliquet fermentum" Description="Fringilla habitasse" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Blandit vestibulum" PrimaryColor="#FF8C564D" ScreenWidth="FullWidth" Summary="Nunc commodo sit vestibulum" SubTitle="Pharetra vel" TextColor="#FF9CAF84" Title="Adipiscing donec placerat">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Morbi amet est egestas malesuada" Description="Euismod hac" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Nulla senectus leo ante" PrimaryColor="#FFCDDBD3" ScreenWidth="FullWidth" Summary="Proin mus augue" SubTitle="Feugiat dolor gravida vestibulum" TextColor="#FF585D23" Title="Iaculis nec auctor">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+		</CoApp_PackageManager_ViewModel:PanoramaItemSource>
+		
+		<CoApp_PackageManager_ViewModel:PanoramaItemSource IsInDesignMode="True" IsInDesignModeStatic="False" NumberOfItems="2" Name="Velit quam vitae ultricies" TopRightTitle="Inceptos class integer est quisque" TopRightColorBrush="#FF5E27EA" TopRightForegroundBrush="#FF7A1DEF">
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Facilisis eros sagittis nibh lacinia" Description="Neque vestibulum nostra senectus ornare" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Nec platea laoreet sociosqu" PrimaryColor="#FF090402" ScreenWidth="Standard" Summary="Vestibulum non primis adipiscing fermentum" SubTitle="Parturient vestibulum netus nisi" TextColor="#FF31CF43" Title="Per natoque nulla rutrum">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Volutpat himenaeos imperdiet malesuada" Description="Maecenas sociis vel penatibus porttitor" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Taciti nam rhoncus praesent purus" PrimaryColor="#FF062D35" ScreenWidth="FullWidth" Summary="Tincidunt risus vestibulum sodales tellus" SubTitle="Adipiscing tristique" TextColor="#FF7756AB" Title="Orci sed pede accumsan">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Posuere potenti" Description="Nisl sed sem" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Suscipit sapien torquent" PrimaryColor="#FF017F9D" ScreenWidth="Standard" Summary="Ultrices porta sit vehicula" SubTitle="Semper nunc" TextColor="#FF738B5C" Title="Fringilla odio habitasse pretium hendrerit">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Quis urna tempor viverra bibendum" Description="Aliquam dictumst venenatis" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Vulputate tempus" PrimaryColor="#FF5D6A28" ScreenWidth="FullWidth" Summary="Eleifend dis curabitur facilisi" SubTitle="Cras faucibus phasellus" TextColor="#FF7FC890" Title="Tortor turpis habitant consequat parturient">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+		</CoApp_PackageManager_ViewModel:PanoramaItemSource>
+		
+		<CoApp_PackageManager_ViewModel:PanoramaItemSource IsInDesignMode="True" IsInDesignModeStatic="False" NumberOfItems="1" Name="Mattis ipsum mauris" TopRightTitle="Erat morbi convallis dignissim elementum" TopRightColorBrush="#FF2DA1C9" TopRightForegroundBrush="#FF102366">
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Malesuada conubia" Description="Cubilia morbi quam" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Penatibus quis dictum nulla" PrimaryColor="#FF02C308" ScreenWidth="FullWidth" Summary="Dapibus lectus libero" SubTitle="Proin ligula" TextColor="#FF9F1072" Title="Vestibulum urna">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Amet ante nam vestibulum sed" Description="Tristique vestibulum dis ultricies arcu" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Lobortis est venenatis diam" PrimaryColor="#FF658BFD" ScreenWidth="FullWidth" Summary="Feugiat hac" SubTitle="Felis eget magnis nascetur" TextColor="#FF277DF3" Title="Vulputate gravida adipiscing elit">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Cras porttitor duis" Description="Egestas augue nunc euismod" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Dolor tincidunt" PrimaryColor="#FF8F35A5" ScreenWidth="FullWidth" Summary="Adipiscing litora fames parturient" SubTitle="Sem sit" TextColor="#FFE0E622" Title="Interdum luctus vel">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Parturient iaculis" Description="Justo mollis curabitur" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Leo lacus enim" PrimaryColor="#FF69DD50" ScreenWidth="Standard" Summary="Pharetra mus lorem phasellus magna" SubTitle="Placerat massa metus" TextColor="#FFB0C807" Title="Montes pulvinar consequat">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+		</CoApp_PackageManager_ViewModel:PanoramaItemSource>
+		
+		<CoApp_PackageManager_ViewModel:PanoramaItemSource IsInDesignMode="True" IsInDesignModeStatic="False" NumberOfItems="5" Name="Hendrerit eros" TopRightTitle="Commodo per inceptos lorem sed" TopRightColorBrush="#FF67DC47" TopRightForegroundBrush="#FF4C17BB">
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Cras aliquam" Description="Class curabitur" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Vestibulum adipiscing" PrimaryColor="#FFB4649A" ScreenWidth="Standard" Summary="Duis integer phasellus consequat curae" SubTitle="Maecenas nunc" TextColor="#FFCB8EE5" Title="Nam amet donec">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Erat aenean mauris" Description="Dictumst fermentum" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Nullam leo" PrimaryColor="#FF940DEC" ScreenWidth="Standard" Summary="Adipiscing fringilla habitasse aptent etiam" SubTitle="Aliquam auctor" TextColor="#FF90BADD" Title="Parturient mus">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Sed convallis" Description="Quisque dis ante est parturient" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Arcu vivamus" PrimaryColor="#FFB36C92" ScreenWidth="FullWidth" Summary="Diam dignissim eget elementum elit" SubTitle="Praesent enim vestibulum vestibulum accumsan" TextColor="#FFC0FFFF" Title="Hac bibendum facilisis">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Eleifend nibh" Description="Fusce himenaeos nec vestibulum" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Imperdiet facilisi nisi" PrimaryColor="#FF15D37F" ScreenWidth="FullWidth" Summary="Nisl faucibus nunc congue" SubTitle="Odio habitant orci aliquet" TextColor="#FFB7EF2C" Title="Non blandit cursus pede">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+		</CoApp_PackageManager_ViewModel:PanoramaItemSource>
+		
+		<CoApp_PackageManager_ViewModel:PanoramaItemSource IsInDesignMode="True" IsInDesignModeStatic="False" NumberOfItems="4" Name="Magnis nulla viverra porta" TopRightTitle="Mus eleifend convallis" TopRightColorBrush="#FF9DCEC2" TopRightForegroundBrush="#FFAB901D">
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Lacinia arcu parturient congue diam" Description="Sociosqu vestibulum per fames" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Cursus dictum sed eget" PrimaryColor="#FF4B5313" ScreenWidth="FullWidth" Summary="Suscipit lectus sem libero torquent" SubTitle="Sit vel" TextColor="#FF9131BF" Title="Laoreet elit">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Nunc tincidunt odio lorem magna" Description="Vestibulum litora luctus volutpat massa" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Orci adipiscing parturient metus pede" PrimaryColor="#FF98F591" ScreenWidth="Standard" Summary="Vestibulum morbi neque tristique" SubTitle="Vestibulum quam sed quis" TextColor="#FFD087F5" Title="Netus ultricies">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Natoque posuere enim erat ultrices" Description="Potenti vestibulum felis eros" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Nam ipsum nibh" PrimaryColor="#FF15E522" ScreenWidth="Standard" Summary="Ligula justo adipiscing nisi parturient" SubTitle="Pretium vehicula vestibulum penatibus porttitor" TextColor="#FF2E6F28" Title="Rhoncus nisl lacus sodales">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Maecenas dis est venenatis urna" Description="Mattis hac cras vulputate" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Praesent purus curabitur leo accumsan" PrimaryColor="#FFA92AE9" ScreenWidth="Standard" Summary="Bibendum adipiscing parturient dictumst" SubTitle="Risus phasellus consequat aliquam duis" TextColor="#FF22DD66" Title="Mauris mollis montes">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+		</CoApp_PackageManager_ViewModel:PanoramaItemSource>
+		<CoApp_PackageManager_ViewModel:PanoramaItemSource IsInDesignMode="True" IsInDesignModeStatic="False" NumberOfItems="45" Name="Egestas nascetur sed pharetra" TopRightTitle="Tellus tristique" TopRightColorBrush="#FF48ED31" TopRightForegroundBrush="#FF9E1167">
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Integer vestibulum quisque" Description="Dignissim nec vestibulum nunc amet" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Non elementum adipiscing per facilisis" PrimaryColor="#FF7A1D9D" ScreenWidth="FullWidth" Summary="Nostra facilisi ornare ante" SubTitle="Arcu platea" TextColor="#FFF0E88C" Title="Vivamus velit fermentum fringilla sed">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Malesuada semper penatibus" Description="Sem sit blandit vestibulum elit" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Curae commodo enim" PrimaryColor="#FFBDA709" ScreenWidth="Standard" Summary="Conubia porttitor" SubTitle="Vel cubilia nam" TextColor="#FF0C7E04" Title="Dapibus lobortis donec">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Faucibus aliquam diam" Description="Habitasse aliquet primis" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Habitant vitae rutrum class" PrimaryColor="#FF0953CB" ScreenWidth="FullWidth" Summary="Eget hendrerit inceptos" SubTitle="Parturient vestibulum interdum" TextColor="#FF8F9704" Title="Sapien himenaeos imperdiet">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Euismod sociis" Description="Etiam tincidunt" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Placerat erat" PrimaryColor="#FF075114" ScreenWidth="FullWidth" Summary="Eros pulvinar dis feugiat adipiscing" SubTitle="Est gravida parturient" TextColor="#FF02B858" Title="Taciti hac fusce sagittis nibh">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+		</CoApp_PackageManager_ViewModel:PanoramaItemSource>
+		<CoApp_PackageManager_ViewModel:PanoramaItemSource IsInDesignMode="True" IsInDesignModeStatic="False" NumberOfItems="10" Name="Parturient fringilla" TopRightTitle="Himenaeos lorem leo" TopRightColorBrush="#FFC175A3" TopRightForegroundBrush="#FF1F0531">
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Lorem ultricies tempor venenatis nisi" Description="Vestibulum morbi leo" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Mus nisl nunc senectus" PrimaryColor="#FF7FBF9B" ScreenWidth="FullWidth" Summary="Sociosqu nulla suscipit vulputate torquent" SubTitle="Odio nec non curabitur per" TextColor="#FF4E7B09" Title="Vestibulum phasellus adipiscing parturient orci">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Quam varius vestibulum quis" Description="Dignissim posuere" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Elementum urna" PrimaryColor="#FFAFB5E6" ScreenWidth="Standard" Summary="Praesent cras aenean" SubTitle="Sit duis facilisis" TextColor="#FFFA9542" Title="Vel fermentum adipiscing nam">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Pede iaculis sed" Description="Vestibulum tempus ultrices vestibulum proin" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Lacinia consequat adipiscing laoreet augue" PrimaryColor="#FF5B4804" ScreenWidth="FullWidth" Summary="Parturient vehicula" SubTitle="Sem tortor volutpat dolor vestibulum" TextColor="#FF4F248E" Title="Maecenas convallis fames natoque turpis">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Potenti habitasse sed" Description="Dis est pretium nunc accumsan" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Hac rhoncus felis ipsum mauris" PrimaryColor="#FFD0A597" ScreenWidth="Standard" Summary="Sodales justo amet" SubTitle="Vestibulum ante hendrerit" TextColor="#FF55E656" Title="Lacus arcu nullam viverra">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+		</CoApp_PackageManager_ViewModel:PanoramaItemSource>
+		<CoApp_PackageManager_ViewModel:PanoramaItemSource IsInDesignMode="True" IsInDesignModeStatic="False" NumberOfItems="85" Name="Habitant odio inceptos" TopRightTitle="Vestibulum himenaeos adipiscing" TopRightColorBrush="#FFCD200B" TopRightForegroundBrush="#FFB6CD4C">
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Diam vestibulum magna" Description="Mus bibendum imperdiet" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Massa malesuada" PrimaryColor="#FFCA9DB6" ScreenWidth="FullWidth" Summary="Penatibus metus" SubTitle="Morbi porttitor" TextColor="#FFF5E644" Title="Eget neque aptent">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Per vulputate vivamus" Description="Parturient facilisi faucibus vestibulum" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Vestibulum nisi sed aliquam curabitur" PrimaryColor="#FFA112DA" ScreenWidth="Standard" Summary="Adipiscing congue cursus parturient" SubTitle="Nisl dictum lectus risus libero" TextColor="#FF73CDB8" Title="Nunc vestibulum ligula">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Elit nec enim tincidunt" Description="Erat aliquam" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Dictumst integer tristique adipiscing ultricies" PrimaryColor="#FFB083C9" ScreenWidth="Standard" Summary="Netus eleifend" SubTitle="Quisque eros nibh nulla venenatis" TextColor="#FF5FC9E2" Title="Non auctor porta purus">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Orci vestibulum sem sit" Description="Phasellus pede consequat vel" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Velit quam quis convallis" PrimaryColor="#FFF6035C" ScreenWidth="Standard" Summary="Adipiscing interdum dignissim elementum facilisis" SubTitle="Fermentum fringilla lobortis habitasse hendrerit" TextColor="#FF38F28C" Title="Vitae nascetur aliquet parturient vestibulum">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+		</CoApp_PackageManager_ViewModel:PanoramaItemSource>
+		<CoApp_PackageManager_ViewModel:PanoramaItemSource IsInDesignMode="True" IsInDesignModeStatic="False" NumberOfItems="25" Name="Montes feugiat vestibulum eget" TopRightTitle="Accumsan leo" TopRightColorBrush="#FFFB60C4" TopRightForegroundBrush="#FF626CEC">
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Urna class litora" Description="Nam imperdiet parturient" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Sed vestibulum pharetra" PrimaryColor="#FF9AD8E3" ScreenWidth="FullWidth" Summary="Placerat dis" SubTitle="Curae cras malesuada vestibulum blandit" TextColor="#FFCB89FF" Title="Commodo pulvinar">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Sociosqu tincidunt" Description="Ante arcu egestas" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Mattis suscipit" PrimaryColor="#FFC0CC38" ScreenWidth="Standard" Summary="Euismod torquent vestibulum mauris" SubTitle="Diam lorem" TextColor="#FFC6C25F" Title="Mollis tristique">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Conubia luctus duis" Description="Sagittis penatibus cubilia adipiscing" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Donec senectus etiam dapibus" PrimaryColor="#FF31FCAE" ScreenWidth="FullWidth" Summary="Parturient nunc" SubTitle="Vestibulum amet fusce est" TextColor="#FF869D91" Title="Vestibulum magnis adipiscing porttitor parturient">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Nostra morbi ultrices ornare" Description="Vehicula platea" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Elit enim ultricies volutpat" PrimaryColor="#FFFB0B2E" ScreenWidth="Standard" Summary="Hac erat gravida venenatis" SubTitle="Maecenas praesent" TextColor="#FF26D9CA" Title="Nulla iaculis lacinia adipiscing primis">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+		</CoApp_PackageManager_ViewModel:PanoramaItemSource>
+		<CoApp_PackageManager_ViewModel:PanoramaItemSource IsInDesignMode="True" IsInDesignModeStatic="False" NumberOfItems="87" Name="Nam adipiscing nascetur integer aenean" TopRightTitle="Hac aptent sagittis himenaeos vestibulum" TopRightColorBrush="#FF5EA5D2" TopRightForegroundBrush="#FF2B9739">
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Bibendum laoreet" Description="Natoque mus dictumst eleifend rutrum" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Posuere sapien semper facilisi" PrimaryColor="#FF66327F" ScreenWidth="FullWidth" Summary="Sociis potenti parturient taciti tellus" SubTitle="Faucibus tempor proin" TextColor="#FF9C9EC5" Title="Vulputate curabitur habitant">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomCenter>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Turpis nibh" Description="Viverra dignissim elementum varius" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Sed facilisis fermentum" PrimaryColor="#FF518F9F" ScreenWidth="Standard" Summary="Sem parturient aliquam sit vestibulum" SubTitle="Dolor vestibulum" TextColor="#FF1EC7F3" Title="Fringilla habitasse lobortis vel">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomRight>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Phasellus consequat" Description="Augue pretium inceptos rhoncus" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Vestibulum vestibulum" PrimaryColor="#FFAAF6F7" ScreenWidth="FullWidth" Summary="Nec interdum" SubTitle="Convallis eros non adipiscing" TextColor="#FF011900" Title="Per tempus sodales tortor">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.BottomLeft>
+			<CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+				<CoApp_PackageManager_Model:ProductInfo CanonicalName="Sed pharetra" Description="Fames hendrerit quisque" IsInDesignMode="True" IsInDesignModeStatic="False" Name="Mauris felis parturient vestibulum ipsum" PrimaryColor="#FFA3D90E" ScreenWidth="Standard" Summary="Placerat dis est vestibulum" SubTitle="Adipiscing nullam" TextColor="#FF02197B" Title="Parturient pulvinar vestibulum">
+					<CoApp_PackageManager_Model:ProductInfo.Version>
+						<CoApp_Toolkit_Win32:FourPartVersion/>
+					</CoApp_PackageManager_Model:ProductInfo.Version>
+				</CoApp_PackageManager_Model:ProductInfo>
+			</CoApp_PackageManager_ViewModel:PanoramaItemSource.TopLeft>
+		</CoApp_PackageManager_ViewModel:PanoramaItemSource>
+	</CoApp_PackageManager_ViewModel:HomeViewModel.PanoramaItems>
+</CoApp_PackageManager_ViewModel:HomeViewModel>

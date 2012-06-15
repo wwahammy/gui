@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 
 namespace CoApp.PackageManager.ViewModel.Filter
 {
     public abstract class GUIFilterBase : ObservableObject, IFilter
     {
-        private NumOfFilter _numberOfFilter;
-        private string _niceName;
         private CAT _category;
+        private string _niceName;
+        private NumOfFilter _numberOfFilter;
 
         public NumOfFilter NumberOfFilter
         {
@@ -42,6 +38,10 @@ namespace CoApp.PackageManager.ViewModel.Filter
             }
         }
 
+        #region IFilter Members
+
         public abstract FrictionlessFilter Create();
+
+        #endregion
     }
 }

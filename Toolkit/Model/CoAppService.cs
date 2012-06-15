@@ -205,9 +205,13 @@ namespace CoApp.Gui.Toolkit.Model
                                                          (name, progress, overallProgress) =>
                                                          installProgress(name, progress,
                                                                          overallProgress));
-                                                 CurrentTask.Events +=
-                                                     new PackageInstalled(name => packageInstalled(name));
+                                                 if (packageInstalled != null)
+                                                 {
+                                                     CurrentTask.Events +=
+                                                         new PackageInstalled(name => packageInstalled(name));
+                                                 }
                                                  return
+                                                     
                                                      EPM.Install(canonicalName, autoUpgrade,
                                                                  replacingPackage: packageToUpgradeFrom).
                                                          ContinueWith(
@@ -361,7 +365,7 @@ namespace CoApp.Gui.Toolkit.Model
                             t.RethrowWhenFaulted();
                         }
 
-                        Task<int> task = EPM.RemovePackages(t.Result.Cast<CanonicalName>(), false);
+                        Task<int> task = EPM.RemovePackages(t.Result.Select(p => p.CanonicalName), false);
                         task.ContinueOnFail(e => Logger.Warning(e.Unwrap()));
                         return task.Result;
                     });

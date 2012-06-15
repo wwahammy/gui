@@ -1,23 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.PackageManager.Model;
 using CoApp.PackageManager.ViewModel.Filter;
+using CoApp.Packaging.Client;
 using CoApp.Packaging.Common;
 using CoApp.Toolkit.Linq;
 using GalaSoft.MvvmLight.Command;
 using SLE = System.Linq.Expressions;
 using CTL = CoApp.Toolkit.Linq;
+using CollectionFilter =
+    CoApp.Toolkit.Collections.XList
+        <
+            System.Linq.Expressions.Expression
+                <
+                    System.Func
+                        <System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>,
+                            System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>>>>;
 using LocalServiceLocator = CoApp.Gui.Toolkit.Model.LocalServiceLocator;
-using CollectionFilter = CoApp.Toolkit.Collections.XList<System.Linq.Expressions.Expression<System.Func<System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>, System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>>>>;
 
 namespace CoApp.PackageManager.ViewModel
 {
@@ -32,13 +37,14 @@ namespace CoApp.PackageManager.ViewModel
         private const int NUM_TO_PULL = 50;
 */
         internal ICoAppService CoApp;
-        internal ViewModelLocator Vm;
         internal LocalServiceLocator Loc;
+        internal ViewModelLocator Vm;
 
         private ObservableCollection<FrictionlessFilter> _appliedFilters;
 
 
         private FrictionlessSort<IPackage> _frictionlessSort;
+        private bool _inMiddleOfSearch;
 
 
         private ObservableCollection<ProductInfo> _packages;
@@ -51,26 +57,61 @@ namespace CoApp.PackageManager.ViewModel
                                                                                        NiceName = "Name",
                                                                                        NumberOfFilter =
                                                                                            NumOfFilter.Multiple
+                                                                                   },
+                                                                               new FilterOnBoolean
+                                                                                   {
+                                                                                       Category = CAT.IsDependency,
+                                                                                       NiceName = "Is a dependency",
+                                                                                       NumberOfFilter =
+                                                                                           NumOfFilter.Single
+                                                                                   },
+                                                                               new FilterOnBoolean
+                                                                                   {
+                                                                                       Category = CAT.IsBlocked,
+                                                                                       NiceName = "Is blocked",
+                                                                                       NumberOfFilter =
+                                                                                           NumOfFilter.Single
+                                                                                   },
+                                                                               new FilterOnBoolean
+                                                                                   {
+                                                                                       Category = CAT.IsInstalled,
+                                                                                       NumberOfFilter =
+                                                                                           NumOfFilter.Single,
+                                                                                       NiceName = "Is installed"
+                                                                                   },
+                                                                               new FilterOnBoolean
+                                                                                   {
+                                                                                       Category = CAT.IsWanted,
+                                                                                       NumberOfFilter =
+                                                                                           NumOfFilter.Single,
+                                                                                       NiceName = "Is wanted"
                                                                                    }
                                                                            };
 
         private ObservableCollection<SortDescriptor> _possibleSorts = new ObservableCollection<SortDescriptor>
                                                                           {
                                                                               new SortDescriptor("Name",
-                                                                                                 p => p.DisplayName)
+                                                                                                 p => p.DisplayName),
+                                                                              new SortDescriptor("Date Published",
+                                                                                                 p =>
+                                                                                                 p.PackageDetails.
+                                                                                                     PublishDate),
+                                                                              new SortDescriptor("Canonical Name",
+                                                                                                 p => p.CanonicalName),
+                                                                              new SortDescriptor("Formal Name",
+                                                                                                 p => p.Name)
                                                                           };
-
-        public ICommand GoToProduct { get; set; }
 
 
         public SearchViewModel()
         {
+            ScreenWidth = ScreenWidth.FullWidth;
             Loc = new LocalServiceLocator();
 
             CoApp = Loc.CoAppService;
             Vm = new ViewModelLocator();
-            
 
+            
             FrictionlessSort = PossibleSorts[0].Create(ListSortDirection.Ascending);
 
             AddFilter = new RelayCommand<GUIFilterBase>(i =>
@@ -100,12 +141,13 @@ namespace CoApp.PackageManager.ViewModel
                                                                       ApplyFilters();
                                                                   });
 
-
+            
             Loaded += OnLoaded;
-            GoToProduct = new RelayCommand<ProductInfo>(p => Loc.NavigationService.GoTo(Vm.GetProductViewModel(p.CanonicalName)));
+            GoToProduct =
+                new RelayCommand<ProductInfo>(p => Loc.NavigationService.GoTo(Vm.GetProductViewModel(p.CanonicalName)));
         }
 
-        private bool _inMiddleOfSearch;
+        public ICommand GoToProduct { get; set; }
 
         public bool InMiddleOfSearch
         {
@@ -117,7 +159,6 @@ namespace CoApp.PackageManager.ViewModel
             }
         }
 
-        
 
         public ObservableCollection<GUIFilterBase> PossibleFilters
         {
@@ -208,7 +249,7 @@ namespace CoApp.PackageManager.ViewModel
             foreach (var g in groups)
             {
                 Filter<IPackage> groupF = null;
-                foreach (var filter in g)
+                foreach (FrictionlessFilter filter in g)
                 {
                     if (groupF == null)
                         groupF = filter.Filter;
@@ -225,54 +266,60 @@ namespace CoApp.PackageManager.ViewModel
             //get only highestpackages
             CollectionFilter collectionFilter = null;
             collectionFilter = collectionFilter.Then(p => p.HighestPackages());
-                
+
 
             //create sort
 
 
             if (FrictionlessSort.Direction == ListSortDirection.Ascending)
             {
-                GetPackages(fullFilter, collectionFilter, ListSortDirection.Ascending); 
+                GetPackages(fullFilter, collectionFilter, ListSortDirection.Ascending);
             }
             else
             {
                 GetPackages(fullFilter, collectionFilter, ListSortDirection.Descending);
             }
-
-            
         }
 
-        private void GetPackages(Filter<IPackage> packageFilter,  CollectionFilter collectionFilter, ListSortDirection direction)
+        private void GetPackages(Filter<IPackage> packageFilter, CollectionFilter collectionFilter,
+                                 ListSortDirection direction)
         {
-            UpdateOnUI(() =>InMiddleOfSearch = true);
+            UpdateOnUI(() => InMiddleOfSearch = true);
             CoApp.GetPackages(packageFilter, collectionFilter).ContinueWith(t =>
                                                                                 {
-                                                                                    
-                                                                                
-
+/*
                                                                                     var packageTasks = t.Result.Select(
                                                                                         p =>
                                                                                         CoApp.GetPackageDetails(
                                                                                             p.CanonicalName)).ToArray();
-                                                                                    Task.WaitAll(packageTasks);
-                                                                                    var packages =
+                                                                                    Task.WaitAll(packageTasks);*/
+                                                                                    IEnumerable<Package> packages =
+                                                                                        t.Result;
+                                                                                    /*
                                                                                         packageTasks.Select(
-                                                                                            t1 => t1.Result);
+                                                                                            t1 => t1.Result);*/
 
                                                                                     ProductInfo[] ret;
-                                                                                    if (direction == ListSortDirection.Ascending)
+                                                                                    if (direction ==
+                                                                                        ListSortDirection.Ascending)
                                                                                     {
                                                                                         ret = packages.OrderBy(
-                                                                                            FrictionlessSort.Property.Compile()).
+                                                                                            FrictionlessSort.Property.
+                                                                                                Compile()).
                                                                                             Select(
-                                                                                                ProductInfo.FromIPackage).ToArray();
+                                                                                                ProductInfo.FromIPackage)
+                                                                                            .ToArray();
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        ret = packages.OrderByDescending(
-                                                                                            FrictionlessSort.Property.Compile()).
-                                                                                            Select(
-                                                                                                ProductInfo.FromIPackage).ToArray();
+                                                                                        ret =
+                                                                                            packages.OrderByDescending(
+                                                                                                FrictionlessSort.
+                                                                                                    Property.Compile()).
+                                                                                                Select(
+                                                                                                    ProductInfo.
+                                                                                                        FromIPackage).
+                                                                                                ToArray();
                                                                                     }
 
                                                                                     var coll = new ObservableCollection
@@ -280,11 +327,10 @@ namespace CoApp.PackageManager.ViewModel
 
                                                                                     UpdateOnUI(() =>
                                                                                                Packages = coll);
-                                                                                               
-                                                                                    UpdateOnUI(() => InMiddleOfSearch= false);
 
+                                                                                    UpdateOnUI(
+                                                                                        () => InMiddleOfSearch = false);
                                                                                 });
-                                                                            
         }
 
         private void OnLoaded()

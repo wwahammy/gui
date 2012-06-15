@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.PackageManager.Model;
@@ -95,10 +96,15 @@ namespace CoApp.PackageManager.ViewModel
 
         private string _name;
         private ProductInfo _topLeft;
+		private int _numberOfItems;
 
         public PanoramaItemSource()
         {
+            TopRightColorBrush = CreateBrush();
+            TopRightForegroundBrush = ProductInfo.CreateTextColorBrush(TopRightColorBrush);
+            TopRightTitle = "See all products for " + Name;
             GoToProductPage = new RelayCommand<string>(canonicalName => _nav.GoTo(_vm.GetProductViewModel(canonicalName)));
+            
         }
 
         public string Name
@@ -157,5 +163,71 @@ namespace CoApp.PackageManager.ViewModel
                 RaisePropertyChanged("BottomRight");
             }
         }
+
+        private string _topRightTitle;
+
+        public string TopRightTitle
+        {
+            get { return _topRightTitle; }
+            set
+            {
+                _topRightTitle = value;
+                RaisePropertyChanged("TopRightTitle");
+            }
+        }
+
+
+        private SolidColorBrush _topRightColorBrush;
+
+        public SolidColorBrush TopRightColorBrush
+        {
+            get { return _topRightColorBrush; }
+            set
+            {
+                _topRightColorBrush = value;
+                RaisePropertyChanged("TopRightColorBrush");
+            }
+        }
+
+        private SolidColorBrush _topRightForegroundBrush;
+
+        public SolidColorBrush TopRightForegroundBrush
+        {
+            get { return _topRightForegroundBrush; }
+            set
+            {
+                _topRightForegroundBrush = value;
+                RaisePropertyChanged("TopRightForegroundBrush");
+            }
+        }
+
+
+        private SolidColorBrush CreateBrush()
+        {
+            var clone = ProductInfo.DefaultBackgroundColor.Clone();
+            clone.Freeze();
+            return clone;
+        }
+
+        
+		
+		public int NumberOfItems
+		{
+			get {
+				return _numberOfItems;
+			}
+			set {
+				_numberOfItems = value;
+				RaisePropertyChanged("NumberOfItems");
+			}
+		}
+
+        
+
+        
     }
+	
+	public class PanoramaSources : List<PanoramaItemSource>
+	{}
+	
 }

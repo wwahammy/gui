@@ -320,7 +320,7 @@ namespace CoApp.PackageManager.Model
             return color;
         }
 
-        public SolidColorBrush CreateTextColorBrush(SolidColorBrush primaryInput)
+        public static SolidColorBrush CreateTextColorBrush(SolidColorBrush primaryInput)
         {
             if (primaryInput != null)
             {

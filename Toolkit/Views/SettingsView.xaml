@@ -9,94 +9,41 @@
              xmlns:Settings1="clr-namespace:CoApp.Gui.Toolkit.ViewModels.Settings"
              xmlns:Settings2="clr-namespace:CoApp.Gui.Toolkit.Views.Settings"
              xmlns:Views1="clr-namespace:CoApp.Gui.Toolkit.Views"
-                     xmlns:Controls="clr-namespace:CoApp.Gui.Toolkit.Controls" mc:Ignorable="d"
+                     xmlns:Controls="clr-namespace:CoApp.Gui.Toolkit.Controls"
+                          xmlns:Support="clr-namespace:CoApp.Gui.Toolkit.Support" mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1024">
-  <!-- DataContext="{Binding SettingsViewModel, Source={StaticResource Locator}}"
-             Title="{Binding Title}">-->
-    <Controls:CoAppFrameChild.Resources>
-    <Views1:TabTemplateSelector x:Key="TabSelector" />
-    </Controls:CoAppFrameChild.Resources>
+
   <Grid>
         
-    <!--
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>-->
-    <TabControl ItemsSource="{Binding TabViewModels}" ContentTemplateSelector="{StaticResource TabSelector}"
-                SelectedItem="{Binding SelectedScreen}" TabStripPlacement="Left">
+  
+    <TabControl ItemsSource="{Binding TabViewModels}" 
+                SelectedItem="{Binding SelectedScreen}" TabStripPlacement="Left"  Support:TabControlHelper.HeaderMinWidth="391" Support:TabControlHelper.HeaderFontSize="26.667">
       <TabControl.ItemTemplate>
         <DataTemplate DataType="{x:Type ViewModels:ScreenViewModel}">
-          <TextBlock FontSize="24" Text="{Binding Title}" MinWidth="396" />
+          <TextBlock Text="{Binding Title}"/>
         </DataTemplate>
 
       </TabControl.ItemTemplate>
 
-      <TabControl.Resources>
-        <DataTemplate x:Key="Feeds" DataType="{x:Type Settings1:FeedSettingsViewModel}">
-          <Settings2:FeedsSettingsView />
-        </DataTemplate>
-        <DataTemplate x:Key="Permissions" DataType="{x:Type Settings1:PermissionsSettingsViewModel}">
-          <Settings2:PermissionsSettingsView />
-        </DataTemplate>
-        <DataTemplate x:Key="Update" DataType="{x:Type Settings1:UpdateSettingsViewModel}">
-          <Settings2:UpdateSettingsView />
-        </DataTemplate>
-        <DataTemplate x:Key="Privacy" DataType="{x:Type Settings1:PrivacySettingsViewModel}">
-          <Settings2:PrivacySettingsView />
-        </DataTemplate>
-
-        <Color x:Key="MouseOverTabBackground">#FFDEDEDE</Color>
-        <SolidColorBrush x:Key="MouseOverTabBackgroundBrush" Color="{StaticResource MouseOverTabBackground}" />
-        <Color x:Key="SelectedTabBackground">#FF008287</Color>
-        <SolidColorBrush x:Key="SelectedTabBackgroundBrush" Color="{StaticResource SelectedTabBackground}" />
-
-        <Style TargetType="{x:Type TabItem}">
-
-          <Setter Property="Foreground" Value="Black" />
-          <Setter Property="FontFamily" Value="{StaticResource HeaderFontFamily}" />
-          <Setter Property="Padding" Value="5, 20, 0, 20" />
-
-          <Setter Property="BorderBrush" Value="{x:Null}" />
-          <Setter Property="Background" Value="White" />
-          <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-          <Setter Property="VerticalContentAlignment" Value="Stretch" />
-          <Setter Property="Template">
-            <Setter.Value>
-              <ControlTemplate TargetType="{x:Type TabItem}">
-       
-              <Grid SnapsToDevicePixels="true">
-                                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0"
-                          Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                    <ContentPresenter x:Name="Content" ContentSource="Header"
-                                      HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                      RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                           
-                                      VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-                  </Border>
-                </Grid>
-                <ControlTemplate.Triggers>
-                  <Trigger Property="IsSelected" Value="true">
-                    <Setter Property="Panel.ZIndex" Value="1" />
-                    <Setter Property="Background"
-                            Value="{StaticResource SelectedTabBackgroundBrush}" />
-                    <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
-                  </Trigger>
-                  <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                      <Condition Property="IsSelected" Value="false" />
-                      <Condition Property="IsMouseOver" Value="true" />
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Background"
-                            Value="{StaticResource MouseOverTabBackgroundBrush}" />
-                  </MultiTrigger>
-                </ControlTemplate.Triggers>
-              </ControlTemplate>
-            </Setter.Value>
-          </Setter>
-        </Style>
-        
-      </TabControl.Resources>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <DataTemplate.Resources>
+                        <DataTemplate  DataType="{x:Type Settings1:FeedSettingsViewModel}">
+                            <Settings2:FeedsSettingsView />
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type Settings1:PermissionsSettingsViewModel}">
+                            <Settings2:PermissionsSettingsView />
+                        </DataTemplate>
+                        <DataTemplate  DataType="{x:Type Settings1:UpdateSettingsViewModel}">
+                            <Settings2:UpdateSettingsView />
+                        </DataTemplate>
+                        <DataTemplate  DataType="{x:Type Settings1:PrivacySettingsViewModel}">
+                            <Settings2:PrivacySettingsView />
+                        </DataTemplate>
+                    </DataTemplate.Resources>
+                    <ContentPresenter Content="{Binding}"/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
     </TabControl>
   </Grid>
 </Controls:CoAppFrameChild>

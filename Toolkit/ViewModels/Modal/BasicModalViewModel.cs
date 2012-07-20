@@ -31,7 +31,7 @@ namespace CoApp.Gui.Toolkit.ViewModels.Modal
         }
 
 
-        public void SetViaButtonDescriptions(IList<ButtonDescription> buttons)
+        public void SetViaButtonDescriptions(IEnumerable<ButtonDescription> buttons)
         {
             Buttons.Clear();
             /*  if (buttons.Count == 2)

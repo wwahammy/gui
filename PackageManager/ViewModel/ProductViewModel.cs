@@ -3,41 +3,51 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.Gui.Toolkit.Support;
 using CoApp.PackageManager.Model;
 using CoApp.PackageManager.Model.Interfaces;
 using CoApp.Packaging.Client;
 using CoApp.Packaging.Common;
 using CoApp.Toolkit.Extensions;
+using CoApp.Toolkit.Logging;
+using CoApp.Toolkit.Win32;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace CoApp.PackageManager.ViewModel
 {
     public class ProductViewModel : PackageProductCommonViewModel
     {
-        internal IActivityService Activity;
-        internal ICoAppService CoApp;
-        internal INavigationService Nav;
-        internal ViewModelLocator VmLoc;
+        internal IColorManager ColorManager;
         private ObservableCollection<PackageToCommand> _allVersions;
-        private ICommand _install32Bit;
+
         private bool _is32BitInstalled;
         private string _latestAuthorVersion;
         private string _latestVersion;
-        private ICommand _remove32Bit;
+
+
+        private bool _show32Bit;
 
         public ProductViewModel()
         {
             var loc = new LocalServiceLocator();
-            CoApp = loc.CoAppService;
-            Nav = loc.NavigationService;
-            Activity = loc.ActivityService;
-            VmLoc = new ViewModelLocator();
 
+
+            ColorManager = loc.ColorManager;
+          
             Loaded += OnLoad;
         }
+
+        public bool Show32Bit
+        {
+            get { return _show32Bit; }
+            set
+            {
+                _show32Bit = value;
+                RaisePropertyChanged("Show32Bit");
+            }
+        }
+
 
         public string LatestVersion
         {
@@ -80,25 +90,14 @@ namespace CoApp.PackageManager.ViewModel
         }
 
 
-        public ICommand Install32Bit
-        {
-            get { return _install32Bit; }
-            set
-            {
-                _install32Bit = value;
-                RaisePropertyChanged("Install32Bit");
-            }
-        }
+        public RelayCommand Install32Bit { get; set; }
 
-        public ICommand Remove32Bit
-        {
-            get { return _remove32Bit; }
-            set
-            {
-                _remove32Bit = value;
-                RaisePropertyChanged("Remove32Bit");
-            }
-        }
+
+        public RelayCommand ElevateInstall32Bit { get; set; }
+
+        public RelayCommand ElevateRemove32Bit { get; set; }
+
+        public RelayCommand Remove32Bit { get; set; }
 
 
         private void OnLoad()
@@ -114,26 +113,131 @@ namespace CoApp.PackageManager.ViewModel
                                                 t.Result.AvailableNewest ?? t.Result.InstalledNewest;
 
 
-                                            Install = new RelayCommand(() => Activity.InstallPackage(p));
-                                            Remove = new RelayCommand(() => Activity.RemovePackage(p));
-
+                                            Install = new RelayCommand(() => ExecuteInstallPackage(p),
+                                                                       () => NoActionsInProgress);
+                                            ElevateInstall = new RelayCommand(ExecuteElevateInstall,
+                                                                              () => NoActionsInProgress);
+                                            Remove = new RelayCommand(() => ExecuteRemovePackage(p),
+                                                                      () => NoActionsInProgress);
+                                            ElevateRemove = new RelayCommand(ExecuteElevateRemove,
+                                                                             () => NoActionsInProgress);
 
                                             LoadFromPackage(p);
                                         }
                                 ));
         }
 
+        private void ExecuteRemovePackage(IPackage p)
+        {
+            Task.Factory.StartNew(DisableActions,
+                                  TaskCreationOptions.AttachedToParent).
+                ContinueAlways(t => Activity.RemovePackage(p)).
+                ContinueAlways(t =>
+                    {
+                        if (t.IsCompleted)
+                        {
+                            //we get the installed status
+
+                            Task<Package> newPack = CoApp.GetPackage(p.CanonicalName);
+                            newPack.Continue(task => UpdateOnUI(() => IsInstalled = task.IsInstalled));
+                        }
+                    }).ContinueAlways(t => ReenableActions());
+        }
+
+
+        private void ExecuteInstallPackage(IPackage p)
+        {
+            Task.Factory.StartNew(DisableActions,
+                                  TaskCreationOptions.AttachedToParent).
+                ContinueAlways(t => Activity.InstallPackage(p)).
+                ContinueAlways(t =>
+                    {
+                        if (t.IsCompleted)
+                        {
+                            //we get the installed status
+
+                            var newPack = CoApp.GetPackage(p.CanonicalName);
+                            newPack.Continue(task => UpdateOnUI(() => IsInstalled = task.IsInstalled));
+                        }
+                    }).ContinueAlways(t => ReenableActions());
+        }
+
+
+        private void DisableActions()
+        {
+            StartAction();
+            //gets all relaycommands on this or parent types
+
+            NotifyAllRelayCommands();
+        }
+
+        private void NotifyAllRelayCommands()
+        {
+            foreach (RelayCommand cmd in ButtonRelayCommands())
+            {
+                if (cmd != null)
+                {
+                    UpdateOnUI(() => cmd.RaiseCanExecuteChanged());
+                }
+            }
+        }
+
+
+        private IEnumerable<RelayCommand> ButtonRelayCommands()
+        {
+            return new[] {Install, Install32Bit, ElevateInstall, ElevateRemove, Remove, Remove32Bit};
+        }
+
+        private void ReenableActions()
+        {
+            EndAction();
+            NotifyAllRelayCommands();
+        }
+
+        private void ExecuteElevateRemove()
+        {
+            DisableActions();
+            Task elevate = CoApp.Elevate();
+            elevate.ContinueOnFail(ex =>
+                {
+                    if (ex.InnerException != null)
+                        Logger.Warning("Elevate failed {0}, {1}", ex.InnerException.Message,
+                                       ex.InnerException.StackTrace);
+                    else
+                        Logger.Warning("Elevate failed {0}, {1}", ex.Message, ex.StackTrace);
+                    Messenger.Default.Send(NotEnoughPermissions("remove packages"));
+                }).ContinueAlways(t => ReenableActions());
+            elevate.Continue(() => Remove.Execute(null)).ContinueAlways(t => ReenableActions());
+        }
+
+        private void ExecuteElevateInstall()
+        {
+            DisableActions();
+            Task elevate = CoApp.Elevate();
+            elevate.ContinueOnFail(ex =>
+                {
+                    if (ex.InnerException != null)
+                        Logger.Warning("Elevate failed {0}, {1}", ex.InnerException.Message,
+                                       ex.InnerException.StackTrace);
+                    else
+                        Logger.Warning("Elevate failed {0}, {1}", ex.Message, ex.StackTrace);
+                    Messenger.Default.Send(NotEnoughPermissions("install packages"));
+                }).Continue(() => ReenableActions());
+            elevate.Continue(() => 
+                Install.Execute(null)).Continue(() => ReenableActions());
+        }
+
 
         private Task<IEnumerable<Package>> GetAllPackageVersions(IPackage p)
         {
             return CoApp.GetAllVersionsOfPackage(p).ContinueWith(t =>
-                                                                     {
-                                                                         t.RethrowWhenFaulted();
+                {
+                    t.RethrowWhenFaulted();
 
-                                                                         return t.Result.Select(otherP =>
-                                                                                                CoApp.GetPackageDetails(
-                                                                                                    otherP).Result);
-                                                                     }
+                    return t.Result.Select(otherP =>
+                                           CoApp.GetPackageDetails(
+                                               otherP).Result);
+                }
                 );
         }
 
@@ -143,7 +247,17 @@ namespace CoApp.PackageManager.ViewModel
             IEnumerable<Package> packages = GetAllPackageVersions(p).Result.ToArray();
             //var deps = p.Dependencies.Select(i => CoApp.GetPackageDetails(i.CanonicalName).Result).ToArray();
 
-            var nicestName = p.GetNicestPossibleName();
+            ColorManager.GetColorPacket().Continue(i =>
+                {
+                    i.Icon.Freeze();
+                    i.BackgroundColor.Freeze();
+                    i.ForegroundColor.Freeze();
+                    UpdateOnUI(() => Icon = i.Icon);
+                    UpdateOnUI(() => PrimaryColor = i.BackgroundColor);
+                    UpdateOnUI(() => TextColor = i.ForegroundColor);
+                });
+
+            string nicestName = p.GetNicestName();
 
             UpdateOnUI(() => DisplayName = nicestName);
 
@@ -154,9 +268,7 @@ namespace CoApp.PackageManager.ViewModel
 
             UpdateOnUI(() => PublisherName = p.PackageDetails.Publisher.Name);
 
-            UpdateOnUI(() => Icon = ProductInfo.GetDefaultIcon());
-
-            //get real Icon
+            UpdateOnUI(() => IsInstalled = p.IsInstalled);
 
 
             UpdateOnUI(() => Title = nicestName);
@@ -164,75 +276,92 @@ namespace CoApp.PackageManager.ViewModel
             SetTags(p);
             SetDependencies(p);
             SetAllVersions(packages);
+
+            Handle32bit(p);
         }
 
-
-        private void SetTags(IPackage p)
+        private void Handle32bit(IPackage package)
         {
-            try
+            if (package.CanonicalName.Architecture == Architecture.x64)
             {
-                if (p != null && p.PackageDetails != null && p.PackageDetails.Tags != null)
-                {
-                    var tags = new ObservableCollection<TagToCommand>(p.PackageDetails.Tags.Select(t =>
-                                                                                                       {
-                                                                                                           string tag =
-                                                                                                               t;
-                                                                                                           return new TagToCommand
-                                                                                                                      {
-                                                                                                                          Tag
-                                                                                                                              =
-                                                                                                                              t,
-                                                                                                                          Navigate
-                                                                                                                              =
-                                                                                                                              new RelayCommand
-                                                                                                                              (
-                                                                                                                              ()
-                                                                                                                              =>
-                                                                                                                              Nav
-                                                                                                                                  .
-                                                                                                                                  GoTo
-                                                                                                                                  (
-                                                                                                                                      VmLoc
-                                                                                                                                          .
-                                                                                                                                          GetSearchViewModel
-                                                                                                                                          (tag)))
-                                                                                                                      };
-                                                                                                       }));
+                //we check for a 32 bit one
+                var s = new CanonicalName(package.CanonicalName);
+                // s.Architecture = Architecture.x86;
+                //TODO set architecture get package
 
-                    UpdateOnUI(() => Tags = tags);
-                }
-            }
-            catch (Exception e)
-            {
-                throw;
+
+                IPackage pack32 = null;
+                Install32Bit = new RelayCommand(() => ExecuteInstall32Bit(pack32), () => NoActionsInProgress);
+                ElevateInstall32Bit = new RelayCommand(ExecuteElevateInstall32Bit, () => NoActionsInProgress);
+                Remove32Bit = new RelayCommand(() => ExecuteRemove32Bit(pack32), () => NoActionsInProgress);
+                ElevateInstall32Bit = new RelayCommand(ExecuteElevateRemove32Bit, () => NoActionsInProgress);
             }
         }
 
-        private void SetDependencies(IPackage p)
+        private void ExecuteElevateRemove32Bit()
         {
-            try
-            {
-                if (p != null && p.Dependencies != null)
+            DisableActions();
+            Task elevate = CoApp.Elevate();
+            elevate.ContinueOnFail(ex =>
                 {
-                    var dep = new ObservableCollection<PackageToCommand>(
-                        p.Dependencies.Select(d =>
-                                              new PackageToCommand
-                                                  {
-                                                      Package =
-                                                          ProductInfo.FromIPackage(
-                                                              CoApp.GetPackageDetails(d.CanonicalName).Result),
-                                                      Navigate =
-                                                          new RelayCommand(
-                                                          () =>
-                                                          Nav.GoTo(VmLoc.GetPackageViewModel(d.CanonicalName.ToString())))
-                                                  }));
-                    UpdateOnUI(() => Dependencies = dep);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+                    if (ex.InnerException != null)
+                        Logger.Warning("Elevate failed {0}, {1}", ex.InnerException.Message,
+                                       ex.InnerException.StackTrace);
+                    else
+                        Logger.Warning("Elevate failed {0}, {1}", ex.Message, ex.StackTrace);
+                    Messenger.Default.Send(NotEnoughPermissions("remove packages"));
+                }).Continue(() => ReenableActions());
+            elevate.Continue(() => Install32Bit.Execute(null)).Continue(() => ReenableActions());
+        }
+
+        private void ExecuteRemove32Bit(IPackage p)
+        {
+            Task.Factory.StartNew(DisableActions,
+                                  TaskCreationOptions.AttachedToParent).
+                ContinueAlways(t => Activity.RemovePackage(p)).
+                ContinueAlways(t =>
+                    {
+                        if (t.IsCompleted)
+                        {
+                            //we get the installed status
+
+                            Task<Package> newPack = CoApp.GetPackage(p.CanonicalName);
+                            newPack.Continue(task => UpdateOnUI(() => IsInstalled = task.IsInstalled));
+                        }
+                    }).ContinueAlways(t => ReenableActions());
+        }
+
+        private void ExecuteElevateInstall32Bit()
+        {
+            DisableActions();
+            Task elevate = CoApp.Elevate();
+            elevate.ContinueOnFail(ex =>
+                {
+                    if (ex.InnerException != null)
+                        Logger.Warning("Elevate failed {0}, {1}", ex.InnerException.Message,
+                                       ex.InnerException.StackTrace);
+                    else
+                        Logger.Warning("Elevate failed {0}, {1}", ex.Message, ex.StackTrace);
+                    Messenger.Default.Send(NotEnoughPermissions("install packages"));
+                }).Continue(() => ReenableActions());
+            elevate.Continue(() => Install32Bit.Execute(null)).Continue(() => ReenableActions());
+        }
+
+        private void ExecuteInstall32Bit(IPackage p)
+        {
+            Task.Factory.StartNew(DisableActions,
+                                  TaskCreationOptions.AttachedToParent).
+                ContinueAlways(t => Activity.InstallPackage(p)).
+                ContinueAlways(t =>
+                    {
+                        if (t.IsCompleted)
+                        {
+                            //we get the installed status
+
+                            Task<Package> newPack = CoApp.GetPackage(p.CanonicalName);
+                            newPack.Continue(task => UpdateOnUI(() => IsInstalled = task.IsInstalled));
+                        }
+                    }).ContinueAlways(t => ReenableActions());
         }
 
         private void SetAllVersions(IEnumerable<IPackage> packages)
@@ -250,7 +379,7 @@ namespace CoApp.PackageManager.ViewModel
                                         Package = ProductInfo.FromIPackage(pack),
                                         Navigate =
                                             new RelayCommand(
-                                            () => Nav.GoTo(VmLoc.GetPackageViewModel(pack.CanonicalName.ToString())))
+                                    () => Nav.GoTo(VmLoc.GetPackageViewModel(pack.CanonicalName.ToString())))
                                     }));
 
                     UpdateOnUI(() => AllVersions = allV);

@@ -23,5 +23,10 @@ namespace CoApp.PackageManager.View
         {
             InitializeComponent();
         }
+
+        private void ComboBox_Selected_1(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

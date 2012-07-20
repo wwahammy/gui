@@ -19,11 +19,13 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
 
         Task RemovePrincipalFromPolicy(PolicyType type, string principal);
 
-        Task<IEnumerable<string>> SystemFeeds { get; }
+        Task<IEnumerable<Feed>> SystemFeeds { get; }
 
         Task AddSystemFeed(string feedUrl);
 
         Task RemoveSystemFeed(string feedUrl);
+
+        Task<Feed> GetSystemFeed(string feedUrl);
 
         Task<IEnumerable<string>> SessionFeeds { get; }
 
@@ -73,6 +75,8 @@ namespace CoApp.Gui.Toolkit.Model.Interfaces
         DateTime? LastTimeChecked { get; }
 
         Task SetAllFeedsStale();
+
+        Task SetFeedStale(string feedLocation);
 
         Task<ScheduledTask> GetScheduledTask(string name);
 

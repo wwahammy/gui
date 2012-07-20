@@ -8,9 +8,9 @@
     <Toolkit:CoAppApplication.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Colours.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Fonts.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;1e373a58e25250cb;component/Styles/Controls.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml"/>
                 <ResourceDictionary Source="BaseStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/CoApp.Gui.Toolkit;component/CoAppToolkitDictionary.xaml"/>

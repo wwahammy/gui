@@ -165,7 +165,7 @@ namespace CoApp.Updater.ViewModel
                                                     }
                                             });
 
-            return new MetroDialogBoxMessage {ModalViewModel = vm};
+            return new MetroDialogBoxMessage(vm);
         }
 
         private static MetroDialogBoxMessage ProductStillBlocked()
@@ -185,7 +185,7 @@ namespace CoApp.Updater.ViewModel
                                                     }
                                             });
 
-            return new MetroDialogBoxMessage {ModalViewModel = vm};
+            return new MetroDialogBoxMessage(vm);
         }
     }
 

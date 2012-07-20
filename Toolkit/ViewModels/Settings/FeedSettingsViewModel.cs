@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Model;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Packaging.Client;
 using CoApp.Toolkit.Extensions;
 using GalaSoft.MvvmLight.Command;
+using System.Linq;
 
 namespace CoApp.Gui.Toolkit.ViewModels.Settings
 {
@@ -13,7 +15,7 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
     {
         internal ICoAppService CoAppService;
 
-        private Task<IEnumerable<string>> SysFeed;
+        private Task<IEnumerable<Feed>> SysFeed;
         private string _feedUrlToAdd;
         private ObservableCollection<string> _feeds;
         private string _selectedItem;
@@ -107,7 +109,7 @@ namespace CoApp.Gui.Toolkit.ViewModels.Settings
             SysFeed = CoAppService.SystemFeeds;
             SysFeed.ContinueWith((t) =>
                                  UpdateOnUI(() =>
-                                            Feeds = new ObservableCollection<string>(t.Result)));
+                                            Feeds = new ObservableCollection<string>(t.Result.Select(f => f.Location))));
         }
     }
 }

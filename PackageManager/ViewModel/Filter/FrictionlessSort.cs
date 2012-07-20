@@ -4,43 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using CoApp.Packaging.Common;
 using GalaSoft.MvvmLight;
 
 namespace CoApp.PackageManager.ViewModel.Filter
 {
-
-    public class FrictionlessSort<TInput, TOutput> : FrictionlessSort<TInput>
-    {
-
-        private Expression<Func<TInput, TOutput>> _property;
-
-        public new Expression<Func<TInput, TOutput>> Property
-        {
-            get { return _property; }
-            set
-            {
-                _property = value;
-                RaisePropertyChanged("Property");
-            }
-        }
-    }
-
-    public class FrictionlessSort<TInput> : FrictionlessSort
-    {
-
-        private Expression<Func<TInput, dynamic>> _property;
-
-        public new Expression<Func<TInput, dynamic>> Property
-        {
-            get { return _property; }
-            set
-            {
-                _property = value;
-                RaisePropertyChanged("Property");
-            }
-        }
-    }
-
 
     public class FrictionlessSort : ObservableObject
     {
@@ -56,15 +24,35 @@ namespace CoApp.PackageManager.ViewModel.Filter
             }
         }
 
-        private Expression<Func<dynamic, dynamic>> _property;
 
-        public Expression<Func<dynamic, dynamic>> Property
+        public Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> SelectedProperty
         {
-            get { return _property; }
+            get { return Direction == ListSortDirection.Ascending ? Ascending : Descending; }
+        }
+
+
+        private Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> _ascending;
+
+        public Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> Ascending
+        {
+            get { return _ascending; }
             set
             {
-                _property = value;
-                RaisePropertyChanged("Property");
+                _ascending = value;
+                RaisePropertyChanged("Ascending");
+            }
+        }
+
+
+        private Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> _descending;
+
+        public Expression<Func<IEnumerable<IPackage>, IEnumerable<IPackage>>> Descending
+        {
+            get { return _descending; }
+            set
+            {
+                _descending = value;
+                RaisePropertyChanged("Descending");
             }
         }
 

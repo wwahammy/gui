@@ -23,5 +23,17 @@ namespace CoApp.Updater.Views
         {
             InitializeComponent();
         }
+
+        private void UserControl_MouseEnter(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void UserControl_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+   
     }
 }

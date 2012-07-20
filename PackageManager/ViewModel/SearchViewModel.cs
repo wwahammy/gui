@@ -2,14 +2,20 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Gui.Toolkit.Support;
 using CoApp.Gui.Toolkit.ViewModels;
 using CoApp.PackageManager.Model;
+using CoApp.PackageManager.Model.Interfaces;
 using CoApp.PackageManager.ViewModel.Filter;
 using CoApp.Packaging.Client;
 using CoApp.Packaging.Common;
+using CoApp.Toolkit.Collections;
+using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Linq;
 using GalaSoft.MvvmLight.Command;
 using SLE = System.Linq.Expressions;
@@ -22,7 +28,7 @@ using CollectionFilter =
                     System.Func
                         <System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>,
                             System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>>>>;
-using LocalServiceLocator = CoApp.Gui.Toolkit.Model.LocalServiceLocator;
+
 
 namespace CoApp.PackageManager.ViewModel
 {
@@ -30,7 +36,7 @@ namespace CoApp.PackageManager.ViewModel
     /// 
     /// </summary>
     /// <from>http://stackoverflow.com/questions/3468866/tabcontrol-with-add-new-tab-button</from>
-    public class SearchViewModel : ScreenViewModel
+    public class SearchViewModel : CommonGuiViewModel
     {
         //the length of a page
 /*
@@ -39,16 +45,26 @@ namespace CoApp.PackageManager.ViewModel
         internal ICoAppService CoApp;
         internal LocalServiceLocator Loc;
         internal ViewModelLocator Vm;
+        //internal IGuiFilterManager Filters;
 
         private ObservableCollection<FrictionlessFilter> _appliedFilters;
 
 
-        private FrictionlessSort<IPackage> _frictionlessSort;
+        private Filter<IPackage> _superFilter;
+
+        private FrictionlessSort _frictionlessSort;
         private bool _inMiddleOfSearch;
+
+        private readonly object _cancelModifyLock = new object();
 
 
         private ObservableCollection<ProductInfo> _packages;
 
+        private CancellationTokenSource _cancelToken;
+
+        public IList<string> FeedUrls { get; private set; }
+
+        /*
         private ObservableCollection<GUIFilterBase> _possibleFilters = new ObservableCollection<GUIFilterBase>
                                                                            {
                                                                                new FilterOnText
@@ -85,22 +101,39 @@ namespace CoApp.PackageManager.ViewModel
                                                                                        NumberOfFilter =
                                                                                            NumOfFilter.Single,
                                                                                        NiceName = "Is wanted"
-                                                                                   }
-                                                                           };
+                                                                                   },
+                                                                                new FilterOnText
+                                                                                    {
+                                                                                        Category = CAT.FeedUrl,
+                                                                                        NumberOfFilter = NumOfFilter.Multiple,
+                                                                                        NiceName = "Feed URL"
+                                                                                    }
+                                                                           };*/
 
         private ObservableCollection<SortDescriptor> _possibleSorts = new ObservableCollection<SortDescriptor>
                                                                           {
                                                                               new SortDescriptor("Name",
-                                                                                                 p => p.DisplayName),
+                                                                                                 ps => ps.SortBy(p => p.DisplayName),
+                                                                                                 ps => ps.SortByDescending(p => p.DisplayName)),
                                                                               new SortDescriptor("Date Published",
-                                                                                                 p =>
+                                                                                                 ps => ps.SortBy(p =>
                                                                                                  p.PackageDetails.
                                                                                                      PublishDate),
+                                                                                                      ps => ps.SortByDescending(p =>
+                                                                                                 p.PackageDetails.
+                                                                                                     PublishDate)
+                                                                                                     ),
+
                                                                               new SortDescriptor("Canonical Name",
-                                                                                                 p => p.CanonicalName),
+                                                                                                 ps => ps.SortBy(p => p.CanonicalName),
+                                                                                                 ps => ps.SortByDescending(p => p.CanonicalName)),
                                                                               new SortDescriptor("Formal Name",
-                                                                                                 p => p.Name)
+                                                                                                 ps => ps.SortBy(p => p.Name),
+                                                                                                 ps => ps.SortByDescending(p => p.CanonicalName))
                                                                           };
+
+
+        public FilterManagement Filters { get; private set; }
 
 
         public SearchViewModel()
@@ -109,22 +142,36 @@ namespace CoApp.PackageManager.ViewModel
             Loc = new LocalServiceLocator();
 
             CoApp = Loc.CoAppService;
+            Filters = new FilterManagement();
+            /*
+            Filters.AllFiltersChanged += ReloadAppliedFilters;
+            Filters.FilterApplied += (a, b) => UpdateOnUI(() => RaisePropertyChanged("FiltersToShow"));
+  */
             Vm = new ViewModelLocator();
+
+
+            FeedUrls = new XList<string>();
 
             
             FrictionlessSort = PossibleSorts[0].Create(ListSortDirection.Ascending);
 
             AddFilter = new RelayCommand<GUIFilterBase>(i =>
                                                             {
-                                                                AppliedFilters.Add(i.Create());
+                                                               
+                                                                    Filters.ApplyFilter(i);
+
+
+
+                                                                    ReloadAppliedFilters();
                                                                 RaisePropertyChanged("FiltersToShow");
 
                                                                 ApplyFilters();
                                                             });
             RemoveFilter = new RelayCommand<FrictionlessFilter>(i =>
                                                                     {
-                                                                        AppliedFilters.Remove(i);
+                                                                        Filters.RemoveFilter(i);
                                                                         RaisePropertyChanged("FiltersToShow");
+                                                                        ReloadAppliedFilters();
                                                                         ApplyFilters();
                                                                     });
 
@@ -142,9 +189,42 @@ namespace CoApp.PackageManager.ViewModel
                                                                   });
 
             
-            Loaded += OnLoaded;
+            
             GoToProduct =
                 new RelayCommand<ProductInfo>(p => Loc.NavigationService.GoTo(Vm.GetProductViewModel(p.CanonicalName)));
+            Loaded += OnLoaded;
+            PropertyChanged += CreateSuperFilter;
+        }
+
+        private void CreateSuperFilter(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "TypedInput")
+            {
+                //let's create the filter
+                Filter<IPackage> fullFilter = null;
+                foreach ( var f in Filters.AllFilters.Where(f => f.IsPartOfSuperFilter).OfType<ISuperFilterCopy>())
+                {
+                    fullFilter |= f.CreateForSuperFilter(TypedInput).Filter;
+                }
+
+                _superFilter = fullFilter;
+
+
+                ApplyFilters();
+            }
+        }
+
+        void SetCancelToken()
+        {
+            lock (_cancelModifyLock)
+            {
+               if (_cancelToken != null)
+               {
+                   _cancelToken.Cancel();
+               }
+
+                _cancelToken = new CancellationTokenSource();
+            }
         }
 
         public ICommand GoToProduct { get; set; }
@@ -156,17 +236,6 @@ namespace CoApp.PackageManager.ViewModel
             {
                 _inMiddleOfSearch = value;
                 RaisePropertyChanged("InMiddleOfSearch");
-            }
-        }
-
-
-        public ObservableCollection<GUIFilterBase> PossibleFilters
-        {
-            get { return _possibleFilters; }
-            set
-            {
-                _possibleFilters = value;
-                RaisePropertyChanged("PossibleFilters");
             }
         }
 
@@ -182,11 +251,14 @@ namespace CoApp.PackageManager.ViewModel
 
         public ObservableCollection<FrictionlessFilter> AppliedFilters
         {
+
+
             get
             {
+                
                 if (_appliedFilters == null)
                 {
-                    _appliedFilters = new ObservableCollection<FrictionlessFilter>();
+                    _appliedFilters = new ObservableCollection<FrictionlessFilter>(Filters.AppliedFilters);
                     var itemsView = (IEditableCollectionView) CollectionViewSource.GetDefaultView(_appliedFilters);
                     itemsView.NewItemPlaceholderPosition = NewItemPlaceholderPosition.AtEnd;
                 }
@@ -206,11 +278,7 @@ namespace CoApp.PackageManager.ViewModel
             get
             {
                 return
-                    new ObservableCollection<GUIFilterBase>(
-                        PossibleFilters.Where(
-                            item =>
-                            !(item.NumberOfFilter == NumOfFilter.Single &&
-                              AppliedFilters.Any(f => f.Category == item.Category))));
+                    new ObservableCollection<GUIFilterBase>(Filters.AvailableFilters);
             }
         }
 
@@ -226,7 +294,7 @@ namespace CoApp.PackageManager.ViewModel
         }
 
 
-        public FrictionlessSort<IPackage> FrictionlessSort
+        public FrictionlessSort FrictionlessSort
         {
             get { return _frictionlessSort; }
             set
@@ -236,20 +304,71 @@ namespace CoApp.PackageManager.ViewModel
             }
         }
 
-        public ICommand AddFilter { get; set; }
+        public RelayCommand<GUIFilterBase> AddFilter { get; set; }
         public ICommand RemoveFilter { get; set; }
         public ICommand Sort { get; set; }
         public ICommand SortDescending { get; set; }
+        
+        public void AddFilterViaRequest(SearchRequest req)
+        {
+            var filt = Filters.AvailableFilters.FirstOrDefault(f => f.Category == req.Category);
+            if (filt == null)
+            {
+                
+            }
+            else
+            {
+                if (filt is IFilterWithTextInput)
+                {
+                    ((IFilterWithTextInput) filt).FromInputSetValue(req.Input);
+                    AddFilter.Execute(filt);
+                }
+                
+            }
+        }
+
+        public new string Title
+        {
+            get { return string.IsNullOrWhiteSpace(TypedInput) ? "Search" : "Search for " + TypedInput; }
+        }
+
+
+        private string _typedInput = "";
+
+        public string TypedInput
+        {
+            get { return _typedInput; }
+            set
+            {
+                _typedInput = value;
+                RaisePropertyChanged("TypedInput");
+                
+                RaisePropertyChanged("Title");
+            }
+        }
+
+        
 
         private void ApplyFilters()
         {
+            
+            SetCancelToken();
+            //TODO: we should lock AppliedFilters list here so we don't have issues with someone adding one while we grab it
+            var a = AppliedFilters.ToArray();
             //create actual filter
-            IEnumerable<IGrouping<CAT, FrictionlessFilter>> groups = AppliedFilters.GroupBy(f => f.Category);
+            IEnumerable<IGrouping<CAT, FrictionlessFilter>> groups = a.GroupBy(f => f.Category);
             Filter<IPackage> fullFilter = null;
+            FeedUrls = new XList<string>();
             foreach (var g in groups)
             {
+                if (g.Key == CAT.FeedUrl)
+                {
+                    //we do something strange since feedUrls are strange stuff
+                    FeedUrls = new XList<string>(g.Cast<FeedUrlFilter>().Select(f => f.ChoiceValue));
+                }
+
                 Filter<IPackage> groupF = null;
-                foreach (FrictionlessFilter filter in g)
+                foreach (var filter in g)
                 {
                     if (groupF == null)
                         groupF = filter.Filter;
@@ -263,9 +382,15 @@ namespace CoApp.PackageManager.ViewModel
                     fullFilter &= groupF;
             }
 
+            if (_superFilter != null)
+            {
+                fullFilter &= _superFilter;
+            }
+
             //get only highestpackages
             CollectionFilter collectionFilter = null;
             collectionFilter = collectionFilter.Then(p => p.HighestPackages());
+            collectionFilter = collectionFilter.Then(FrictionlessSort.SelectedProperty);
 
 
             //create sort
@@ -285,52 +410,79 @@ namespace CoApp.PackageManager.ViewModel
                                  ListSortDirection direction)
         {
             UpdateOnUI(() => InMiddleOfSearch = true);
-            CoApp.GetPackages(packageFilter, collectionFilter).ContinueWith(t =>
-                                                                                {
-/*
-                                                                                    var packageTasks = t.Result.Select(
-                                                                                        p =>
-                                                                                        CoApp.GetPackageDetails(
-                                                                                            p.CanonicalName)).ToArray();
-                                                                                    Task.WaitAll(packageTasks);*/
-                                                                                    IEnumerable<Package> packages =
-                                                                                        t.Result;
-                                                                                    /*
-                                                                                        packageTasks.Select(
-                                                                                            t1 => t1.Result);*/
 
-                                                                                    ProductInfo[] ret;
-                                                                                    if (direction ==
-                                                                                        ListSortDirection.Ascending)
-                                                                                    {
-                                                                                        ret = packages.OrderBy(
-                                                                                            FrictionlessSort.Property.
-                                                                                                Compile()).
-                                                                                            Select(
-                                                                                                ProductInfo.FromIPackage)
-                                                                                            .ToArray();
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        ret =
-                                                                                            packages.OrderByDescending(
-                                                                                                FrictionlessSort.
-                                                                                                    Property.Compile()).
-                                                                                                Select(
-                                                                                                    ProductInfo.
-                                                                                                        FromIPackage).
-                                                                                                ToArray();
-                                                                                    }
+            Task<IEnumerable<Package>> task = null;
+            if (FeedUrls.IsNullOrEmpty())
+            {
+                task = CoApp.GetPackages(packageFilter, collectionFilter);
+            }
 
-                                                                                    var coll = new ObservableCollection
-                                                                                        <ProductInfo>(ret);
+            else
+            {
+                task = Task.Factory.StartNew(() =>
+                                                 {
+                                                     var t = FeedUrls.SelectMany(
+                                                         s =>
+                                                         CoApp.GetPackages(packageFilter, collectionFilter,
+                                                                           locationFeed: s).
+                                                                           ContinueAlways(t1 =>
+                                                                                              {
+                                                                                                  if (t1.IsFaulted || t1.IsCanceled)
+                                                                                                      return null;
+                                                                                                  else
+                                                                                                  {
+                                                                                                      return t1.Result;
+                                                                                                  }
+                                                                                              }).Result.Where(i => i != null) );
 
-                                                                                    UpdateOnUI(() =>
-                                                                                               Packages = coll);
+                                                     return t;
 
-                                                                                    UpdateOnUI(
-                                                                                        () => InMiddleOfSearch = false);
-                                                                                });
+
+                                                 }, TaskCreationOptions.AttachedToParent);
+            }
+            task.ContinueAlways (t =>
+                                    {
+
+                                        if (!_cancelToken.IsCancellationRequested)
+                                        {
+                                            IEnumerable<Package> packages =
+                                                t.Result;
+
+
+                                            ProductInfo[] ret;
+                                            if (direction ==
+                                                ListSortDirection.Ascending)
+                                            {
+                                                ret = packages.
+                                                    Select(
+                                                        ProductInfo.FromIPackage)
+                                                    .ToArray();
+                                            }
+                                            else
+                                            {
+                                                ret =
+                                                    packages.
+                                                        Select(
+                                                            ProductInfo.
+                                                                FromIPackage).
+                                                        ToArray();
+                                            }
+
+                                            var coll = new ObservableCollection
+                                                <ProductInfo>(ret);
+
+                                            UpdateOnUI(() =>
+                                                       Packages = coll);
+                                        }
+                                        UpdateOnUI(
+                                            () => InMiddleOfSearch = false);
+                                    });
+        }
+
+        private void ReloadAppliedFilters()
+        {
+            UpdateOnUI(() => AppliedFilters = null);
+           
         }
 
         private void OnLoaded()

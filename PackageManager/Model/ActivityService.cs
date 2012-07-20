@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CoApp.Gui.Toolkit.Model.Interfaces;
@@ -15,75 +16,117 @@ namespace CoApp.PackageManager.Model
     {
         internal ICoAppService CoApp;
 
+        readonly object _activityListLock = new object();
+
         public ActivityService()
         {
             CoApp = new LocalServiceLocator().CoAppService;
             Activities = new ObservableCollection<Activity>();
+
+            //Sample Activities
+       
             ((ObservableCollection<Activity>) Activities).CollectionChanged +=
-                (s, a) => Messenger.Default.Send(new ActivitiesUpdatedMessage());
+                (s, a) => Messenger.Default.Send(CreateActivitiesUpdateMessage());
+         
+        }
+
+        
+
+        private ActivitiesUpdatedMessage CreateActivitiesUpdateMessage()
+        {
+            var msg = new ActivitiesUpdatedMessage();
+            lock (_activityListLock)
+            {
+                foreach (var g in Activities.GroupBy(a => a.State))
+                {
+                    var i = g.Count();
+                    switch(g.Key)
+                    {
+                        case State.Finished:
+                            msg.NumberFinished = i;
+                            break;
+                        case State.Failed:
+                            msg.NumberOfFailures = i;
+                            break;
+                        case State.Performing:
+                            msg.NumberOfActivities = i;
+                            break;
+                    }
+                }
+                return msg;
+            }
         }
 
         #region IActivityService Members
 
         public Task InstallPackage(IPackage p)
         {
-            return
-                Task.Factory.StartNew(() =>
-                                          {
-                                              Activity a = CreateActivity(p, ActivityType.Install);
-                                              Activities.Add(a);
-                                              Task task = CoApp.InstallPackage(p.CanonicalName,
-                                                                               (ignore1, ignore2, progress) =>
-                                                                               a.Progress = progress,
-                                                                               s =>
-                                                                               a.State = State.Finished);
 
-                                              task.Wait();
-                                              if (task.Exception != null)
-                                              {
-                                                  a.State = State.Failed;
-                                              }
-                                              //task.RethrowWhenFaulted();
-                                          });
+
+            Activity a = CreateActivity(p, ActivityType.Install);
+            AddActivity(a);
+            Task task = CoApp.InstallPackage(p.CanonicalName,
+                                             (ignore1, ignore2, progress) =>
+                                             a.Progress = progress,
+                                             s =>
+                                             a.State = State.Finished).ContinueOnFail(e => a.State = State.Failed);
+
+
+            return task;
         }
 
         public Task RemovePackage(IPackage p)
         {
-            return Task.Factory.StartNew(() =>
-                                             {
-                                                 Activity a = CreateActivity(p, ActivityType.Remove);
-                                                 Activities.Add(a);
-                                                 Task task = CoApp.RemovePackage(p.CanonicalName, (i, progress) =>
-                                                                                                  a.Progress = progress,
-                                                                                 i =>
-                                                                                 a.State = State.Finished);
-                                                 task.Wait();
 
-                                                 if (task.Exception != null)
-                                                 {
-                                                     a.State = State.Failed;
-                                                 }
+            Activity a = CreateActivity(p, ActivityType.Remove);
+            AddActivity(a);
+            Task task = CoApp.RemovePackage(p.CanonicalName, (i, progress) =>
+                                                             a.Progress = progress,
+                                            i =>
+                                            a.State = State.Finished).ContinueOnFail(e => a.State = State.Failed);
+         
+            return task;
 
-                                                 //task.RethrowWhenFaulted();
-                                             }
-                );
+           
         }
 
-        public Task SetState(IPackage p, PackageState state)
+    
+
+    public Task SetState(IPackage p, PackageState state)
         {
-            return Task.Factory.StartNew(() => 
-                {
+       
                                                  var a = CreateActivity(p, ActivityType.SetState);
-                                                 Activities.Add(a);
+                                                 AddActivity(a);
 
-                                                 var task = CoApp.SetState(p.CanonicalName, state);
-                                                 task.Wait();
+        var task = CoApp.SetState(p.CanonicalName, state).ContinueAlways(t =>
+                                                                             {
+                                                                                 if (t.Exception != null)
+                                                                                     a.State = State.Failed;
+                                                                                 else
+                                                                                     a.State = State.Finished;
+                                                                             });
 
-                                                 a.State = task.Exception != null ? State.Failed : State.Finished;
 
-                                                 //task.RethrowWhenFaulted();
-                });
-            
+                                               
+        return task;
+
+        }
+
+        public void RemoveActivity(Activity a)
+        {
+            lock (_activityListLock)
+            {
+                Activities.Remove(a);
+            }
+            Messenger.Default.Send(CreateActivitiesUpdateMessage());
+        }
+
+        private void AddActivity(Activity a)
+        {
+            lock (_activityListLock)
+            {
+                Activities.Add(a);
+            }
         }
 
         public IList<Activity> Activities { get; private set; }
@@ -93,7 +136,7 @@ namespace CoApp.PackageManager.Model
         private Activity CreateActivity(IPackage p, ActivityType type)
         {
             var a = new Activity(p, type);
-            a.PropertyChanged += (sender, args) => Messenger.Default.Send(new ActivitiesUpdatedMessage());
+            a.PropertyChanged += (sender, args) => Messenger.Default.Send(CreateActivitiesUpdateMessage());
             return a;
         }
     }

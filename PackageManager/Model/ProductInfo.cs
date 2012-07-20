@@ -1,31 +1,26 @@
 ﻿using System;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CoApp.Gui.Toolkit.Support;
 using CoApp.Gui.Toolkit.ViewModels;
-using CoApp.PackageManager.Properties;
-using CoApp.PackageManager.Support;
+using CoApp.PackageManager.Model.Interfaces;
 using CoApp.Packaging.Common;
+using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Win32;
-using Brushes = System.Windows.Media.Brushes;
-using Color = System.Windows.Media.Color;
 
 namespace CoApp.PackageManager.Model
 {
     public class ProductInfo : ScreenViewModel
     {
-        public static readonly SolidColorBrush DefaultBackgroundColor =
-            new SolidColorBrush(new Color {A = 255, B = 236, G = 114, R = 38});
-
-
+        internal IColorManager ColorManager;
         private string _canonicalName;
         private string _description;
         private BitmapSource _icon;
+        private bool _iconLoaded;
         private string _name;
+        private IPackage _original;
         private Uri _possibleIconSource;
         private DateTime? _posted;
         private SolidColorBrush _primaryColor;
@@ -34,10 +29,33 @@ namespace CoApp.PackageManager.Model
         private SolidColorBrush _textColor;
         private FourPartVersion _version;
 
+
         public ProductInfo()
         {
-            PrimaryColor = CreateMyFrozenBackgroundColor();
+            ColorManager = new LocalServiceLocator().ColorManager;
         }
+
+        public bool IconLoaded
+        {
+            get { return _iconLoaded; }
+            set
+            {
+                _iconLoaded = value;
+                RaisePropertyChanged("IconLoaded");
+            }
+        }
+
+
+        public IPackage Original
+        {
+            get { return _original; }
+            set
+            {
+                _original = value;
+                RaisePropertyChanged("Original");
+            }
+        }
+
 
         public Uri PossibleIconSource
         {
@@ -56,7 +74,6 @@ namespace CoApp.PackageManager.Model
             set
             {
                 _icon = value;
-                HandleIconChanged();
                 RaisePropertyChanged("Icon");
             }
         }
@@ -159,40 +176,20 @@ namespace CoApp.PackageManager.Model
             }
         }
 
-        private void HandleIconChanged()
-        {
-            Task.Factory.StartNew(() =>
-                                      {
-                                          SolidColorBrush primaryColor = CreateBackgroundColorBrush();
-                                          SolidColorBrush textColor = CreateTextColorBrush(primaryColor);
-                                          primaryColor.Freeze();
-                                          textColor.Freeze();
-                                          UpdateOnUI(() => PrimaryColor = primaryColor);
-                                          UpdateOnUI(() => TextColor = textColor);
-
-                                      });
-        }
-
-        static ProductInfo()
-        {
-            if (!DefaultBackgroundColor.IsFrozen)
-            {
-                DefaultBackgroundColor.Freeze();
-            }
-        }
+        public event Action IconLoadingCompleted = delegate { };
 
 
         public static ProductInfo FromIPackage(IPackage package)
         {
             var pi = new ProductInfo
                          {
+                             Original = package,
                              Name = package.GetNicestPossibleName(),
                              CanonicalName = package.CanonicalName,
                              Description = package.PackageDetails.Description,
                              Summary = package.PackageDetails.SummaryDescription,
                              Posted = package.PackageDetails.PublishDate,
                              Version = package.Version,
-                             Icon = GetDefaultIcon(),
                              PossibleIconSource =
                                  (package.PackageDetails.Icons != null && package.PackageDetails.Icons.Any())
                                      ? package.PackageDetails.Icons.First()
@@ -205,145 +202,21 @@ namespace CoApp.PackageManager.Model
 
         private void LoadBitmapIfPossible()
         {
-            if (PossibleIconSource != null)
-            {
-                var bi = new BitmapImage();
-                bi.BeginInit();
-                bi.UriSource = PossibleIconSource;
-                bi.CacheOption = BitmapCacheOption.OnLoad;
-                bi.EndInit();
-                bi.DownloadCompleted += (sender, args) =>
-                                            {
-                                                bi.Freeze();
-                                                UpdateOnUI(() => Icon = bi);
-                                            };
-            }
+            Task<IconColorPacket> task = ColorManager.GetColorPacket(PossibleIconSource);
+            task.ContinueAlways(t =>
+                                    {
+                                        if (t.IsCompleted)
+                                        {
+                                            t.Result.BackgroundColor.Freeze();
+                                            t.Result.ForegroundColor.Freeze();
+                                            t.Result.Icon.Freeze();
+                                            UpdateOnUI(() => Icon = t.Result.Icon);
+                                            UpdateOnUI(() => TextColor = t.Result.ForegroundColor);
+                                            UpdateOnUI(() => PrimaryColor = t.Result.BackgroundColor);
+                                        }
+                                        UpdateOnUI(() => IconLoaded = true);
+                                        IconLoadingCompleted();
+                                    });
         }
-
-        public static BitmapSource GetDefaultIcon()
-        {
-            using (var mem = new MemoryStream(Resources.software))
-            {
-                var bitmapSource = new BitmapImage();
-                bitmapSource.BeginInit();
-                bitmapSource.CacheOption = BitmapCacheOption.OnLoad;
-
-                bitmapSource.StreamSource = mem;
-                bitmapSource.EndInit();
-                bitmapSource.Freeze();
-                return bitmapSource;
-            }
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        /// <from>http://www.rudigrobler.net/blog/2011/9/26/make-your-wpf-buttons-color-hot-track.html</from>
-        /// <license>CC-BY</license>
-        public SolidColorBrush CreateBackgroundColorBrush()
-        {
-            try
-            {
-
-
-
-                if (Icon != null)
-                {
-
-                    var e = new BmpBitmapEncoder();
-                    var pixels = PixelRetrievalExtensions.GetPixels(Icon);
-                    var tempLock = new object();
-                    int tr = 0;
-                    int tg = 0;
-                    int tb = 0;
-
-
-                    Parallel.For(0, pixels.GetLength(0),
-                                 () => new TemporaryColors(),
-                                 (x, state, current) =>
-                                     {
-                                         for (int y = 0; y < pixels.GetLength(1); y++)
-                                         {
-                                             var pixel = pixels[x, y];
-                                             current.Red += pixel.Red;
-                                             current.Green += pixel.Green;
-                                             current.Blue += pixel.Blue;
-
-                                         }
-                                         return current;
-                                     },
-                                 (current) =>
-                                     {
-                                         lock (tempLock)
-                                         {
-                                             tr += current.Red;
-                                             tg += current.Green;
-                                             tb += current.Blue;
-                                         }
-                                     });
-
-                    /*
-                    for (int x = 0; x < bitmap.Width; x++)
-                    {
-
-                        for (int y = 0; y < bitmap.Height; y++)
-                        {
-                            System.Drawing.Color pixel = bitmap.GetPixel(x, y);
-                            tr += pixel.R;
-                            tg += pixel.G;
-                            tb += pixel.B;
-                        }
-                    }*/
-
-                    var r = (byte) Math.Floor((double) (tr/(pixels.Length)));
-                    var g = (byte) Math.Floor((double) (tg/(pixels.Length)));
-                    var b = (byte) Math.Floor((double) (tb/(pixels.Length)));
-
-                    return new SolidColorBrush(Color.FromArgb(0xFF, r, g, b));
-
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            return CreateMyFrozenBackgroundColor();
-        }
-
-        private SolidColorBrush CreateMyFrozenBackgroundColor()
-        {
-            var color = DefaultBackgroundColor.Clone();
-            color.Freeze();
-            return color;
-        }
-
-        public static SolidColorBrush CreateTextColorBrush(SolidColorBrush primaryInput)
-        {
-            if (primaryInput != null)
-            {
-                var c = new Color();
-
-                c = primaryInput.Color;
-
-
-                double l = 0.2126*c.ScR + 0.7152*c.ScG + 0.0722*c.ScB;
-                if (l < 0.5)
-                {
-                    return Brushes.White;
-                }
-            }
-            return Brushes.Black;
-        }
-    }
-
-    internal class TemporaryColors
-    {
-        public int Red { get; set; }
-        public int Green { get; set; }
-        public int Blue { get; set; }
-
     }
 }

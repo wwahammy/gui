@@ -15,6 +15,7 @@ namespace CoApp.PackageManager.Model
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<IFeaturedService, FeaturedService>();
             SimpleIoc.Default.Register<IActivityService, ActivityService>();
+            SimpleIoc.Default.Register<IColorManager,ColorManager>();
         }
 
         public IFeaturedService FeaturedService
@@ -26,5 +27,12 @@ namespace CoApp.PackageManager.Model
         {
             get { return ServiceLocator.Current.GetInstance<IActivityService>(); }
         }
+
+        public IColorManager ColorManager
+        {
+            get { return ServiceLocator.Current.GetInstance<IColorManager>(); }
+        }
+
+      
     }
 }

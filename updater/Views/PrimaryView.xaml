@@ -6,8 +6,8 @@
              xmlns:Support="clr-namespace:CoApp.Updater.Support" xmlns:Controls="clr-namespace:CoApp.Updater.Controls"
              xmlns:Command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:Primary="clr-namespace:CoApp.Updater.Views.Primary" mc:Ignorable="d"
-             d:DesignHeight="800" d:DesignWidth="1024" >
+             xmlns:Primary="clr-namespace:CoApp.Updater.Views.Primary" mc:Ignorable="d" MouseDown="UserControl_MouseDown"
+             d:DesignHeight="800" d:DesignWidth="1024">
     <UserControl.Resources>
         
         <ResourceDictionary>

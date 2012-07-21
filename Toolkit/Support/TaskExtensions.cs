@@ -10,6 +10,140 @@ namespace CoApp.Gui.Toolkit.Support
 {
     public static class TaskExtensions
     {
+        public static Task<TResult> ContinueOnAll<TResult, TAntecedentResult>(this Task<TAntecedentResult> input, 
+            Func<TAntecedentResult, TResult> success, 
+            Action<Exception> failure = null, 
+            Action cancelled = null)
+        {
+            return input.ContinueAlways(t =>
+                                            {
+                                                if (t.IsCanceled)
+                                                {
+                                                    if (cancelled != null)
+                                                        cancelled();
+                                                    throw new TaskCanceledException();
+                                                }
+
+                                                if (t.IsFaulted)
+                                                {
+                                                    if (failure != null)
+                                                        failure(t.Exception.Unwrap());
+                                                    t.RethrowWhenFaulted();
+                                                }
+
+                                                var r = success(t.Result);
+
+                                                return r;
+
+
+                                            });
+        }
+
+        public static Task<TResult> ContinueOnAll<TResult, TAntecedentResult>(this Task<TAntecedentResult> input,
+            Func<TAntecedentResult, Task<TResult>> success,
+            Action<Exception> failure = null,
+            Action cancelled = null)
+        {
+            return input.ContinueAlways(t =>
+            {
+                if (t.IsCanceled)
+                {
+                    if (cancelled != null)
+                        cancelled();
+                    throw new TaskCanceledException();
+                }
+
+                if (t.IsFaulted)
+                {
+                    if (failure != null)
+                        failure(t.Exception.Unwrap());
+                    t.RethrowWhenFaulted();
+                }
+
+                var r = success(t.Result);
+
+                return r;
+
+
+            });
+        }
+
+
+
+        public static Task<TResult> ContinueOnAll<TResult>(this Task input, Func<Task<TResult>> success, Action<Exception> failure = null, Action cancelled = null)
+        {
+            return input.ContinueAlways(t =>
+                                     {
+                                         if (t.IsCanceled)
+                                         {
+                                             {
+                                                 if (cancelled != null)
+                                                     cancelled();
+                                                 throw new TaskCanceledException();
+                                             }
+                                         }
+
+                                         if (t.IsFaulted)
+                                         {
+                                             if (failure != null)
+                                                 failure(t.Exception.Unwrap());
+                                             t.RethrowWhenFaulted();
+                                         }
+
+                                         return success();
+                                     });
+        }
+
+
+        public static Task ContinueOnAll<TAntecedentResult>(this Task<TAntecedentResult> input, Action<TAntecedentResult> success, Action<Exception> failure = null, Action cancelled = null)
+        {
+            return input.ContinueAlways(t =>
+            {
+                if (t.IsCanceled)
+                {
+                    {
+                        if (cancelled != null)
+                            cancelled();
+                        throw new TaskCanceledException();
+                    }
+                }
+
+                if (t.IsFaulted)
+                {
+                    if (failure != null)
+                        failure(t.Exception.Unwrap());
+                    t.RethrowWhenFaulted();
+                }
+
+                success(t.Result);
+            });
+        }
+
+
+
+        public static Task<TResult> ContinueOnAll<TResult>(this Task input, Func<TResult> success, Action<Exception> failure = null, Action cancelled = null
+    )
+        {
+            return input.ContinueAlways(t =>
+            {
+                if (t.IsCanceled)
+                {
+                    if (cancelled != null)
+                        cancelled();
+                    throw new TaskCanceledException();
+                }
+
+                if (t.IsFaulted)
+                {
+                    if (failure != null)
+                        failure(t.Exception.Unwrap());
+                    t.RethrowWhenFaulted();
+                }
+
+                return success();
+
+            });
+        }
 
 
         public static int WaitAny(this IEnumerable<Task> tasks)

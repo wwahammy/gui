@@ -2,42 +2,57 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using CoApp.Gui.Toolkit.Controls;
+using CoApp.Gui.Toolkit.Messages;
 using CoApp.Gui.Toolkit.Model.Interfaces;
+using CoApp.Gui.Toolkit.Support;
 using CoApp.Gui.Toolkit.ViewModels;
+using CoApp.Gui.Toolkit.ViewModels.Modal;
 using CoApp.PackageManager.Model;
 using CoApp.PackageManager.Model.Interfaces;
+using CoApp.PackageManager.ViewModel.Filter;
+using CoApp.Packaging.Client;
+using CoApp.Toolkit.Extensions;
+using CoApp.Toolkit.Logging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace CoApp.PackageManager.ViewModel
 {
-    public class HomeViewModel : ScreenViewModel
+    public class HomeViewModel : CommonGuiViewModel
     {
-        internal IFeaturedService Featured;
         internal ICoAppService CoApp;
+        internal IFeaturedService Featured;
+        private string _newFeed;
 
         private ObservableCollection<PanoramaItemSource> _panoramaItems = new ObservableCollection<PanoramaItemSource>();
+        private string _visualState = HomeState.Waiting.ToString();
 
         public HomeViewModel()
         {
-            Loaded += OnLoaded;
             var loc = new LocalServiceLocator();
             Featured = loc.FeaturedService;
             CoApp = loc.CoAppService;
 
             GoToSearch = new RelayCommand(() => loc.NavigationService.GoTo(new ViewModelLocator().SearchViewModel));
+            AddFeed = new RelayCommand(ExecuteAddFeed);
+            ElevateAddFeed = new RelayCommand(ExecuteElevateAddFeed);
+            Loaded += OnLoaded;
         }
+
 
         public ICommand GoToSearch { get; set; }
 
+        public ICommand AddFeed { get; set; }
+        public ICommand ElevateAddFeed { get; set; }
+
         public ObservableCollection<PanoramaItemSource> PanoramaItems
         {
-            get
-            {
-                return _panoramaItems;
-            }
+            get { return _panoramaItems; }
             set
             {
                 _panoramaItems = value;
@@ -45,67 +60,176 @@ namespace CoApp.PackageManager.ViewModel
             }
         }
 
+
+        public string VisualState
+        {
+            get { return _visualState; }
+            set
+            {
+                _visualState = value;
+                RaisePropertyChanged("VisualState");
+            }
+        }
+
+
+        public string NewFeed
+        {
+            get { return _newFeed; }
+            set
+            {
+                _newFeed = value;
+                RaisePropertyChanged("NewFeed");
+            }
+        }
+
+        private void ExecuteElevateAddFeed()
+        {
+            Task e = CoApp.Elevate();
+            //elevationfailed
+            e.ContinueOnFail(ex =>
+                {
+                    if (ex.InnerException != null)
+                        Logger.Warning("Elevate failed {0}, {1}", ex.InnerException.Message,
+                                       ex.InnerException.StackTrace);
+                    else
+                        Logger.Warning("Elevate failed {0}, {1}", ex.Message, ex.StackTrace);
+                    Messenger.Default.Send(NotEnoughPermissions("add a feed"));
+                });
+
+            e.Continue(() => AddFeed.Execute(null));
+        }
+
+        private void ExecuteAddFeed()
+        {
+            Task sysFeed = CoApp.AddSystemFeed(NewFeed);
+
+
+            Task<SectionFeature> featuredTask =
+                sysFeed.Continue(
+                    () => CoApp.SetFeedStale(NewFeed)).ContinueAlways(t => CoApp.GetSystemFeed(NewFeed)).ContinueOnAll(
+                        f => Featured.GetSectionFeatureForFeed(f),
+                        e => { },
+                        () => { });
+
+
+            //couldn't get feed?
+            featuredTask.ContinueOnFail(e => { });
+
+            featuredTask.Continue(sf => CreatePanoramaItemSourceFromSectionFeature(sf)).Continue(
+                ps => UpdateOnUI(() => PanoramaItems.Insert(0, ps)));
+        }
+
+
         private void OnLoaded()
         {
             Title = "Home";
             ScreenWidth = ScreenWidth.FullWidth;
+
             PanoramaItems.Clear();
 
-            AddPostLoadTask(
-                CoApp.SystemFeeds.ContinueWith(CreateSectionsFromTask));
-              
-        }
 
-        private void CreateSectionsFromTask(Task<IEnumerable<string>> feedsTask)
-        {
-            if (feedsTask.IsCanceled || feedsTask.IsFaulted)
-            {
-                //TODO something bad;
-            }
-
-            //if this crashes we're screwed
-            foreach (SectionFeature a in feedsTask.Result.Select(f => Featured.GetSectionFeatureForFeed(f).Result))
-            {
-                var panItem = new PanoramaItemSource
+            CoApp.SystemFeeds.ContinueOnAll(CreateSectionsFromTask, exception =>
                 {
-                    Name = a.Name,
-                    TopLeft = a.TopLeft,
-                    BottomCenter =
-                        a.BottomCenter,
-                    BottomLeft =
-                        a.BottomLeft,
-                    BottomRight =
-                        a.BottomRight
-                };
+                    Logger.Error(exception);
+                    var vm = new BasicModalViewModel
+                        {
+                            Title =
+                                "Couldn't get feeds",
+                            Content =
+                                "We couldn't get your system feeds. There must be something wrong with your permissions or CoApp."
+                        };
+                    vm.SetViaButtonDescriptions(new[]
+                        {
+                            new ButtonDescription
+                                {
+                                    Title = "Close CoApp Package Manager",
+                                    Command = new RelayCommand(() => Application.Current.Shutdown())
+                                }
+                        });
+                    Messenger.Default.Send(
+                        new MetroDialogBoxMessage(vm));
+                });
+        }
 
+        private void CreateSectionsFromTask(IEnumerable<Feed> feeds)
+        {
+            if (!feeds.Any())
+            {
+                UpdateOnUI(() => VisualState = HomeState.Failed.ToString());
+            }
+            
+            //
+            //if this crashes we're screwed
+            foreach (SectionFeature a in Featured.SortFeedsToFinalOrder(feeds).Select(f => Featured.GetSectionFeatureForFeed(f).Result))
+            {
+                PanoramaItemSource panItem = CreatePanoramaItemSourceFromSectionFeature(a);
+                bool needToChangeState = !PanoramaItems.Any();
                 UpdateOnUI(() => PanoramaItems.Add(panItem));
+                if (needToChangeState)
+                {
+                    UpdateOnUI(() => VisualState = HomeState.Loaded.ToString());
+                }
             }
         }
 
-    }
+        
 
-    
+
+        private PanoramaItemSource CreatePanoramaItemSourceFromSectionFeature(SectionFeature f)
+        {
+            var panItem = new PanoramaItemSource
+                {
+                    Name = f.Name,
+                    TopLeft = f.TopLeft,
+                    BottomCenter = f.BottomCenter,
+                    BottomLeft = f.BottomLeft,
+                    BottomRight = f.BottomRight
+                };
+            return panItem;
+        }
+
+        #region Nested type: HomeState
+
+        private enum HomeState
+        {
+            Waiting,
+            Loaded,
+            Failed
+        }
+
+        #endregion
+    }
 
     public class PanoramaItemSource : ViewModelBase
     {
         private readonly INavigationService _nav = new LocalServiceLocator().NavigationService;
         private readonly ViewModelLocator _vm = new ViewModelLocator();
+
         private ProductInfo _bottomCenter;
         private ProductInfo _bottomLeft;
         private ProductInfo _bottomRight;
 
         private string _name;
+        private int _numberOfItems;
         private ProductInfo _topLeft;
-		private int _numberOfItems;
+        private SolidColorBrush _topRightColorBrush;
+        private SolidColorBrush _topRightForegroundBrush;
+        private string _topRightTitle;
 
         public PanoramaItemSource()
         {
             TopRightColorBrush = CreateBrush();
-            TopRightForegroundBrush = ProductInfo.CreateTextColorBrush(TopRightColorBrush);
-            TopRightTitle = "See all products for " + Name;
-            GoToProductPage = new RelayCommand<string>(canonicalName => _nav.GoTo(_vm.GetProductViewModel(canonicalName)));
-            
+            TopRightForegroundBrush = ColorManager.CreateTextColorBrush(TopRightColorBrush);
+
+            GoToProductPage =
+                new RelayCommand<string>(canonicalName => _nav.GoTo(_vm.GetProductViewModel(canonicalName)));
+
+
+            GoToSource =
+                new RelayCommand(
+                    () => _nav.GoTo(_vm.GetSearchViewModel(new SearchRequest {Category = CAT.FeedUrl, Input = Name})));
         }
+
 
         public string Name
         {
@@ -113,7 +237,9 @@ namespace CoApp.PackageManager.ViewModel
             set
             {
                 _name = value;
+
                 RaisePropertyChanged("Name");
+                TopRightTitle = "See all products from " + Name;
             }
         }
 
@@ -164,8 +290,6 @@ namespace CoApp.PackageManager.ViewModel
             }
         }
 
-        private string _topRightTitle;
-
         public string TopRightTitle
         {
             get { return _topRightTitle; }
@@ -177,8 +301,6 @@ namespace CoApp.PackageManager.ViewModel
         }
 
 
-        private SolidColorBrush _topRightColorBrush;
-
         public SolidColorBrush TopRightColorBrush
         {
             get { return _topRightColorBrush; }
@@ -188,8 +310,6 @@ namespace CoApp.PackageManager.ViewModel
                 RaisePropertyChanged("TopRightColorBrush");
             }
         }
-
-        private SolidColorBrush _topRightForegroundBrush;
 
         public SolidColorBrush TopRightForegroundBrush
         {
@@ -202,32 +322,26 @@ namespace CoApp.PackageManager.ViewModel
         }
 
 
+        public int NumberOfItems
+        {
+            get { return _numberOfItems; }
+            set
+            {
+                _numberOfItems = value;
+                RaisePropertyChanged("NumberOfItems");
+            }
+        }
+
         private SolidColorBrush CreateBrush()
         {
-            var clone = ProductInfo.DefaultBackgroundColor.Clone();
+            SolidColorBrush clone = ColorManager.DefaultBackgroundColor.Clone();
             clone.Freeze();
             return clone;
         }
-
-        
-		
-		public int NumberOfItems
-		{
-			get {
-				return _numberOfItems;
-			}
-			set {
-				_numberOfItems = value;
-				RaisePropertyChanged("NumberOfItems");
-			}
-		}
-
-        
-
-        
     }
-	
-	public class PanoramaSources : List<PanoramaItemSource>
-	{}
-	
+
+
+    public class PanoramaSources : List<PanoramaItemSource>
+    {
+    }
 }

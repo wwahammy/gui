@@ -28,7 +28,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Utf8Output>true</Utf8Output>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -58,29 +58,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CoApp.Client, Version=1.2.0.157, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="CoApp.Toolkit">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentDateTime">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\FluentDateTime.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Toolkit"/>
+    <Reference Include="FluentDateTime"/>
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF4">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="GalaSoft.MvvmLight.WPF4">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=0.7.1.0, Culture=neutral, PublicKeyToken=e4472823608665b4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\MahApps.Metro.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+    <Reference Include="MahApps.Metro, Version=0.8.0.0" Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+      <HintPath>..\lib\MahApps.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Expression.Interactions">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\Microsoft.Expression.Interactions.dll</HintPath>
-    </Reference>
+    <Reference Include="MahApps.Metro, Version=0.8.0.0" Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'"/>
+    <Reference Include="Microsoft.Expression.Interactions"/>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -89,9 +81,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Interactivity">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Windows.Interactivity"/>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -113,6 +103,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\ActivityNotification.cs" />
     <Compile Include="Controls\AddIcon.xaml.cs">
       <DependentUpon>AddIcon.xaml</DependentUpon>
     </Compile>
@@ -120,16 +111,9 @@
       <DependentUpon>CloseIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CommandBorder.cs" />
-    <Compile Include="Controls\CustomTile.cs" />
     <Compile Include="Controls\OtherHeaderItems.cs" />
-    <Compile Include="Controls\TileGridControl.cs" />
     <Compile Include="Controls\TileGridItem.cs" />
-    <Compile Include="Controls\TileGridSection.xaml.cs">
-      <DependentUpon>TileGridSection.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ToggleDropDown.xaml.cs">
-      <DependentUpon>ToggleDropDown.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Controls\ToggleDropDown.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -150,6 +134,16 @@
     <Compile Include="Model\LocalServiceLocator.cs" />
     <Compile Include="Model\ProductInfo.cs" />
     <Compile Include="Model\RatingCommentService.cs" />
+    <Compile Include="Support\PackageStateToName.cs" />
+    <Compile Include="Support\ResendTypingBehavior.cs" />
+    <Compile Include="Support\Type.cs" />
+    <Compile Include="Support\TypingBehavior.cs" />
+    <Compile Include="ViewModel\Filter\FilterOnArchitecture.cs" />
+    <Compile Include="ViewModel\Filter\FilterOnDateRange.cs" />
+    <Compile Include="ViewModel\Filter\IFilterOnChoices.cs" />
+    <Compile Include="ViewModel\Filter\IFilterWithTextInput.cs" />
+    <Compile Include="ViewModel\Filter\ISuperFilterCopy.cs" />
+    <Compile Include="ViewModel\Filter\SearchRequest.cs" />
     <Compile Include="Model\SectionFeature.cs" />
     <Compile Include="SampleData\FilterSource\FilterSource.xaml.cs">
       <DependentUpon>FilterSource.xaml</DependentUpon>
@@ -158,8 +152,10 @@
     <Compile Include="Support\Converters\CommaDelimitedPackageListConverter.cs" />
     <Compile Include="Support\Converters\CommaDelimitedTagListConverter.cs" />
     <Compile Include="Support\Converters\CommaDelimitedLicenseListConverter.cs" />
+    <Compile Include="Support\Converters\GreaterThanZeroIsTrueConverter.cs" />
     <Compile Include="Support\Converters\HorizontalAlignmentToPlacementConverter.cs" />
     <Compile Include="Support\Converters\PrettyPackageNameConverter.cs" />
+    <Compile Include="Support\Converters\TrueFalseConverter.cs" />
     <Compile Include="Support\FilterTemplateSelector.cs" />
     <Compile Include="Support\Filters\EasyCollectionViewSource.cs" />
     <Compile Include="Support\HorizontalScrollBehavior.cs" />
@@ -167,14 +163,14 @@
     <Compile Include="Support\StringExtensions.cs" />
     <Compile Include="Support\TaskExtensions.cs" />
     <Compile Include="ViewModel\ActivityViewModel.cs" />
-    <Compile Include="ViewModel\Filter\BinaryFilter.cs" />
-    <Compile Include="ViewModel\Filter\DisplayNameFilter.cs" />
+    <Compile Include="ViewModel\CommonGuiViewModel.cs" />
+    <Compile Include="ViewModel\Filter\FilterManagement.cs" />
     <Compile Include="ViewModel\Filter\FilterOnBoolean.cs" />
+    <Compile Include="ViewModel\Filter\FilterOnFeedUrls.cs" />
     <Compile Include="ViewModel\Filter\FilterOnText.cs" />
     <Compile Include="ViewModel\Filter\FrictionlessFilter.cs" />
     <Compile Include="ViewModel\Filter\FrictionlessSort.cs" />
-    <Compile Include="ViewModel\Filter\GUIFilterBase.cs" />
-    <Compile Include="ViewModel\Filter\IFilter.cs" />
+    <Compile Include="ViewModel\Filter\GuiFilterBase.cs" />
     <Compile Include="ViewModel\Filter\SortDescriptor.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
     <Compile Include="ViewModel\PackageProductCommonViewModel.cs" />
@@ -218,6 +214,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -238,17 +235,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TileGridSection.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\ToggleDropDown.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ModalResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="PageResourceDictionary.xaml">
       <SubType>Designer</SubType>
@@ -310,7 +303,11 @@
     <DesignData Include="SampleData\HomeViewModelSampleData.xaml" />
     <DesignData Include="SampleData\SearchViewModelSampleData.xaml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <AssemblySearchPaths>c:\programdata\Reference Assemblies\any;$(AssemblySearchPaths)</AssemblySearchPaths>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

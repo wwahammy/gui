@@ -11,7 +11,7 @@
                            xmlns:Support="clr-namespace:CoApp.PackageManager.Support"
                            xmlns:Support1="clr-namespace:CoApp.Gui.Toolkit.Support;assembly=CoApp.Gui.Toolkit"
                            mc:Ignorable="d" 
-             d:DesignHeight="768" d:DesignWidth="1024"  TextBlock.FontSize="14">
+             d:DesignHeight="768" d:DesignWidth="1024"  TextBlock.FontSize="14" >
     <Controls1:CoAppFrameChild.Resources>
     	
         <ResourceDictionary>
@@ -29,7 +29,17 @@
         
 
     </Controls1:CoAppFrameChild.Resources>
-    <Grid>
+    <Controls1:CoAppWindow.MoreHeaderItems>
+        <x:Array Type="Panel">
+            <Grid>
+                <Controls:ActivityNotification  Margin="0,0,20,0" 
+                                                    NumberOfActivities="{Binding NumberOfActivities}" 
+                                                    NumberofActivitiesFinished="{Binding NumberOfActivitiesFinished}" 
+                                                    NumberOfActivityFailures="{Binding NumberOfActivityFailures}" ButtonCommand="{Binding GoToActivities}"/>
+            </Grid>
+        </x:Array>
+    </Controls1:CoAppWindow.MoreHeaderItems>
+    <Grid ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400"/>
             <ColumnDefinition Width="*"/>
@@ -45,19 +55,13 @@
         <Border Grid.Column="0" Grid.Row="1" x:Name="Box" Padding="18" Background="{Binding PrimaryColor}" TextBlock.Foreground="{Binding TextColor}" Margin="0,0,40,0" Height="690" VerticalAlignment="Top">
             <DockPanel LastChildFill="True">
                 <StackPanel  VerticalAlignment="Bottom" d:LayoutOverrides="Height, VerticalMargin" DockPanel.Dock="Bottom">
-                    <Button Margin="0,0,0, 10" Content="Report Bugs" Visibility="{Binding Path=BugTrackerUrl, 
-                        Converter={StaticResource NullEmptyStringToVisibilityConverter1}}" Style="{DynamicResource MetroLinkButtonStyle}" 
-                            HorizontalAlignment="Left">
-                    	<Button.ToolTip>
-                    		<ToolTip Content="{Binding BugTrackerUrl}"/>
-						</Button.ToolTip>
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:LaunchUriOrFileAction Path="{Binding BugTrackerUrl}"/>
-                            </i:EventTrigger>
-                            
-                        </i:Interaction.Triggers>
-                    </Button>
+                    <TextBlock Margin="0,0,0, 10" Visibility="{Binding Path=BugTrackerUrl, 
+                        Converter={StaticResource NullEmptyStringToVisibilityConverter1}}" HorizontalAlignment="Left"><Hyperlink NavigateUri="{Binding BugTrackerUrl}" >
+                            <Hyperlink.ToolTip><ToolTip Content="{Binding BugTrackerUrl}"/> </Hyperlink.ToolTip><Run Text="Report Bugs"/>
+                        </Hyperlink></TextBlock>
+                           
+                    
+                    <!--
                     <StackPanel Orientation="Horizontal" Visibility="{Binding IsSafeForWork, Converter={StaticResource boolToVisConverter}}" Margin="0,0,0,10">
                         <TextBlock Text="{Binding UsersDisagree, StringFormat='Safe for work ({0} users disagree)'}"/>
 
@@ -66,7 +70,7 @@
                     </StackPanel>
 
                     <TextBlock  Visibility="{Binding IsSafeForWork, Converter={StaticResource NotSafeForWorkVisibilityConverter}}" Margin="0,0,0,10" Text="Not safe for work"/>
-
+-->
 
                     <TextBlock Margin="0,0,0,10">
                         <TextBlock.Text>
@@ -76,28 +80,34 @@
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>Publisher: </TextBlock>
-                        <Button Content="{Binding PublisherName}" Command="{Binding GoToPublisher}" Style="{DynamicResource MetroLinkButtonStyle}"/>
-                    </StackPanel>
+
+                    <TextBlock TextWrapping="Wrap">Publisher: <Hyperlink Command="{Binding GoToPublisher}"><Run Text="{Binding PublisherName}"/></Hyperlink></TextBlock>
+
+
                 </StackPanel>
                 
                 <!--left top-->
                 <StackPanel DockPanel.Dock="Top">
                     <Image Width="64" Height="64" HorizontalAlignment="Left" Margin="0,0,0,20" Source="{Binding Icon}"/>
                     <!-- Rating -->
-                    <TextBlock Text="{Binding NumberOfRatings, StringFormat='Average Rating ({0})'}"/>
+                    <!--<TextBlock Text="{Binding NumberOfRatings, StringFormat='Average Rating ({0})'}"/ >-->
                     <!--Stability -->
                 </StackPanel>
                 
                 <!-- middle area-->
                 <StackPanel>
-                    <Controls1:ElevateButton Content="Install" HorizontalAlignment="Left" MustElevate="{Binding CanInstall, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install}"  Visibility="{Binding IsInstalled, Converter={StaticResource NotSafeForWorkVisibilityConverter}}"/>
-                    <Controls1:ElevateButton Content="Remove" HorizontalAlignment="Left" MustElevate="{Binding CanRemove, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Remove}" Visibility="{Binding IsInstalled, Converter={StaticResource boolToVisConverter}}"/>
-                    <StackPanel Visibility="{Binding Show32Bit, Converter={StaticResource boolToVisConverter}}">
-                        <Controls1:ElevateButton Content="Install 32 bit" HorizontalAlignment="Left" MustElevate="{Binding CanInstall, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Install32Bit}" Visibility="{Binding Is32BitInstalled, Converter={StaticResource NotSafeForWorkVisibilityConverter}}"/>
-                        <Controls1:ElevateButton Content="Remove 32 bit" HorizontalAlignment="Left"  MustElevate="{Binding CanRemove, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding RunAdmin}" ElevatedCommand="{Binding Remove32Bit}" Visibility="{Binding Is32BitInstalled, Converter={StaticResource boolToVisConverter}}"/>
-                    </StackPanel>
+                    <Controls1:ElevateButton Content="Install" HorizontalAlignment="Left" MustElevate="{Binding CanInstall, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding ElevateInstall}" ElevatedCommand="{Binding Install}"  Visibility="{Binding IsInstalled, Converter={StaticResource NotSafeForWorkVisibilityConverter}}"/>
+                    <Controls1:ElevateButton Content="Remove" HorizontalAlignment="Left" MustElevate="{Binding CanRemove, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding ElevateRemove}" ElevatedCommand="{Binding Remove}" Visibility="{Binding IsInstalled, Converter={StaticResource boolToVisConverter}}"/>
+                    <Grid Visibility="{Binding Show32Bit, Converter={StaticResource boolToVisConverter}}" Margin="5,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Controls1:ElevateButton Grid.Column="0" Content="Install 32 bit" HorizontalAlignment="Left" MustElevate="{Binding CanInstall, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding ElevateInstall32Bit}" ElevatedCommand="{Binding Install32Bit}" Visibility="{Binding Is32BitInstalled, Converter={StaticResource NotSafeForWorkVisibilityConverter}}"/>
+                        <Controls1:ElevateButton Grid.Column="0" Content="Remove 32 bit" HorizontalAlignment="Left"  MustElevate="{Binding CanRemove, Converter={StaticResource invertConverter}}" UnelevatedCommand="{Binding ElevateRemove32Bit}" ElevatedCommand="{Binding Remove32Bit}" Visibility="{Binding Is32BitInstalled, Converter={StaticResource boolToVisConverter}}"/>
+                        
+                        <!--questionmark -->
+                    </Grid>
                 </StackPanel>
                 
             </DockPanel>
@@ -145,27 +155,14 @@
                     </Controls1:StyleableHeaderControl>
                     
                     <Controls1:StyleableHeaderControl Header="All Versions" Style="{DynamicResource PackageSectionStyle}">
-                        <!--<Controls1:CommaItemsControl ItemsSource="{Binding AllVersions}">
-                            <Controls1:CommaItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
-                                        <Run Text="{Binding Package.Name, PresentationTraceSources.TraceLevel=High}"/>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </Controls1:CommaItemsControl.ItemTemplate>
-                        </Controls1:CommaItemsControl>
-                        
-                        <Controls:DelimitedControl ItemsSource="{Binding AllVersions}" >
+                        <TextBlock Support1:TextBlockExtensions.InlinesList="{Binding Path=AllVersions, Converter={StaticResource CommaDelimitedConverter1}}" TextWrapping="Wrap" />
 
-                            <Controls:DelimitedControl.ValueTemplate>
-                                <DataTemplate>
-                                    <Button Content="{Binding Package.Name}" Style="{StaticResource MetroLinkButtonStyle}" Command="{Binding Navigate}"/>
-                                </DataTemplate>
-                            </Controls:DelimitedControl.ValueTemplate>
-                        </Controls:DelimitedControl>-->
+
+                        
                     </Controls1:StyleableHeaderControl>
                 </StackPanel>
             </TabItem>
+            <!--
             <TabItem Header="Review" Style="{DynamicResource ProductPackageTabStyle}">
                 <StackPanel>
                     <TextBlock>Coming Soon</TextBlock>
@@ -175,7 +172,7 @@
                     </StackPanel>
                 </StackPanel>
                 
-            </TabItem>
+            </TabItem>-->
         </TabControl>
     </Grid>
 </Controls1:CoAppFrameChild>

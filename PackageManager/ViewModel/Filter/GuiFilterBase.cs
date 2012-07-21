@@ -1,9 +1,19 @@
-﻿using GalaSoft.MvvmLight;
+using System.Collections.Generic;
+using GalaSoft.MvvmLight;
 
 namespace CoApp.PackageManager.ViewModel.Filter
 {
-    public abstract class GUIFilterBase : ObservableObject, IFilter
+    public abstract class GUIFilterBase : ObservableObject
     {
+        protected FilterManagement Management;
+        protected GUIFilterBase(FilterManagement management)
+        {
+            Management = management;
+        }
+
+        public bool IsPartOfSuperFilter { get; set; }
+        
+
         private CAT _category;
         private string _niceName;
         private NumOfFilter _numberOfFilter;
@@ -38,10 +48,9 @@ namespace CoApp.PackageManager.ViewModel.Filter
             }
         }
 
-        #region IFilter Members
 
         public abstract FrictionlessFilter Create();
 
-        #endregion
+        public abstract bool CanBeCreated();
     }
 }

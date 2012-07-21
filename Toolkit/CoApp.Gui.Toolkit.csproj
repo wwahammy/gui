@@ -49,19 +49,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CoApp.Client, Version=1.2.0.140, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Client.dll</HintPath>
+ 
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="CoApp.Developer.Toolkit, Version=1.2.0.72, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Developer.Toolkit.dll</HintPath>
+
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="CoApp.Toolkit, Version=1.2.0.140, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\CoApp.Toolkit.dll</HintPath>
+
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="FluentDateTime, Version=1.6.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\FluentDateTime.dll</HintPath>
+     
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
@@ -70,19 +70,18 @@
     <Reference Include="GalaSoft.MvvmLight.WPF4, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=0.7.1.1, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\Microsoft.Expression.Interactions.dll</HintPath>
+    <Reference Include="MahApps.Metro, Version=0.8.0.0" Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+      <HintPath>..\lib\MahApps.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
+    <Reference Include="MahApps.Metro, Version=0.8.0.0" Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'"/>
+    <Reference Include="Microsoft.Expression.Interactions"/>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\ProgramData\ReferenceAssemblies\any\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Windows.Interactivity"/>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -97,17 +96,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CoAppApplication.cs" />
+    <Compile Include="Controls\ButtonDescription.cs" />
     <Compile Include="Controls\CoAppFrame.cs" />
     <Compile Include="Controls\CoAppFrameChild.cs" />
     <Compile Include="Controls\CoAppWindow.cs" />
     <Compile Include="Controls\DialogBox.xaml.cs">
       <DependentUpon>DialogBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DialogBox2.cs" />
     <Compile Include="Controls\ElevateButton.cs" />
     <Compile Include="Controls\ElevateMenuItem.cs" />
     <Compile Include="Controls\ElevateShield.cs" />
     <Compile Include="Controls\HeaderItem.cs" />
+    <Compile Include="Controls\LoadingGrid.cs" />
     <Compile Include="Controls\ModalManager.cs" />
     <Compile Include="Controls\PopUpControl.xaml.cs">
       <DependentUpon>PopUpControl.xaml</DependentUpon>
@@ -181,12 +181,14 @@
     <Compile Include="Support\Converters\UrlToBooleanConverter.cs" />
     <Compile Include="Support\Converters\ValueConverterList.cs" />
     <Compile Include="Support\EnumerableExtensions.cs" />
+    <Compile Include="Support\EnumExtensions.cs" />
     <Compile Include="Support\Extensions.cs" />
     <Compile Include="Support\NavFrameStyleSelector.cs" />
     <Compile Include="Support\ObservableDictionary.cs" />
     <Compile Include="Support\PackageExtensions.cs" />
     <Compile Include="Support\StateManager.cs" />
     <Compile Include="Support\StringList.cs" />
+    <Compile Include="Support\TabControlHelper.cs" />
     <Compile Include="Support\TaskExtensions.cs" />
     <Compile Include="Support\TextBlockExtensions.cs" />
     <Compile Include="Support\UIHelper.cs" />
@@ -303,7 +305,12 @@
     <Resource Include="Resources\UAC-Win7-Disabled.png" />
   </ItemGroup>
   <ItemGroup />
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <AssemblySearchPaths>c:\programdata\Reference Assemblies\any;$(AssemblySearchPaths)</AssemblySearchPaths>
+  </PropertyGroup>
+
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -11,6 +11,7 @@ using CoApp.Toolkit.Configuration;
 using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Logging;
 using CoApp.Toolkit.Tasks;
+using CoApp.Gui.Toolkit.Support;
 using CollectionFilter = CoApp.Toolkit.Collections.XList<System.Linq.Expressions.Expression<System.Func<System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>, System.Collections.Generic.IEnumerable<CoApp.Packaging.Common.IPackage>>>>;
 
 namespace CoApp.Gui.Toolkit.Model
@@ -50,12 +51,12 @@ namespace CoApp.Gui.Toolkit.Model
         }
 
 
-        public Task<IEnumerable<string>> SystemFeeds
+        public Task<IEnumerable<Feed>> SystemFeeds
         {
             get
             {
                 return EPM.Feeds.ContinueWith(a =>
-                                              a.Result.Where(f => !f.IsSession).Select(f => f.Location));
+                                              a.Result.Where(f => !f.IsSession));
             }
         }
 
@@ -67,6 +68,14 @@ namespace CoApp.Gui.Toolkit.Model
         public Task RemoveSystemFeed(string feedUrl)
         {
             return EPM.RemoveSystemFeed(feedUrl);
+        }
+
+        public Task<Feed> GetSystemFeed(string feedUrl)
+        {
+            var sys = SystemFeeds;
+            return sys.ContinueOnAll(feeds => feeds.FirstOrDefault(f => f.Location == feedUrl));
+           
+
         }
 
         public Task<IEnumerable<string>> SessionFeeds
@@ -88,9 +97,6 @@ namespace CoApp.Gui.Toolkit.Model
         {
             return EPM.SetGeneralPackageInformation(50, packageName, "state", state.ToString());
         }
-
-       
-
 
         public Task BlockPackage(CanonicalName packageName)
         {
@@ -338,6 +344,11 @@ namespace CoApp.Gui.Toolkit.Model
             return EPM.SetAllFeedsStale();
         }
 
+        public Task SetFeedStale(string feedLocation)
+        {
+            return EPM.SetFeedStale(feedLocation);
+        }
+
         public Task<ScheduledTask> GetScheduledTask(string name)
         {
             return EPM.GetScheduledTask(name);
@@ -383,7 +394,7 @@ namespace CoApp.Gui.Toolkit.Model
                                                       installProgress(name, progress,
                                                                       overallProgress));
                                               CurrentTask.Events += new PackageInstalled(name => packageInstalled(name));
-                                              return EPM.Install(canonicalName);
+                                              return EPM.Install(canonicalName, download:true);
                                           });
         }
 
@@ -440,8 +451,14 @@ namespace CoApp.Gui.Toolkit.Model
         public Task Elevate()
         {
             var elev = EPM.Elevate();
-            elev.Continue(() => Elevated());
-            return elev;
+            return elev.ContinueAlways(t =>
+            {
+                t.RethrowWhenFaulted();
+                if (t.IsCompleted)
+                    Elevated();
+            });
+            
+
         }
 
         public event Action Elevated = delegate { }; 

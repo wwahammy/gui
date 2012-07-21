@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using CoApp.Gui.Toolkit.Controls;
+using CoApp.Gui.Toolkit.Messages;
+using CoApp.Gui.Toolkit.Support;
+using CoApp.Gui.Toolkit.ViewModels.Modal;
 using CoApp.PackageManager.Messages;
 using CoApp.Packaging.Client;
 using CoApp.Packaging.Common;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace CoApp.PackageManager.Model.Interfaces
@@ -15,7 +21,9 @@ namespace CoApp.PackageManager.Model.Interfaces
         Task InstallPackage(IPackage p);
         Task RemovePackage(IPackage p);
 
-        Task SetState(IPackage p, PackageState state); 
+        Task SetState(IPackage p, PackageState state);
+
+        void RemoveActivity(Activity a);
 
         IList<Activity> Activities { get; }
     }
@@ -25,12 +33,45 @@ namespace CoApp.PackageManager.Model.Interfaces
         public Activity(IPackage p, ActivityType a)
         {
             Package = p;
+            PackageName = p.GetNicestName();
             ActivityType = a;
             State = State.Performing;
+            SeeError = new RelayCommand(ExecuteSeeError, () => State == State.Failed);
         }
 
-       
+        private void ExecuteSeeError()
+        {
+            var vm = new BasicModalViewModel {Title = "Error",
+                //TODO: better error?!
+                Content = "Something is wrong"};
+           
 
+
+            vm.SetViaButtonDescriptions(new[]
+                                            {
+                                                new ButtonDescription
+                                                    {
+                                                        Title = "Continue"
+                                                    }
+                                            });
+
+             Messenger.Default.Send(new MetroDialogBoxMessage(vm));
+        }
+
+
+        private string _packageName;
+
+        public string PackageName
+        {
+            get { return _packageName; }
+            set
+            {
+                _packageName = value;
+                RaisePropertyChanged("PackageName");
+            }
+        }
+
+        
 
         public IPackage Package { get; private set; }
 
@@ -62,7 +103,21 @@ namespace CoApp.PackageManager.Model.Interfaces
             }
         }
 
-        
+
+        private string _error;
+
+        public string Error
+        {
+            get { return _error; }
+            set
+            {
+                _error = value;
+                RaisePropertyChanged("Error");
+            }
+        }
+
+
+        public ICommand SeeError { get; set; }
 
      
 

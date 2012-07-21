@@ -3,10 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Controls="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
                       
-                      xmlns:System="clr-namespace:System;assembly=mscorlib" Title="MainWindow" 
+                      xmlns:System="clr-namespace:System;assembly=mscorlib"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                      xmlns:Support="clr-namespace:CoApp.PackageManager.Support"
+                      xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+                      Title="MainWindow" 
                       DataContext="{Binding CoAppWindowViewModel, Source={StaticResource Locator}}" Content="{Binding MainScreenViewModel, Mode=TwoWay, UpdateSourceTrigger=Explicit}" Template="{DynamicResource CoAppWinTemplate}"
                       >
+    <i:Interaction.Behaviors>
+        <Behaviours:BorderlessWindowBehavior/>
+        <Support:ResendTypingBehavior/>
+    </i:Interaction.Behaviors>
     <Controls:CoAppWindow.Resources>
         <ResourceDictionary Source="PageResourceDictionary.xaml"/>
     </Controls:CoAppWindow.Resources>
+    <Controls:CoAppWindow.ModalResourceDictionary>
+        <ResourceDictionary Source="ModalResourceDictionary.xaml"/>
+    </Controls:CoAppWindow.ModalResourceDictionary>
 </Controls:CoAppWindow>

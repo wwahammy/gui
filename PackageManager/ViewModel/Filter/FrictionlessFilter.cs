@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CoApp.Packaging.Common;
-using GalaSoft.MvvmLight;
 using CoApp.Toolkit.Linq;
+using GalaSoft.MvvmLight;
 
 namespace CoApp.PackageManager.ViewModel.Filter
 {
@@ -48,8 +44,30 @@ namespace CoApp.PackageManager.ViewModel.Filter
             }
         }
 
-         
-       
+
+
+    }
+
+
+    public class FrictionlessFilter<TChoiceType> :FrictionlessFilter
+    {
+        private TChoiceType _choiceValue;
+
+        public TChoiceType ChoiceValue
+        {
+            get { return _choiceValue; }
+            set
+            {
+                _choiceValue = value;
+                RaisePropertyChanged("ChoiceValue");
+            }
+        }
+    }
+
+    public class FeedUrlFilter : FrictionlessFilter<string>
+    {
+
+        
     }
 
     public enum CAT
@@ -59,7 +77,21 @@ namespace CoApp.PackageManager.ViewModel.Filter
         IsWanted,
         IsBlocked,
         IsInstalled,
-        IsDependency
+        IsDependency,
+        FeedUrl,
+        Tag,
+        IsActive,
+        Description,
+        Publisher,
+        License,
+        Contributor,
+        Summary,
+        AuthorVersion,
+        Stability,
+        Architecture,
+        Flavor,
+        PublishDate
+
     }
 
 

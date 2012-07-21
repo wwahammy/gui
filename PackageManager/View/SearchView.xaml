@@ -10,68 +10,159 @@
              xmlns:Filter="clr-namespace:CoApp.PackageManager.ViewModel.Filter"
              xmlns:Model="clr-namespace:CoApp.PackageManager.Model"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:Support1="clr-namespace:CoApp.Gui.Toolkit.Support;assembly=CoApp.Gui.Toolkit"
+             xmlns:Converters="clr-namespace:CoApp.PackageManager.Support.Converters"
              x:Class="CoApp.PackageManager.View.SearchView" 
+ 
             x:Name="Root"
              mc:Ignorable="d" 
-             d:DesignHeight="439" d:DesignWidth="765" d:DataContext="{d:DesignData /SampleData/SearchViewModelSampleData.xaml}">
+             d:DesignHeight="439" d:DesignWidth="765">
 
+    <i:Interaction.Behaviors>
+        <Support:TypingBehavior TextValue="{Binding TypedInput, Mode=TwoWay}"/>
+    </i:Interaction.Behaviors>
     <Controls1:CoAppFrameChild.Resources>
-        
+
+        <Converters:TrueFalseConverter x:Key="TrueFalseConverter"/>
+  
+
+
         <DataTemplate x:Key="ActualFilter">
             <Button Command="{Binding DataContext.RemoveFilter, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" CommandParameter="{Binding}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding FilterDisplay}"/>
+                    <TextBlock Text="{Binding FilterDisplay}" Margin="0, 0, 2, 0"/>
                     <Controls:CloseIcon/>
                 </StackPanel>
             </Button>
         </DataTemplate>
-        
+      
         <DataTemplate x:Key="NewFilter">
-            <Controls:ToggleDropDown ToggleButtonStyle="{DynamicResource Windows8ToggleButtonStyle}">
+            <Controls:ToggleDropDown ToggleButtonStyle="{DynamicResource Windows8ToggleButtonStyle}" Controls:ToggleDropDown.PopupContent="{Binding Path=DataContext,RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild, Mode=FindAncestor, PresentationTraceSources.TraceLevel=High}, PresentationTraceSources.TraceLevel=High}">
                 <Controls:ToggleDropDown.ButtonContent>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Add filter..."/>
-                        <Controls:AddIcon/>
+                        <TextBlock Text="Add filter..." Margin="0, 0, 2, 0"/>
+                        <Controls:AddIcon />
                     </StackPanel>
                 </Controls:ToggleDropDown.ButtonContent>
-                <Controls:ToggleDropDown.PopupContent>
-                    <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                        <TabControl TabStripPlacement="Left" ItemsSource="{Binding DataContext.FiltersToShow, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" MinHeight="400" MinWidth="400">
-                            <TabControl.Resources>
-                                <DataTemplate DataType="{x:Type Filter:FilterOnText}">
-                                	<DockPanel LastChildFill="True">
-                                		   
-										   <Button 
-										   Command="{Binding DataContext.AddFilter, RelativeSource={RelativeSource AncestorType=Controls1:CoAppFrameChild}}" 
-										   CommandParameter="{Binding}" Controls:ToggleDropDown.CloseContainingDropDown="True"
-										    Content="Apply Filter" DockPanel.Dock="Bottom" HorizontalAlignment="Right"/>
-											<StackPanel Orientation="Horizontal">
-                                        		<Label Content="{Binding NiceName}" ContentStringFormat="{}{0} starts with: " />
-												<TextBox Text="{Binding Input}" MinWidth="200" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                        	</StackPanel>                   	
-									</DockPanel>
-                                    
-                                </DataTemplate>
-								<DataTemplate DataType="{x:Type Filter:FilterOnBoolean}">
-									
-								</DataTemplate>
-                            </TabControl.Resources>
+                <Controls:ToggleDropDown.PopupTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Black" Background="White">
+
+                        <TabControl TabStripPlacement="Left" 
+                                    ItemsSource="{Binding FiltersToShow}" 
+                                    MinHeight="400" MinWidth="400" Support1:TabControlHelper.HeaderMinWidth="100" Support1:TabControlHelper.HeaderFontSize="24">
                             <TabControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border BorderBrush="Black" BorderThickness="0,1, 0, 1">
-                                        <TextBlock Text="{Binding NiceName}"/>
-                                    </Border>
+
+                                    <TextBlock Text="{Binding NiceName}"/>
+
                                 </DataTemplate>
                             </TabControl.ItemTemplate>
                             <TabControl.ContentTemplate>
                                 <DataTemplate>
-                                    <ContentPresenter Content="{Binding .}"/>
-                                </DataTemplate>
+                                    <DataTemplate.Resources>
+                                        <DataTemplate DataType="{x:Type Filter:FilterOnText}">
+                                                <DockPanel LastChildFill="True"  Background="Transparent">
+                                                    <Button 
+										   Command="{Binding DataContext.AddFilter, RelativeSource={RelativeSource AncestorType=TabControl}}" 
+										   CommandParameter="{Binding}" Controls:ToggleDropDown.CloseContainingDropDown="True"
+										    Content="Apply Filter" DockPanel.Dock="Bottom" HorizontalAlignment="Right"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Label Content="{Binding NiceName}" ContentStringFormat="{}{0} starts with: " FontSize="14"/>
+                                                    <TextBox Text="{Binding Input}" MinWidth="200" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                </StackPanel>
+                                            </DockPanel>
+
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type Filter:FilterOnBoolean}">
+                                                <DockPanel LastChildFill="True"  Background="Transparent">
+                                                    <Button 
+										               Command="{Binding DataContext.AddFilter, RelativeSource={RelativeSource AncestorType=TabControl}}" 
+										               CommandParameter="{Binding}" Controls:ToggleDropDown.CloseContainingDropDown="True"
+										                Content="Apply Filter" DockPanel.Dock="Bottom" HorizontalAlignment="Right"/>
+                                                    <StackPanel>
+                                                        <Controls2:ToggleSwitch Header="{Binding NiceName, StringFormat='{}{0} is:'}"
+                                                                                IsChecked="{Binding Input, Mode=TwoWay}" 
+                                                                                Content="{Binding Input, Mode=TwoWay, Converter={StaticResource TrueFalseConverter}}"
+                                                                               />
+                                                       
+                                                    </StackPanel>
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        <DataTemplate DataType="{x:Type Filter:FilterOnArchitecture}">
+                                                <DockPanel LastChildFill="True"  Background="Transparent">
+                                                <Button 
+										               Command="{Binding DataContext.AddFilter, RelativeSource={RelativeSource AncestorType=TabControl}}" 
+										               CommandParameter="{Binding}" Controls:ToggleDropDown.CloseContainingDropDown="True"
+										                Content="Apply Filter" DockPanel.Dock="Bottom" HorizontalAlignment="Right"/>
+                                                <StackPanel>
+                                                    <ComboBox ItemsSource="{Binding AvailableChoices}" SelectedIndex="0" SelectedValue="{Binding Input}" DisplayMemberPath="Value"/>
+
+                                                </StackPanel>
+                                                </DockPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type Filter:FilterOnFeedUrls}">
+                                             <DockPanel LastChildFill="True"  Background="Transparent">
+                                                    <Button 
+										               Command="{Binding DataContext.AddFilter, RelativeSource={RelativeSource AncestorType=TabControl}}" 
+										               CommandParameter="{Binding}" Controls:ToggleDropDown.CloseContainingDropDown="True"
+										                Content="Apply Filter" DockPanel.Dock="Bottom" HorizontalAlignment="Right"/>
+                                                    <StackPanel>
+                                                        <ComboBox ItemsSource="{Binding AvailableChoices}" SelectedIndex="0" SelectedValue="{Binding Input}" DisplayMemberPath="Value"/>
+
+                                                    </StackPanel>
+                                                </DockPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type Filter:FilterOnDateRange}">
+                                            <DockPanel LastChildFill="True" Background="Transparent">
+                                                <Button 
+										               Command="{Binding DataContext.AddFilter, RelativeSource={RelativeSource AncestorType=TabControl}}" 
+										               CommandParameter="{Binding}" Controls:ToggleDropDown.CloseContainingDropDown="True"
+										                Content="Apply Filter" DockPanel.Dock="Bottom" HorizontalAlignment="Right" x:Name="ApplyButton"/>
+                                               <StackPanel>
+                                                   <StackPanel Orientation="Horizontal">
+                                                       <TextBlock>On or after: </TextBlock>
+                                                       <DatePicker SelectedDate="{Binding OnOrAfter}" x:Name="OnOrAfterPicker"/>
+                                                       <Button x:Name="OnOrAfterPickerClear" Command="{Binding ClearAfter}">Clear</Button>
+                                                   </StackPanel>
+                                                   <StackPanel Orientation="Horizontal">
+                                                            <TextBlock>On or before:</TextBlock>
+                                                            <DatePicker SelectedDate="{Binding OnOrBefore}" x:Name="OnOrBeforePicker"/>
+                                                            <Button x:Name="OnOrBeforePickerClear" Command="{Binding ClearBefore}">Clear</Button>
+                                                   </StackPanel>
+                                               </StackPanel>
+                                            </DockPanel>
+                                                <DataTemplate.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding SelectedDate, ElementName=OnOrAfterPicker}" Value="{x:Null}"/>
+                                                            <Condition Binding="{Binding SelectedDate, ElementName=OnOrBeforePicker}" Value="{x:Null}"/>
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter TargetName="ApplyButton" Property="IsEnabled" Value="False"/>
+                                                    </MultiDataTrigger>
+                                                    <DataTrigger Binding="{Binding SelectedDate, ElementName=OnOrAfterPicker}" Value="{x:Null}">
+                                                        <Setter TargetName="OnOrAfterPickerClear" Property="Visibility" Value="Hidden"/> 
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding SelectedDate, ElementName=OnOrBeforePicker}" Value="{x:Null}">
+                                                        <Setter TargetName="OnOrBeforePickerClear" Property="Visibility" Value="Hidden"/>
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </DataTemplate.Resources>
+                                        <Border Background="Transparent" BorderThickness="0">
+                                            <ContentPresenter Content="{Binding .}"/>
+                                        </Border>
+                                    </DataTemplate>
                             </TabControl.ContentTemplate>
 
                         </TabControl>
-                    </Border>
-                </Controls:ToggleDropDown.PopupContent>
+                        </Border>
+                    </DataTemplate>
+                </Controls:ToggleDropDown.PopupTemplate>
+                     
+                    
+
+                
             </Controls:ToggleDropDown>
         </DataTemplate>
     
@@ -162,14 +253,24 @@
             </Setter>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
-        
 
-        
+       
 
-        
+
+
 
 
     </Controls1:CoAppFrameChild.Resources>
+    <Controls1:CoAppWindow.MoreHeaderItems>
+        <x:Array Type="Panel">
+            <Grid>
+                <Controls:ActivityNotification  Margin="0,0,20,0" 
+                                                    NumberOfActivities="{Binding NumberOfActivities}" 
+                                                    NumberofActivitiesFinished="{Binding NumberOfActivitiesFinished}" 
+                                                    NumberOfActivityFailures="{Binding NumberOfActivityFailures}" ButtonCommand="{Binding GoToActivities}"/>
+            </Grid>
+        </x:Array>
+    </Controls1:CoAppWindow.MoreHeaderItems>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -181,7 +282,7 @@
             <ColumnDefinition  Width="Auto"/>
         </Grid.ColumnDefinitions>
         <!--Filters -->
-        <ItemsControl ItemTemplateSelector="{StaticResource FilterTemplateSelector}" ItemsSource="{Binding AppliedFilters}"  Grid.Column="0" Grid.Row="0">
+        <ItemsControl ItemTemplateSelector="{StaticResource FilterTemplateSelector}" ItemsSource="{Binding AppliedFilters}"  Grid.Column="0" Grid.Row="0" Margin="120,0,0,0">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel/>
@@ -205,12 +306,12 @@
             </Controls:ToggleDropDown.ButtonContent>
             <Controls:ToggleDropDown.PopupContent>
                 <Border BorderThickness="1" BorderBrush="Black" Background="White">
-                    <TabControl TabStripPlacement="Right" ItemsSource="{Binding PossibleSorts}">
+                    <TabControl TabStripPlacement="Right" ItemsSource="{Binding PossibleSorts}" MinHeight="400" MinWidth="400"  Support1:TabControlHelper.HeaderMinWidth="100" Support1:TabControlHelper.HeaderFontSize="24">
                         <TabControl.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderBrush="Black" BorderThickness="0,1,0, 1">
+                          
                                     <TextBlock Text="{Binding Title}"/>
-                                </Border>
+                          
                             </DataTemplate>
                         </TabControl.ItemTemplate>
                         <TabControl.ContentTemplate>
@@ -225,13 +326,13 @@
                 </Border>
             </Controls:ToggleDropDown.PopupContent>
         </Controls:ToggleDropDown>
-           
-        <Controls2:MetroProgressBar Visibility="{Binding Path=InMiddleOfSearch, Converter={StaticResource BooleanToHiddenVisibilityConverter1}}" IsIndeterminate="True" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="0, 10"/>
-		 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="8,0,-8,0" RenderTransformOrigin="6,0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+
+        <Controls2:MetroProgressBar Visibility="{Binding Path=InMiddleOfSearch, Converter={StaticResource BooleanToHiddenVisibilityConverter1}}" IsIndeterminate="True" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="0, 10" IsEnabled="{Binding Path=InMiddleOfSearch}"/>
+		 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="0,0,0,0" RenderTransformOrigin="6,0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
             <i:Interaction.Behaviors>
                 <Support:HorizontalScrollBehavior/>
             </i:Interaction.Behaviors>
-        <ItemsControl ItemsSource="{Binding Packages}">
+            <ItemsControl ItemsSource="{Binding Packages}" Margin="120,0,0,0" >
 
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type Model:ProductInfo}">

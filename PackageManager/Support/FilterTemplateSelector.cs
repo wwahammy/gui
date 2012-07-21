@@ -22,6 +22,7 @@ namespace CoApp.PackageManager.Support
         {
             if (item == CollectionView.NewItemPlaceholder)
             {
+                
                 return NewItemTemplate;
             }
             else

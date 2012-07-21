@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -26,6 +27,20 @@ namespace CoApp.Gui.Toolkit.ViewModels
         private string _subTitle;
         private string _title;
 
+        private int _numberOfActionsInProgress = 0;
+
+        public int NumberOfActionsInProgress
+        {
+            get { return _numberOfActionsInProgress; }
+        }
+
+
+        public bool NoActionsInProgress
+        {
+            get { return NumberOfActionsInProgress == 0; }
+        }
+
+
         public bool NotInABlock = true;
 
         protected ScreenViewModel()
@@ -35,25 +50,7 @@ namespace CoApp.Gui.Toolkit.ViewModels
             
 
             Loaded += OnLoaded;
-            Unloaded += OnUnloaded;
-            //Restart = new RelayCommand(RunRestart);
-            /*
-            DefaultElevate =
-                new RelayCommand(
-                    () =>
-                    MessengerInstance.Send(new MetroDialogBoxMessage
-                                               {
-                                                   Title = "Restart CoApp Update",
-                                                   Content =
-                                                       "In order to complete your command, CoApp Update must restart. Would you like to restart CoApp Update?",
-                                                   Buttons = new ObservableCollection<ButtonDescription>
-                                                                 {
-                                                                     new ElevateButtonDescription
-                                                                         {Title = "Restart", Command = Restart},
-                                                                     new ButtonDescription
-                                                                         {Title = "Cancel", IsCancel = true}
-                                                                 }
-                                               }));*/
+            Unloaded += OnUnloaded;    
         }
 
         private void OnUnloaded()
@@ -68,8 +65,8 @@ namespace CoApp.Gui.Toolkit.ViewModels
 
         protected List<Task> PostLoadTasks { get; private set; }
 
-        public ICommand DefaultElevate { get; set; }
-        public ICommand Restart { get; set; }
+       
+       
 
         public string Title
         {
@@ -224,6 +221,18 @@ namespace CoApp.Gui.Toolkit.ViewModels
             ReloadPolicies();
             MessengerInstance.Register<PoliciesUpdatedMessage>(this, PoliciesUpdated);
       
+        }
+
+
+        protected void StartAction()
+        {
+            Interlocked.Increment(ref _numberOfActionsInProgress);
+
+        }
+
+        protected void EndAction()
+        {
+            Interlocked.Decrement(ref _numberOfActionsInProgress);
         }
 
 

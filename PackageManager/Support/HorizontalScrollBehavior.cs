@@ -63,17 +63,6 @@ namespace CoApp.PackageManager.Support
            
         }
 
-        /*
-        public ICommand MyCommand
-        {
-            get;
-            private set;
-        }
-         
-        private void MyFunction()
-        {
-            // Insert code that defines what the behavior will do when invoked.
-        }
-        */
+       
     }
 }

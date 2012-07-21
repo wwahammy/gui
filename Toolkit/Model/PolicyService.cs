@@ -19,7 +19,9 @@ namespace CoApp.Gui.Toolkit.Model
         internal ICoAppService CoApp;
         internal IWindowsUserService UserService;
 
-        private Task<IEnumerable<PolicyProxy>> _policyTask;
+        private IEnumerable<PolicyProxy> _policies; 
+
+      
 
         public PolicyService()
         {
@@ -28,7 +30,7 @@ namespace CoApp.Gui.Toolkit.Model
             CoApp.Elevated += CoAppOnElevated;
 
             UserService = loc.WindowsUserService;
-            _policyTask = CoApp.Policies;
+            ReloadPolicies();
         }
 
         #region IPolicyService Members
@@ -37,7 +39,7 @@ namespace CoApp.Gui.Toolkit.Model
         {
             lock (_policyTaskLock)
             {
-                _policyTask = CoApp.Policies;
+                _policies = CoApp.Policies.Result;
             }
         }
 
@@ -46,10 +48,9 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
-                return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.InstallPackage)).ContinueWith(
+                return Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.InstallPackage), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => CreatePolicyResultTask(t));
+                    
             }
         }
 
@@ -57,9 +58,9 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+              
                 return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ModifyPolicy)).ContinueWith(
+                    Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.ModifyPolicy), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => t.Result.IsEnabledForUser);
             }
         }
@@ -80,9 +81,9 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+               
                 return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.UpdatePackage)).ContinueWith(
+                   Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.UpdatePackage), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => CreatePolicyResultTask(t));
             }
         }
@@ -96,8 +97,8 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
-                return policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.RemovePackage)).
+                return
+                  Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.RemovePackage), TaskCreationOptions.AttachedToParent).
                     ContinueWith(t =>
                                  CreatePolicyResultTask(t));
             }
@@ -119,9 +120,8 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
                 return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSystemFeeds)).ContinueWith(
+                  Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.EditSystemFeeds), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => CreatePolicyResultTask(t));
             }
         }
@@ -135,9 +135,8 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
                 return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSessionFeeds)).ContinueWith(
+                  Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.EditSessionFeeds), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => CreatePolicyResultTask(t));
             }
         }
@@ -151,9 +150,8 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
                 return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.InstallPackage)).ContinueWith(
+                   Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.InstallPackage), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => t.Result.IsEnabledForUser);
             }
         }
@@ -163,9 +161,8 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
-                return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.UpdatePackage)).ContinueWith(
+                 return
+                   Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.UpdatePackage), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => t.Result.IsEnabledForUser);
             }
         }
@@ -174,9 +171,8 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
                 return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.RemovePackage)).ContinueWith(
+                  Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.RemovePackage), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => t.Result.IsEnabledForUser);
             }
         }
@@ -186,9 +182,8 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
                 return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSessionFeeds)).ContinueWith(
+                  Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.EditSessionFeeds), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => t.Result.IsEnabledForUser);
             }
         }
@@ -197,18 +192,18 @@ namespace CoApp.Gui.Toolkit.Model
         {
             get
             {
-                Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
                 return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.EditSystemFeeds)).ContinueWith(
+                  Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.EditSystemFeeds), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => t.Result.IsEnabledForUser);
             }
         }
 
         public Task<bool> CanSetState
         {
-            get { Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
+            get
+            {
                 return
-                    policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ChangeState)).ContinueWith(t => t.Result.IsEnabledForUser);
+                Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.ChangeState), TaskCreationOptions.AttachedToParent).ContinueWith(t => t.Result.IsEnabledForUser);
             }
         }
 
@@ -219,8 +214,10 @@ namespace CoApp.Gui.Toolkit.Model
 
         public Task<PolicyResult> SetStatePolicy
         {
-            get { Task<IEnumerable<PolicyProxy>> policy = GetPolicyTask();
-            return policy.ContinueWith(t => GetPolicyFromTask(t.Result, PolicyType.ChangeState)).ContinueWith(
+            get
+            {
+                return
+                Task.Factory.StartNew(() => GetPolicyFromList(PolicyType.ChangeState), TaskCreationOptions.AttachedToParent).ContinueWith(
                         t => CreatePolicyResultTask(t));
             }
 
@@ -247,62 +244,15 @@ namespace CoApp.Gui.Toolkit.Model
             Messenger.Default.Send(new PoliciesUpdatedMessage());
         }
 
-        private Task<IEnumerable<PolicyProxy>> GetPolicyTask()
+      
+        private PolicyProxy GetPolicyFromList( PolicyType type)
         {
             lock (_policyTaskLock)
             {
-                return _policyTask;
+                return _policies.Single(p => p.Name == type.ToString());
             }
         }
-
-        private PolicyProxy GetPolicyFromTask(IEnumerable<PolicyProxy> policies, PolicyType type)
-        {
-            return policies.Single(p => p.Name == type.ToString());
-        }
-        /*
-        private bool VerifyActionPermission(Task<PolicyProxy> taskResult)
-        {
-            if (taskResult.IsFaulted)
-            {
-                return false;
-            }
-
-            return
-                CanCurrentUserPerformAction(
-                    taskResult.Result.Members);
-        }
-        */
-        /*
-        private bool CanCurrentUserPerformAction(IEnumerable<string> accounts)
-        {
-            IIdentity current = UserService.GetCurrentUser();
-
-            if (current == null)
-            {
-                //apparently you can get null?
-                return false;
-            }
-            SidWrapper currentUser = UserService.GetUserSid(current);
-
-
-            foreach (SidWrapper sid in accounts.Select(a => UserService.FindSid(a)))
-            {
-                if (sid.Equals(WORLDSID))
-                {
-                    return true;
-                }
-
-                if (sid.Equals(currentUser))
-                {
-                    return true;
-                }
-
-
-                return UserService.IsSIDInUsersGroup(current, sid);
-            }
-
-            return false;
-        }*/
+        
 
 
         private PolicyResult CreatePolicyResult(IEnumerable<string> accounts)
@@ -314,9 +264,9 @@ namespace CoApp.Gui.Toolkit.Model
                 //apparently you can get null?
                 return PolicyResult.Other;
             }
-            SidWrapper currentUser = UserService.GetUserSid(current);
-            PolicyResult output = PolicyResult.Other;
-            foreach (SidWrapper sid in accounts.Select(a => UserService.FindSid(a)))
+            var currentUser = UserService.GetUserSid(current);
+            var output = PolicyResult.Other;
+            foreach (var sid in accounts.Select(a => UserService.FindSid(a)))
             {
                 if (sid.AreSame(WORLDSID))
                 {

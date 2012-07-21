@@ -1,4 +1,4 @@
-﻿<Controls:CoAppFrameChild x:Class="CoApp.PackageManager.View.PackageView"
+﻿<Controls1:CoAppFrameChild x:Class="CoApp.PackageManager.View.PackageView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,14 +6,24 @@
                            xmlns:Controls1="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
              
                            xmlns:Support="clr-namespace:CoApp.PackageManager.Support"
-                           xmlns:Controls="clr-namespace:CoApp.Gui.Toolkit.Controls;assembly=CoApp.Gui.Toolkit"
+                           xmlns:Controls="clr-namespace:CoApp.PackageManager.Controls"
                            xmlns:Converters="clr-namespace:CoApp.Gui.Toolkit.Support.Converters;assembly=CoApp.Gui.Toolkit"
                           xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                           xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                           xmlns:Support1="clr-namespace:CoApp.Gui.Toolkit.Support;assembly=CoApp.Gui.Toolkit"
                           mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="1024"  TextBlock.FontSize="14">
-    <Controls:CoAppFrameChild.Resources>
+    <Controls1:CoAppWindow.MoreHeaderItems>
+        <x:Array Type="Panel">
+            <Grid>
+                <Controls:ActivityNotification  Margin="0,0,20,0" 
+                                                    NumberOfActivities="{Binding NumberOfActivities}" 
+                                                    NumberofActivitiesFinished="{Binding NumberOfActivitiesFinished}" 
+                                                    NumberOfActivityFailures="{Binding NumberOfActivityFailures}" ButtonCommand="{Binding GoToActivities}"/>
+            </Grid>
+        </x:Array>
+    </Controls1:CoAppWindow.MoreHeaderItems>
+    <Controls1:CoAppFrameChild.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Styles/ProductPackageCommonStyle.xaml"/>
@@ -25,7 +35,7 @@
         </ResourceDictionary>
 
 
-    </Controls:CoAppFrameChild.Resources>
+    </Controls1:CoAppFrameChild.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400"/>
@@ -43,7 +53,7 @@
             <DockPanel LastChildFill="True">
                 <StackPanel  VerticalAlignment="Bottom" d:LayoutOverrides="Height, VerticalMargin" DockPanel.Dock="Bottom">
                     <Button Margin="0,0,0, 10" Content="Report Bugs" Visibility="{Binding Path=BugTrackerUrl, 
-                        Converter={DynamicResource NullEmptyStringToVisibilityConverter1}}" Style="{DynamicResource MetroLinkButtonStyle}" 
+                        Converter={StaticResource NullEmptyStringToVisibilityConverter1}}" Style="{DynamicResource MetroLinkButtonStyle}" 
                             HorizontalAlignment="Left">
                         <Button.ToolTip>
                             <ToolTip Content="{Binding BugTrackerUrl}"/>
@@ -131,13 +141,24 @@
                     </Controls1:StyleableHeaderControl>
 
                     <Controls1:StyleableHeaderControl Header="Replaces" Style="{DynamicResource PackageSectionStyle}" Visibility="{Binding Path=BindingPolicyRange, 
-                        Converter={DynamicResource NullEmptyStringToVisibilityConverter1}}">
+                        Converter={StaticResource NullEmptyStringToVisibilityConverter1}}">
                         <TextBlock Text="{Binding BindingPolicyRange}"/>
                     </Controls1:StyleableHeaderControl>
 
                     <Controls1:StyleableHeaderControl Header="Advanced Options"  Style="{DynamicResource PackageSectionStyle}">
                     
 					<StackPanel Orientation="Horizontal">
+                        <!-- set package state -->
+                        <Label Content="State: " Target="{Binding ElementName=StateBox}"/>
+                        <ComboBox SelectedValue="{Binding PackageState, PresentationTraceSources.TraceLevel=High}" ItemsSource="{Binding AllPackageStates}" MinWidth="200" x:Name="StateBox" Margin="0, 0, 10, 0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+<Controls1:ElevateButton Content="Set State" UnelevatedCommand="{Binding ElevateSetState}" ElevatedCommand="{Binding SetState}" MustElevate="{Binding CanSetState, Converter={StaticResource invertConverter}}"/>
+                          <!--
                         <Controls1:ElevateButton Content="Block" UnelevatedCommand="{Binding ElevateBlockPackage}" ElevatedCommand="{Binding BlockPackage}" MustElevate="{Binding CanBlock, Converter={StaticResource invertConverter}}" Visibility="{Binding IsBlocked, Converter={StaticResource InvertAndThenBoolToVisibility }}"/>
                         <Controls1:ElevateButton Content="Unblock" UnelevatedCommand="{Binding ElevateUnblockPackage}" ElevatedCommand="{Binding UnblockPackage}" MustElevate="{Binding CanBlock, Converter={StaticResource invertConverter}}" Visibility="{Binding IsBlocked, Converter={StaticResource boolToVisConverter}}"/>
                         
@@ -145,12 +166,12 @@
                         <Controls1:ElevateButton Content="Unlock" UnelevatedCommand="{Binding ElevateUnlockPackage}" ElevatedCommand="{Binding UnlockPackage}" MustElevate="{Binding CanLock, Converter={StaticResource invertConverter}}" Visibility="{Binding IsLocked, Converter={StaticResource boolToVisConverter}}"/>
 
                             <Controls1:ElevateButton Content="Activate" UnelevatedCommand="{Binding ElevateActivatePackage}" ElevatedCommand="{Binding ActivatePackage}" MustElevate="{Binding CanActivate, Converter={StaticResource invertConverter}}" Visibility="{Binding IsActive, Converter={StaticResource InvertAndThenBoolToVisibility }}"/>
-                            <Controls1:ElevateButton Content="Deactivate" UnelevatedCommand="{Binding ElevateDeactivatePackage}" ElevatedCommand="{Binding DeactivatePackage}" MustElevate="{Binding CanActivate, Converter={StaticResource invertConverter}}" Visibility="{Binding IsActive, Converter={StaticResource boolToVisConverter}}"/>
+                            <Controls1:ElevateButton Content="Deactivate" UnelevatedCommand="{Binding ElevateDeactivatePackage}" ElevatedCommand="{Binding DeactivatePackage}" MustElevate="{Binding CanActivate, Converter={StaticResource invertConverter}}" Visibility="{Binding IsActive, Converter={StaticResource boolToVisConverter}}"/>-->
                     </StackPanel>
                     </Controls1:StyleableHeaderControl>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Review" Style="{DynamicResource ProductPackageTabStyle}">
+           <!-- <TabItem Header="Review" Style="{DynamicResource ProductPackageTabStyle}">
                 <StackPanel>
                     <TextBlock>Coming Soon</TextBlock>
                     <StackPanel Visibility="Collapsed">
@@ -159,7 +180,7 @@
                     </StackPanel>
                 </StackPanel>
 
-            </TabItem>
+            </TabItem>-->
         </TabControl>
     </Grid>
-</Controls:CoAppFrameChild>
+</Controls1:CoAppFrameChild>

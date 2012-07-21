@@ -17,7 +17,7 @@ namespace CoApp.Gui.Toolkit.Controls
 {
     public class ModalManager
     {
-        private MetroDialogBoxMessage _dialogBoxInfo;
+        //private MetroDialogBoxMessage _dialogBoxInfo;
         private readonly object _modelDialogBoxLock = new object();
 
         private readonly CoAppWindow _window;
@@ -89,10 +89,7 @@ namespace CoApp.Gui.Toolkit.Controls
         }
 
 
-        private void TimeOnTick(object sender)
-        {
-           
-        }
+    
 
 
         readonly Queue<MetroDialogBoxMessage> _modalDialogQueue = new Queue<MetroDialogBoxMessage>();

@@ -17,7 +17,7 @@ namespace CoApp.PackageManager.View
     /// <summary>
     /// Interaction logic for ActivityView.xaml
     /// </summary>
-    public partial class ActivityView : UserControl
+    public partial class ActivityView
     {
         public ActivityView()
         {

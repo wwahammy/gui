@@ -18,15 +18,29 @@ namespace CoApp.Gui.Toolkit.Support.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            bool? param = null;
+            if (parameter is string)
+            {
+                bool test;
+                if (Boolean.TryParse((string)parameter, out test))
+                {
+                    param = test;
+                }
+                else
+                {
+                    param = null;
+                }
+            }
+
             if (value != null && value is IEnumerable)
             {
                 var e = ((IEnumerable) value).Cast<object>();
                 var empty = Visibility.Collapsed;
                 var filled = Visibility.Visible;
                 
-                if (parameter != null && parameter is bool)
+                if (param != null)
                 {
-                    var b = (bool) parameter;
+                    var b = (bool) param;
                     if (b)
                     {
                         empty = Visibility.Visible;

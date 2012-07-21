@@ -78,7 +78,7 @@ namespace CoApp.Gui.Toolkit.Controls
         private Button _maxRestore, _minimize;
 
         private ModalManager _modalManager;
-        private CoAppFrame _navFrame;
+       
 
         static CoAppWindow()
         {
@@ -230,7 +230,7 @@ namespace CoApp.Gui.Toolkit.Controls
                 _header.MouseLeftButtonDown -= HeaderDragWindow;
             }
 
-            _navFrame = GetTemplateChild(NAV_FRAME_NAME) as CoAppFrame;
+            //_navFrame = GetTemplateChild(NAV_FRAME_NAME) as CoAppFrame;
             _maxRestore = GetTemplateChild(MAX_RESTORE_NAME) as Button;
             _minimize = GetTemplateChild(MINIMIZE_NAME) as Button;
             _header = GetTemplateChild(HEADER_NAME) as Grid;

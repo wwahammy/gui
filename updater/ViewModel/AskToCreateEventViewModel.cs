@@ -88,12 +88,7 @@ namespace CoApp.Updater.ViewModel
                                                                                                                              .
                                                                                                                              Send
                                                                                                                              (
-                                                                                                                                 new MetroDialogBoxMessage
-                                                                                                                                     {
-                                                                                                                                         ModalViewModel
-                                                                                                                                             =
-                                                                                                                                             modalModel
-                                                                                                                                     }
+                                                                                                                                 new MetroDialogBoxMessage(modalModel)
                                                                                                                              );
                                                                                                                      }
 
@@ -149,10 +144,7 @@ namespace CoApp.Updater.ViewModel
             MessengerInstance
                 .
                 Send
-                (new MetroDialogBoxMessage
-                     {
-                         ModalViewModel = modalModel
-                     });
+                (new MetroDialogBoxMessage(modalModel));
 
             Leave();
         }

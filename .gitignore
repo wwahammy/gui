@@ -9,6 +9,7 @@ intermediate
 obj
 bin
 _Resharper*
+_UpgradeReport_Files
 coapp-tools-personal.sln
 *.ReSharper
 *.user

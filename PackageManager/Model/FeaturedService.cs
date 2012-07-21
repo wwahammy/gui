@@ -5,6 +5,7 @@ using CoApp.Gui.Toolkit.Model.Interfaces;
 using CoApp.PackageManager.Model.Interfaces;
 using CoApp.Packaging.Client;
 using CoApp.Packaging.Common;
+using CoApp.Toolkit.Extensions;
 using CoApp.Toolkit.Linq;
 using CollectionFilter =
     CoApp.Toolkit.Collections.XList
@@ -25,8 +26,45 @@ namespace CoApp.PackageManager.Model
         {
             CoApp = new LocalServiceLocator().CoAppService;
         }
+        //find all feeds without CoApp
+        //CoappCurrent
+        private readonly string[] _coAppFeeds = {"http://coapp.org/current", "http://coapp.org/archive"};
 
         #region IFeaturedService Members
+
+        public Task<SectionFeature> GetSectionFeatureForFeed(Feed feed)
+        {
+            return GetSectionFeatureForFeed(feed.Location);
+        }
+
+        public IEnumerable<Feed> SortFeedsToFinalOrder(IEnumerable<Feed> feeds)
+        {
+            foreach ( var g in feeds.GroupBy(f => _coAppFeeds.Any(cf => cf == f.Location)))
+            {
+                if (!g.Key)
+                {
+                    foreach (var feed in g)
+                    {
+                        yield return feed;
+                    }
+
+                }
+                else
+                {
+                    var a = g.ToArray();
+                    //it's a coapp one
+                    var current = a.FirstOrDefault(f => f.Location == "http://coapp.org/current");
+                    if (current != null)
+                        yield return current;
+
+                    var archive = a.FirstOrDefault(f => f.Location == "http://coapp.org/archive");
+
+                    if (archive != null)
+                        yield return archive;
+
+                }
+            }
+        }
 
         public Task<IEnumerable<SectionFeature>> GetSections()
         {
@@ -66,7 +104,8 @@ namespace CoApp.PackageManager.Model
             return Task.Factory.StartNew(() =>
                                              {
                                                  CollectionFilter collectionFilter = null;
-                                                 collectionFilter = collectionFilter.Then(p => p.HighestPackages());
+                                                 collectionFilter = collectionFilter.Then(p => p.HighestPackages()).Then(p => p.SortByDescending(pack => pack.PackageDetails.PublishDate))
+                                                     .Then(p => p.Take(4));
 
                                                  var f = new FeedAndPackages
                                                              {

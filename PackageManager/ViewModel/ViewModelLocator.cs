@@ -1,5 +1,10 @@
 ﻿
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Threading;
+using CoApp.PackageManager.ViewModel.Filter;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 
@@ -18,6 +23,7 @@ namespace CoApp.PackageManager.ViewModel
     /// </summary>
     public class ViewModelLocator : CoApp.Gui.Toolkit.ViewModels.ViewModelLocator
     {
+        private static int _nextSearchVmNumber = 0;
         static ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
@@ -56,10 +62,23 @@ namespace CoApp.PackageManager.ViewModel
         {
             get { return ServiceLocator.Current.GetInstance<SearchViewModel>(); }
         }
-
+        /*
         public SearchViewModel GetSearchViewModel(string key)
         {
                 return ServiceLocator.Current.GetInstance<SearchViewModel>(key);
+        }*/
+
+        public SearchViewModel GetSearchViewModel()
+        {
+            return
+                ServiceLocator.Current.GetInstance<SearchViewModel>(Interlocked.Increment(ref _nextSearchVmNumber).ToString(CultureInfo.InvariantCulture));
+        }
+
+        public SearchViewModel GetSearchViewModel(SearchRequest request)
+        {
+            var s = ServiceLocator.Current.GetInstance<SearchViewModel>(Interlocked.Increment(ref _nextSearchVmNumber).ToString(CultureInfo.InvariantCulture));
+            s.AddFilterViaRequest(request);
+            return s;
         }
 
         public ProductViewModel GetProductViewModel(string key)
